@@ -156,7 +156,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID=1
-MEDIA_ROOT='C:/Users/Ehsan/'
+MEDIA_ROOT='C:/Users/digital/'
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',

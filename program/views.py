@@ -2,6 +2,7 @@ from django.shortcuts import render
 from pay.models import Payment
 import jdatetime
 from program import jalali
+from accounts.templatetags.tags import get_tuple_item
 from .models import Program, User, Registration, Profile, Management, Pricing, Message, Message_reciving
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
@@ -113,10 +114,24 @@ def panel(request, program_id):
                 return HttpResponseRedirect('/program/panel/' + str(programe.id))
         elif action == 'excel':
             if manager.canFilter:
-                regs = registered.values_list('numberOfPayments', 'coupling', 'status',
-                                              'profile__user__first_name', 'profile__user__last_name',
-                                              'profile__user__email', 'profile__cellPhone')
-                return export_users_xls(regs)
+                status_list = []
+                for j in registered:
+                    status = get_tuple_item(Registration.status_choices, j.status)
+                    numberOfPayment = j.numberOfPayments
+                    coupling = j.coupling
+                    profile__user__first_name = j.profile.user.first_name
+                    profile__user__last_name = j.profile.user.last_name
+                    profile__user__email = j.profile.user.email
+                    profile__cellPhone = j.profile.cellPhone
+                    object = (numberOfPayment,
+                              coupling,
+                              status,
+                              profile__user__first_name,
+                              profile__user__last_name,
+                              profile__user__email,
+                              profile__cellPhone)
+                    status_list.append(object)
+                return export_users_xls(status_list)
         elif action == 'monifest':
             # return render(request, 'panel.html', {'all': registered})
                 return TestDocument(request, registered)
@@ -246,7 +261,7 @@ def allfilter(filter, programe):
 
     return registered
 
-def export_users_xls(regs):
+def export_users_xls(status_list):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
@@ -261,7 +276,7 @@ def export_users_xls(regs):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    for row in regs:
+    for row in status_list:
         row_num += 1
         for col_num in range(len(row)):
             if col_num == 1:
