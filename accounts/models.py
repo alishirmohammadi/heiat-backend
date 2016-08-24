@@ -73,7 +73,9 @@ class Profile(UserenaBaseProfile):
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
     passport = models.CharField(max_length=200, choices=passport_choices, null=True)
-
+    passport_number = models.IntegerField(null=True)
+    passport_dateofissue = models.DateField(null=True)
+    passport_dateofexpiry = models.DateField(null=True)
     def hasManagement(self):
         from program.models import Management
         manage = Management.objects.filter(profile=self).first()

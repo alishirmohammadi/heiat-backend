@@ -169,7 +169,10 @@ def edit(request):
         # a.passport_release=request.POST.get('pas_release',)
         # a.passport_exprition=request.POST.get('pas_exprition',)
         # a.couple=request.POST.get('coupling')
-
+        if a.passport == 'have':
+            a.passport_number = request.POST.get('serial_pas', )
+            a.passport_dateofissue = request.POST.get('pas_release', )
+            a.passport_dateofexpiry = request.POST.get('pas_exprition', )
         a.save()
         return HttpResponseRedirect('/')
 

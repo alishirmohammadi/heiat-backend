@@ -104,17 +104,16 @@ def panel(request, program_id):
         }
         request.session['filter'] = all_filter
 
+        registered = Registration.objects.filter(program=programe)
+
+        registered = allfilter(all_filter, programe)
+
         if action == 'show':
             if manager.canFilter:
                 return HttpResponseRedirect('/program/panel/' + str(programe.id))
         elif action == 'excel':
-
-            registered = Registration.objects.filter(program=programe)
-
-            registered = allfilter(all_filter, programe)
-
             if manager.canFilter:
-                regs = registered.values_list('numberOfPayments', 'coupling', 'status', 'program',
+                regs = registered.values_list('numberOfPayments', 'coupling', 'status',
                                               'profile__user__first_name', 'profile__user__last_name',
                                               'profile__user__email', 'profile__cellPhone')
                 return export_users_xls(regs)
@@ -125,11 +124,6 @@ def panel(request, program_id):
             # return render(request, 'panel.html', {'all': registered})
                 return pri1(request, registered)
         elif action == 'select':
-
-            registered = Registration.objects.filter(program=programe)
-
-            registered = allfilter(all_filter, programe)
-
             if manager.canSelect:
                     numberOfSelect = request.POST.get("selectFilter", '')
                     face = int(numberOfSelect)
@@ -161,7 +155,7 @@ def TestDocument(request, registered):
     response['Content-Length'] = length
     return response
 def pri1(request, registered):
-    docx_title="monifest.docx"
+    docx_title="print.docx"
     f=nmi.pri(request, registered)
     length = f.tell()
     f.seek(0)
@@ -261,7 +255,7 @@ def export_users_xls(regs):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['numOfPayment', 'coupling', 'status', 'program', 'first_name', 'last_name', 'email', 'cellphone']
+    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Sheet body, remaining rows
