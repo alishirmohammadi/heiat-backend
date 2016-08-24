@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load tags %}
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+
+{#            {% block navbar-menu %}#}
+{##}
+{#                <div class="collapse navbar-collapse ">#}
+{#                    <ul class="nav navbar-nav">#}
+{#                        {% block navbar-right %}#}
+{#                            {% include "_navbar.html" with prog.id="1"  %}#}
+{#                        {% endblock %}#}
+{#                    </ul>#}
+{#                </div><!--/.nav-collapse -->#}
+{#            {% endblock %}#}
+
+{% block  content %}
+
+    {% for item in registered %}
+        {% if item.program.id in prog %}
+            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>
+        {% else %}
+            {{ item.program.title }}
+        {% endif %}
+
+
+        <br>
+
+    {% endfor %}
+
+    {% for item in post %}
+
+        <div class="well" style="text-align: right">
+            <p>
+                {{ item.profile.user.get_full_name }}
+                در برنامه:
+                {{ item.program.title }}
+                ، بعنوان:
+                {{ item.role_choices|get_tuple_item:item.role }}
+                این نظر را داد
+                <br>
+                :
+            </p>
+
+            <p>{{ item.documentation }}</p>
+
+
+        </div>
+    {% endfor %}
+
+
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% load staticfiles %}
+{#{% load thumbnail %}#}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}{% endblock description %}">
+    <meta name="author" content="Arun Ravindran">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <script src="{% static 'jquery-1.11.1.min.js' %}"></script>
+
+    <title>{% block title %}azzahra{% endblock %}</title>
+    <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
+    <script>tinymce.init({mode: "textareas", selector: 'textarea'});</script>
+    <!— Bootstrap core CSS —>
+    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({trigger: "hover", placement: "auto"});
+        });
+    </script>
+    <style>
+
+        @font-face {
+            font-family: 'B Nazanin+';
+            src: url('{% static 'fontBnazanin/fonts/BNazanin+Regular.eot' %}');
+            src: url('{% static 'fontBnazanin/fonts/BNazanin+Regular.eot?#iefix' %}') format('embedded-opentype'),
+            url('{% static ' fontBnazanin/fonts/BNazanin+Regular.woff' %}') format('woff'),
+            url('{% static 'fontBnazanin/fonts/BNazanin+Regular.ttf' %}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+    </style>
+
+    <!— Custom styles for this site —>
+    {% block styles %}
+        <style>
+
+            @font-face {
+                font-family: 'B Nazanin+';
+                src: url('{% static 'fontBnazanin/fonts/BNazanin+Regular.eot' %}');
+                src: url('{% static 'fontBnazanin/fonts/BNazanin+Regular.eot?#iefix' %}') format('embedded-opentype'),
+                url('{% static ' fontBnazanin/fonts/BNazanin+Regular.woff' %}') format('woff'),
+                url('{% static 'fontBnazanin/fonts/BNazanin+Regular.ttf' %}') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+        </style>
+    {% endblock styles %}
+
+    <!— Custom tags for the head tag —>
+    {% block extrahead %}{% endblock extrahead %}
+
+</head>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!— Brand and toggle get grouped for better mobile display —>
+        <div class="navbar-header" style="padding-left: 40px">
+            <a href="/"><img src="{% static 'phot.png' %}" height="50px" width="50px"></a>
+        </div>
+
+        <!— Collect the nav links, forms, and other content for toggling —>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+            {% block navbar %}
+                {% include '_navbar.html' with active_link='home' %}
+            {% endblock %}
+
+        </div>
+        <!— /.navbar-collapse —>
+    </div>
+    <!— /.container-fluid —>
+</nav>
+
+
+{#<div class="container" style="margin-top: 50px;">#}
+<div class="container" style="margin-top: 60px;">
+    {% block content %}
+
+    {% endblock content %}
+
+</div>
+<!— /.container —>
+
+<!— Site footer —>
+{% block footer %}
+{% endblock %}
+
+
+
+{% block scripts %}{% endblock scripts %}
+<script src="{% static 'bootstrap-slider.min.js' %}"></script>
+<link href="{% static 'bootstrap-slider.min.css' %}" rel="stylesheet">
+<script>
+    $(document).ready(function () {
+        $('.slider').slider();
+
+    });
+
+</script>
+
+</body>
+</html>

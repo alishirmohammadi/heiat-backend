@@ -1,0 +1,12 @@
+{#<li {% if active_link == "all" %}class="active"{% endif %}><a href="/"> All posts </a></li>#}
+<li {% if active_link == "admin" %}class="active"{% endif %}><a href="/admin/"> Admin </a></li>
+{% if not user.is_authenticated %}
+    <li {% if active_link == "login" %}class="active"{% endif %}><a href="/accounts/signin"> Sign in</a></li>
+    <li {% if active_link == "login" %}class="active"{% endif %}><a href="/accounts/signup"> Sign up</a></li>
+{% elif user.is_authenticated %}
+    <li {% if active_link == "user" %}class="active"{% endif %}><a href="#"><p>Welcome, {{ user.username }}.</p></a></li>
+    <li {% if active_link == "user" %}class="active"{% endif %}><a href="/program"> My program </a></li>
+    <li {% if active_link == "user" %}class="active"{% endif %}><a href="/program/manage"> Management </a></li>
+    <li {% if active_link == "user" %}class="active"{% endif %}><a href="/program/panel"> panel </a></li>
+    <li {% if active_link == "user" %}class="active"{% endif %}><a href="/program/document"> document </a></li>
+{% endif %}

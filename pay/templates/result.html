@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+    <div class="container">
+ 
+ 
+        <div class="well">
+            {% if payment.success %}
+                <h3 style="text-align: center;color: green">
+                    پرداخت موفقیت آمیز بود. باتشکر
+                </h3>
+                <h5 style="text-align: center">
+                    <label for="refId">
+                        شماره مرجع:
+                    </label>
+                    <span id="refId">{{ payment.refId }}</span>
+                </h5>
+                <h5 style="text-align: center">
+                    <label for="saaleId">
+                        رسید:
+                    </label>
+                    <span id="saleId">{{ payment.saleRefId }}</span>
+                </h5>
+ 
+ 
+ 
+            {% else %}
+                <h2 style="text-align: center;color: red">
+                    پرداخت ناموفق
+                </h2>
+                <h3 style="text-align: center">
+                    در صورت کم شدن مبلغ، ظرف ۷۲ ساعت به حساب شما عودت داده خواهد شد
+                </h3>
+                <h5 style="text-align: center">
+                    کد خطا
+                    :
+                    {{ payment.verify_rescode }}
+                </h5>
+            {% endif %}
+            <h4><a style="text-align: center" class="btn btn-primary btn-lg" href="/pay/start/">
+                کمک مجدد
+            </a>
+            </h4>
+        </div>
+    </div>
+{% endblock %}

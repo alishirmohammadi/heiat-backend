@@ -1,0 +1,620 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-07 15:33+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: accounts/templates/accounts/emails/password-reset-email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: accounts/templates/accounts/emails/password-reset-email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: accounts/templates/accounts/emails/password-reset-email.html:8
+msgid "Your login email, in case you've forgotten, is same this email address:"
+msgstr ""
+
+#: accounts/templates/accounts/emails/password-reset-email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: accounts/templates/accounts/emails/password-reset-email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:6
+#: accounts/templates/accounts/signup.html:15 web/templates/base.html:80
+#: web/templates/signinup.html:7
+msgid "Login"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:8
+msgid "Please Log In"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:15
+msgid "Don't have an account?"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:15
+#: accounts/templates/accounts/signup.html:6 web/templates/base.html:81
+#: web/templates/signinup.html:8
+msgid "Register"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:8
+msgid "Signing Up is Free"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:15
+msgid "Already signed up?"
+msgstr ""
+
+#: downloader/models.py:14 profiles/models.py:47 profiles/models.py:71
+msgid "Title"
+msgstr ""
+
+#: downloader/models.py:16
+msgid "Proxy Base URL"
+msgstr ""
+
+#: downloader/models.py:17
+msgid "Proxy Login URL"
+msgstr ""
+
+#: downloader/models.py:18
+msgid "Proxy Logout URL"
+msgstr ""
+
+#: downloader/models.py:19
+msgid "Proxy Form Username"
+msgstr ""
+
+#: downloader/models.py:20
+msgid "Proxy Form Password"
+msgstr ""
+
+#: downloader/models.py:21
+msgid "Proxy Form XPath"
+msgstr ""
+
+#: downloader/models.py:22
+msgid "SFX Base URL"
+msgstr ""
+
+#: downloader/models.py:23
+msgid "Serial Solutions Key"
+msgstr ""
+
+#: downloader/models.py:29 downloader/models.py:35 downloader/models.py:93
+msgid "Library"
+msgstr ""
+
+#: downloader/models.py:30
+msgid "Libraries"
+msgstr ""
+
+#: downloader/models.py:40
+msgid "Start Date"
+msgstr ""
+
+#: downloader/models.py:41
+msgid "End Date"
+msgstr ""
+
+#: downloader/models.py:42
+msgid "Provider ID"
+msgstr ""
+
+#: downloader/models.py:43
+msgid "Provider Name"
+msgstr ""
+
+#: downloader/models.py:44
+msgid "Database ID"
+msgstr ""
+
+#: downloader/models.py:45
+msgid "Database Name"
+msgstr ""
+
+#: downloader/models.py:46
+msgid "Database Date"
+msgstr ""
+
+#: downloader/models.py:75
+msgid "Holding"
+msgstr ""
+
+#: downloader/models.py:76
+msgid "Holdings"
+msgstr ""
+
+#: downloader/models.py:86
+msgid "Active"
+msgstr ""
+
+#: downloader/models.py:87
+msgid "Inactive"
+msgstr ""
+
+#: downloader/models.py:88
+msgid "Logging in"
+msgstr ""
+
+#: downloader/models.py:89
+msgid "Suspended"
+msgstr ""
+
+#: downloader/models.py:90 web/models.py:254
+msgid "Invalid"
+msgstr ""
+
+#: downloader/models.py:92 web/models.py:261
+msgid "Status"
+msgstr ""
+
+#: downloader/models.py:94
+msgid "Username"
+msgstr ""
+
+#: downloader/models.py:95
+msgid "Password"
+msgstr ""
+
+#: downloader/models.py:96
+msgid "Cookies"
+msgstr ""
+
+#: downloader/models.py:151
+msgid "Credential"
+msgstr ""
+
+#: downloader/models.py:152
+msgid "Credentials"
+msgstr ""
+
+#: profiles/models.py:35 profiles/models.py:53 profiles/models.py:54
+#: profiles/models.py:60 profiles/models.py:76
+msgid "Organization"
+msgstr ""
+
+#: profiles/models.py:36
+msgid "Degree"
+msgstr ""
+
+#: profiles/models.py:37
+msgid "Graduate"
+msgstr ""
+
+#: profiles/models.py:38
+msgid "Doctrate"
+msgstr ""
+
+#: profiles/models.py:39
+msgid "Assistant/Associate Professor"
+msgstr ""
+
+#: profiles/models.py:40
+msgid "Full Professor"
+msgstr ""
+
+#: profiles/models.py:58
+msgid "Name"
+msgstr ""
+
+#: profiles/models.py:59
+msgid "Description"
+msgstr ""
+
+#: profiles/models.py:66
+msgid "Domain"
+msgstr ""
+
+#: profiles/models.py:67
+msgid "Domains"
+msgstr ""
+
+#: profiles/models.py:72
+msgid "Email"
+msgstr ""
+
+#: profiles/models.py:73
+msgid "Address"
+msgstr ""
+
+#: profiles/models.py:74
+msgid "Phone"
+msgstr ""
+
+#: profiles/models.py:75
+msgid "Number of Digits is incorrect"
+msgstr ""
+
+#: profiles/models.py:82
+msgid "Contact"
+msgstr ""
+
+#: profiles/models.py:83
+msgid "Contacts"
+msgstr ""
+
+#: scipub/settings.py:84
+msgid "Persian"
+msgstr ""
+
+#: scipub/settings.py:85
+msgid "Afghan Persian"
+msgstr ""
+
+#: scipub/settings.py:86
+msgid "English"
+msgstr ""
+
+#: scipub/settings.py:137
+msgid "Administration"
+msgstr ""
+
+#: web/admin.py:14
+msgid "Make Selected Requests Unavailable"
+msgstr ""
+
+#: web/forms.py:17
+msgid "Journal Articles"
+msgstr ""
+
+#: web/forms.py:18
+msgid "Book Chapters"
+msgstr ""
+
+#: web/forms.py:19
+msgid "Dissertations"
+msgstr ""
+
+#: web/forms.py:23
+msgid "In"
+msgstr ""
+
+#: web/forms.py:27
+msgid "All Time"
+msgstr ""
+
+#: web/forms.py:30
+msgid "Since"
+msgstr ""
+
+#: web/forms.py:42
+msgid "Search"
+msgstr ""
+
+#: web/forms.py:112
+msgid "The Input type is not Identified"
+msgstr ""
+
+#: web/models.py:52
+msgid "Proceedings"
+msgstr ""
+
+#: web/models.py:53
+msgid "Reference Book"
+msgstr ""
+
+#: web/models.py:54
+msgid "Journal Issue"
+msgstr ""
+
+#: web/models.py:55
+msgid "Proceedings Article"
+msgstr ""
+
+#: web/models.py:56
+msgid "Other"
+msgstr ""
+
+#: web/models.py:57
+msgid "Dissertation"
+msgstr ""
+
+#: web/models.py:58
+msgid "Dataset"
+msgstr ""
+
+#: web/models.py:59
+msgid "Edited Book"
+msgstr ""
+
+#: web/models.py:60
+msgid "Journal Article"
+msgstr ""
+
+#: web/models.py:61
+msgid "Journal"
+msgstr ""
+
+#: web/models.py:62
+msgid "Report"
+msgstr ""
+
+#: web/models.py:63
+msgid "Book Series"
+msgstr ""
+
+#: web/models.py:64
+msgid "Report Series"
+msgstr ""
+
+#: web/models.py:65
+msgid "Book Track"
+msgstr ""
+
+#: web/models.py:66
+msgid "Standard"
+msgstr ""
+
+#: web/models.py:67
+msgid "Book Section"
+msgstr ""
+
+#: web/models.py:68
+msgid "Part"
+msgstr ""
+
+#: web/models.py:69
+msgid "Book"
+msgstr ""
+
+#: web/models.py:70
+msgid "Book Chapter"
+msgstr ""
+
+#: web/models.py:71
+msgid "Standard Series"
+msgstr ""
+
+#: web/models.py:72
+msgid "Monograph"
+msgstr ""
+
+#: web/models.py:73
+msgid "Component"
+msgstr ""
+
+#: web/models.py:74
+msgid "Reference Entry"
+msgstr ""
+
+#: web/models.py:75
+msgid "Journal Volume"
+msgstr ""
+
+#: web/models.py:76
+msgid "Book Set"
+msgstr ""
+
+#: web/models.py:79
+msgid "Type"
+msgstr ""
+
+#: web/models.py:80
+msgid "Titles"
+msgstr ""
+
+#: web/models.py:81
+msgid "Subtitles"
+msgstr ""
+
+#: web/models.py:82
+msgid "Authors"
+msgstr ""
+
+#: web/models.py:83
+msgid "Editors"
+msgstr ""
+
+#: web/models.py:85
+msgid "Publication Date"
+msgstr ""
+
+#: web/models.py:87
+msgid "Subjects"
+msgstr ""
+
+#: web/models.py:88
+msgid "Volume"
+msgstr ""
+
+#: web/models.py:89
+msgid "Issue"
+msgstr ""
+
+#: web/models.py:90
+msgid "Page"
+msgstr ""
+
+#: web/models.py:96 web/models.py:238
+msgid "Publisher"
+msgstr ""
+
+#: web/models.py:100
+msgid "Container Title"
+msgstr ""
+
+#: web/models.py:102
+msgid "Indexed at"
+msgstr ""
+
+#: web/models.py:178 web/models.py:204 web/models.py:244
+msgid "Metadata"
+msgstr ""
+
+#: web/models.py:179
+msgid "Metadatas"
+msgstr ""
+
+#: web/models.py:205
+msgid "File"
+msgstr ""
+
+#: web/models.py:206
+msgid "MD5 Hash"
+msgstr ""
+
+#: web/models.py:207
+msgid "Size"
+msgstr ""
+
+#: web/models.py:208
+msgid "Thumbnail"
+msgstr ""
+
+#: web/models.py:209 web/models.py:245
+msgid "Created at"
+msgstr ""
+
+#: web/models.py:223
+msgid "Resource"
+msgstr ""
+
+#: web/models.py:224
+msgid "Resources"
+msgstr ""
+
+#: web/models.py:229
+msgid "Primary Name"
+msgstr ""
+
+#: web/models.py:230
+msgid "Prefixes"
+msgstr ""
+
+#: web/models.py:231
+msgid "Names"
+msgstr ""
+
+#: web/models.py:232
+msgid "Tokens"
+msgstr ""
+
+#: web/models.py:239
+msgid "Publishers"
+msgstr ""
+
+#: web/models.py:243
+msgid "Requester"
+msgstr ""
+
+#: web/models.py:246
+msgid "Resolved at"
+msgstr ""
+
+#: web/models.py:255
+msgid "Unhandled"
+msgstr ""
+
+#: web/models.py:256
+msgid "Unavailable"
+msgstr ""
+
+#: web/models.py:257
+msgid "Download Error"
+msgstr ""
+
+#: web/models.py:258
+msgid "Unexpected Error"
+msgstr ""
+
+#: web/models.py:259
+msgid "Resolved"
+msgstr ""
+
+#: web/models.py:263
+msgid "IP"
+msgstr ""
+
+#: web/models.py:264
+msgid "Origin"
+msgstr ""
+
+#: web/models.py:265
+msgid "Is marked"
+msgstr ""
+
+#: web/models.py:271
+msgid "Request"
+msgstr ""
+
+#: web/models.py:272
+msgid "Requests"
+msgstr ""
+
+#: web/templates/_navbar.html:2 web/templates/home.html:7
+#: web/templates/user.html:7
+msgid "Home"
+msgstr ""
+
+#: web/templates/_navbar.html:3
+msgid "About"
+msgstr ""
+
+#: web/templates/base.html:46
+msgid "Change Navigation"
+msgstr ""
+
+#: web/templates/base.html:69
+msgid "Administrator"
+msgstr ""
+
+#: web/templates/base.html:74
+msgid "Logout"
+msgstr ""
+
+#: web/templates/search/search.html:9
+msgid "Search in Scientific Publications"
+msgstr ""
+
+#: web/templates/search/search.html:51
+msgid "No results found."
+msgstr ""
+
+#: web/templates/search/search.html:57
+msgid "Previous"
+msgstr ""
+
+#: web/templates/search/search.html:59
+msgid "Next"
+msgstr ""
+
+#: web/views.py:64 web/views.py:75
+msgid "The requested resource is not available"
+msgstr ""
+
+#: web/views.py:81
+msgid "The requested resource is not valid"
+msgstr ""
+
+#: web/views.py:87
+msgid "The requested resource could not be downloaded now"
+msgstr ""
+
+#: web/views.py:93
+msgid "An unexpected error occurred, we will check it as soon as possible"
+msgstr ""

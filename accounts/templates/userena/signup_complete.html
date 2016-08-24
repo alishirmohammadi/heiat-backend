@@ -1,0 +1,24 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Signup almost done!" %}{% endblock %}
+
+{% block content_title %}<h2>{% trans "Signup" %}</h2>{% endblock %}
+
+{% block content %}
+    <div  style="text-align: center;width: 100%">
+<p style="font-size: large;font-family: 'B Mitra';font-size: 6em">با تشکر از ثبت نام شما</p>
+
+{% if userena_activation_required %}
+<p style="font-size: large;font-family: 'B Mitra';font-size: 4em"><br>
+، لینک فعال سازی اکانت شما به ایمیل تان ارسال شد
+    <br>
+   . با مراجعه به ایمیل خود ثبت نام را تکمیل کنید
+   </p>
+    <p style="font-size: large;font-family: 'B Mitra';font-size: 2em"> <br>
+. توجه : اطلاعات ثبت نام اولیه شما تا  {{ userena_activation_days }} روز روی سرور نگهداری می شود</p>
+{% else  %}
+<p style="font-size: large;font-family: 'B Mitra'">شما می توانید با اکانت خود وارد شوید</p>
+{% endif %}
+    </div>
+{% endblock %}

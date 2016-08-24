@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load tags %}
+<body>
+{% block content %}
+        <div class="row" style="width: 100%">
+            <div class="col-md-6">
+                {#<-----Managers edit programs here!----->#}
+                <div dir="rtl">
+                    <form method="post">
+                        {% csrf_token %}
+                        <table class="table-responsive">
+                            <tbody>
+                            <tr>
+                                <td style="width: 20%">نام برنامه</td>
+                                <td style="width: 80%"><input class="form-control" type="text" name="title"
+                                           value="{{ mymanagement.program.title }}"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%"> زمان برنامه:</td>
+                                <td style="width: 80%"><input class="form-control" type="text" name="programinterval"
+                                           value="{{ mymanagement.program.programInterval }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>زمان ثبت نام:</td>
+                                <td><input class="form-control" type="text" name="registrinterval"
+                                           value="{{ mymanagement.program.registerInterval }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>امکان ثبت نام متاهلی:</td>
+                                <td>
+                                    <input type="checkbox" name="hascoupling"
+                                            {% if mymanagement.program.hasCoupling %}
+                                           checked
+
+                                            {% endif %}>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>باز برای ثبت نام</td>
+                                <td>
+                                    <input type="checkbox" name="isopen"
+                                            {% if mymanagement.program.isOpen %}
+                                           checked
+                                            {% endif %}
+                                    >
+                            </tr>
+                            <tr>
+                                <td>ایمیل</td>
+                                <td><input class="form-control" type="text" name="email"
+                                           value="{{ mymanagement.program.email }}">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <span><textarea class="form-control" name="note">{{ mymanagement.program.notes }}</textarea></span>
+                        <br>
+                        <button type="submit" class="btn btn-default btn-success">ثبت تغییر</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                {#<-----Managers can add or remove installment here----->#}
+                <div class="well" dir="rtl">
+                    <table class="table-responsive">
+                        <thead>
+                        <tr>
+                            <td width="160px"><b>سری شرکت کننده</b></td>
+                            <td><b>افزودن قسط</b></td>
+                            <td width="80px"><b>قسط اول</b></td>
+                            <td width="80px"><b>قسط دوم</b></td>
+                            <td width="80px"><b>قسط سوم</b></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for  didi in list %}
+                            <tr>
+                                <td>
+                                    <span>
+                                        {% if additonal %}
+                                            {{ regType|get_tuple_item:didi.pe }}
+                                                {% if didi.add == False %}
+                                                        {% if didi.c %}
+                                                            متاهلی
+                                                        {% else %}
+                                                            مجردی
+                                                        {% endif %}
+                                                {% else %}
+                                                        {% if didi.c %}
+                                                                متاهلی {{ mymanagement.program.additionalObject }}
+                                                        {% else %}
+                                                                مجردی {{ mymanagement.program.additionalObject }}
+                                                        {% endif %}
+                                                {% endif %}
+                                        {% else %}
+                                            {{ regType|get_tuple_item:didi.pe }}
+                                                {% if didi.c %}
+                                                    متاهلی
+                                                {% else %}
+                                                    مجردی
+                                                {% endif %}
+                                        {% endif %}
+                                    </span>
+                                </td>
+
+                                <form action="/program/add" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="peopleType" value="{{ didi.pe }}">
+                                    <input type="hidden" name="coupling" value="{{ didi.c }}">
+                                    <input type="hidden" name="additionalobject" value="{{ didi.add }}">
+                                    <input type="hidden" name="programId" value="{{ mymanagement.program.id }}">
+                                    <td><input class="form-control" data-toggle="popover"
+                                               title="افزودن قسط" data-content="برای افزودن قسط مقدار آن را اینجا وارد کنید سپس دکمه Enter را بزنید"
+                                               type="text" name="price" style="width: 90%"></td>
+                                    <td>
+                                        {% if didi.pri.price1 == None %}
+                                        {% else %}
+                                            <span><a href="/program/remove/{{ didi.pri.id }}/1" data-toggle="popover"
+                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
+                                                     class="btn btn-danger"
+                                                     style="width: 70px ; margin-bottom: auto">{{ didi.pri.price1 }}</a></span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if didi.pri.price2 == None %}
+                                        {% else %}
+                                            <span><a href="/program/remove/{{ didi.pri.id }}/2" data-toggle="popover"
+                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
+                                                     class="btn btn-danger"
+                                                     style="width: 70px">{{ didi.pri.price2 }}</a></span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if didi.pri.price3 == None %}
+                                        {% else %}
+                                            <span><a href="/program/remove/{{ didi.pri.id }}/3" data-toggle="popover"
+                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
+                                                     class="btn btn-danger"
+                                                     style="width: 70px">{{ didi.pri.price3 }}</a></span>
+                                        {% endif %}
+                                    </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+</body>

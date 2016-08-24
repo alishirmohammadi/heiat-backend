@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="col-md-12">
+            <div id="logbox">
+                <form method="post">
+                    {% csrf_token %}
+                    <h1>Create an account</h1>
+                    <input name="firstname" type="text" placeholder="First name" required="required"
+                            class="input"  value={{ first_name }}>
+                    <input name="lastname" type="text" placeholder="Last name" required="required"
+                            class="input"  value={{ last_name }}>
+                    <input name="password" type="password" placeholder="Choose a password" required="required"
+                            class="input"/>
+                    <input name="email" type="email" placeholder="Email address"
+                            class="input" {% if not error2 %} value={{ email }}{% endif %} >
+                    {% if error2 %}
+                        <input value="Wrong Email" type="text" class=" label-danger" style="margin-left:45px;font-family: 'Cooper Black'">
+                    {% endif %}
+                    <input name="cellphone" type="number" placeholder="cellphone number" required="required"
+                          class="input" value={{ cellphone }}>
+                    <input name="mellicode" type="number" placeholder="melli code" required="required"
+                           class="input" {% if not error1 %}{% if not error3 %} value={{ mellicode }} {% endif %}{% endif %} >
+                    {% if error1 %}
+                        <input value="Wrong MelliCode" type="text" class=" label-danger" style="margin-left:45px;font-family: 'Cooper Black'">
+                    {% endif %}
+                    {% if error3 %}
+                        <input value="Mellicode is used before" type="text" class=" label-danger" style="margin-left:45px;font-family: 'Cooper Black'">
+                    {% endif %}
+                    <input type="submit" value="Sign me up!" class="inputButton"/>
+                    <div class="text-center">
+                        already have an account? <a href="/signin" id="login_id">login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

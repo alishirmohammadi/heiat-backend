@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+        <div class="col-md-12">
+            {% if message_id == '1' %}
+            <div class="alert-success" style="text-align: center">Activaion Email has sent.Your account is created but it is not active. check your Email</div>
+            {% endif %}
+            <div id="logbox">
+                <form method="post">
+                    {% csrf_token %}
+                    <h1 style="font-family:  'B Nazanin';font-size: 30px">ورود به حساب کاربری</h1>
+                    <input name="username" style="font-family:  'B Nazanin';font-size: large" type="text" placeholder="کدملی" class="input pass"/>
+                    <input name="password" style="font-family:  'B Nazanin';font-size: large" type="password" placeholder="گذرواژه" required="required"
+                           class="input pass"/>
+                    <input type="submit"  style="font-family: 'B Nazanin';font-size: 30px" value="ورود" class="inputButton"/>
+                    <div class="text-center"></div>
+                    <a href="/signup" style="font-family: 'B Nazanin';font-size: 15px">ثبت نام</a> - <a href="/password_reset/recover" style="font-family: 'B Nazanin';font-size: 15px">آیا پسوورد خود را فراموش کرده اید</a>
+            </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

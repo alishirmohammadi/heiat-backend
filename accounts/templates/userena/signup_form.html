@@ -1,0 +1,122 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% block navbar %}
+   {% include '_navbar.html' with active_link='noaccount' %}
+{% endblock %}
+{% block title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+
+    <div style="padding-top: 60px;">
+        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
+        <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12" style="background-color: #dfdfdf; border-radius: 10px;">
+            <form action="" method="post" class="form-signin" style="padding-top: 15px;">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="field-error" style="color: red">{{ form.non_field_errors }}</div>
+                        <p style="text-align:center;font-size:22px;color:#58b6d2;direction:rtl"><strong>ثبت نام</strong></p>
+                        <div class="row" id="messageRegister" style="color: red; padding-bottom:12px;margin: 0 auto;display:none; ">لطفا برای ثبت نام از ایمیل دانشگاهی خود استفاده کنید</div>
+                        {% for field in form %}
+                            {{ field.errors }}
+                            {% if field.name == 'tos' %}
+                                 <p class="checkbox">
+                                        <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+                                 </p>
+                                {% else %}
+
+                        <div class="row" style="padding-bottom:10px; width: 100%; margin:0 auto;">
+                            <div class="row input-group" style="border:2px solid #58b6d2;background-color: #ffffff;">
+                                <div class="input-group-btn">
+                                    <i class="fa fa-envelope-o" style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
+                                </div>
+                                <div style="padding:5px 25px">
+                                        <p>
+{#                                        {{ field.label_tag }}#}
+                                        {{ field }}
+                                        </p>
+{#                                    <input class="required form-control" id="id_email" maxlength="75" name="email" type="email" placeholder="Email" onblur="checkEmail()" style="border:0px;margin-bottom: 5px;">#}
+                                    <script>
+                                        function checkEmail() {
+                                            var emailValue = document.getElementById("id_email").value;
+                                            if(emailValue.indexOf("@chapar.ir")>=0 || emailValue.indexOf("@rayana.ir")>=0 || emailValue.indexOf("@elenoon.ir")>=0 || emailValue.indexOf("@outlook.com")>=0 || emailValue.indexOf("@hotmail.com")>=0 || emailValue.indexOf("@ymail.com")>=0 || emailValue.indexOf("@yahoo.com")>=0 || emailValue.indexOf("@googlemail.com")>=0 || emailValue.indexOf("@gmail.com")>=0){
+                                                document.getElementById("id_email").value = "";
+                                                document.getElementById("messageRegister").style.display = "block";
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                                {% endif %}
+                        {% endfor %}
+
+
+
+                </fieldset>
+                <div class="row" style="padding-bottom:10px;">
+                    <button id="btnRegister" style="border-radius: 0;" type="submit" class="btn btn-lg btn-primary btn-block">
+                        <span style="color:#58B6D2">ساخت پروفایل</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input[type=text]").addClass('form-control input-sm');
+            $("input[type=password]").addClass('form-control input-sm');
+            $("#id_email").attr('placeholder', '{{form.email.label}}');
+            $("#id_password1").attr('placeholder', '{{form.password1.label}}');
+            $("#id_password2").attr('placeholder', '{{form.password2.label}}');
+            $("#id_username").attr('placeholder', '{{form.username.label}}');
+            $("#id_first_name").attr('placeholder', '{{form.first_name.label}}');
+            $("#id_last_name").attr('placeholder', '{{form.last_name.label}}');
+            $("#id_cellPhone").attr('placeholder', '{{form.cellPhone.label}}');
+
+        });
+    </script>
+{#    <style>#}
+{#        .form-signin {#}
+{#            max-width: 330px;#}
+{#            padding: 15px;#}
+{#            margin: 0 auto;#}
+{#        }#}
+{##}
+{#        .form-signin .form-signin-heading,#}
+{#        .form-signin .checkbox {#}
+{#            margin-bottom: 10px;#}
+{#        }#}
+{##}
+{#        .form-signin .checkbox {#}
+{#            font-weight: normal;#}
+{#        }#}
+{##}
+{#        .form-signin .form-control {#}
+{#            position: relative;#}
+{#            height: auto;#}
+{#            -webkit-box-sizing: border-box;#}
+{#            -moz-box-sizing: border-box;#}
+{#            box-sizing: border-box;#}
+{#            padding: 10px;#}
+{#            font-size: 16px;#}
+{#        }#}
+{##}
+{#        .form-signin .form-control:focus {#}
+{#            z-index: 2;#}
+{#        }#}
+{##}
+{#        .form-signin input[type="email"] {#}
+{#            margin-bottom: -1px;#}
+{#            border-bottom-right-radius: 0;#}
+{#            border-bottom-left-radius: 0;#}
+{#        }#}
+{##}
+{#        .form-signin input[type="password"] {#}
+{#            margin-bottom: 10px;#}
+{#            border-top-left-radius: 0;#}
+{#            border-top-right-radius: 0;#}
+{#        }#}
+{#    </style>#}
+{% endblock %}

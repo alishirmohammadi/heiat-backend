@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block navbar %}
+   {% include '_navbar.html' with active_link='charity' %}
+{% endblock %}
+{% block content %}
+{% load staticfiles %}
+
+ <div class="container" style="padding-left: 300px">
+
+            <form method="POST" style="text-align: center">
+                <div style="text-align: center">
+
+                    <h3 class="form-signin-heading" style="font-family: 'B Mitra';font-size: 150px">
+                       بده در راه خدا
+                    </h3>
+
+                </div>
+                <input type="text" class="form-control show-popover" name="amount" placeholder="مبلغ به تومان" required="" autofocusrel="popover" data-original-title="مبلغ دلخواه" data-content="
+                       مبلغ دلخواهی که می خواهید کمک کنید را به صورت عددی وارد کنید.مبلغ باید بیش از صد تومان باشد
+                       ">
+                <br>
+                <button class="btn btn-lg btn-success btn-block show-popover" type="submit" rel="popover" data-original-title="پرداخت" data-content="
+                        پس از زدن دگمه پرداخت به صفحه پرداخت الکترونیکی بانک ملت تحت سامانه شاپرک هدایت می شوید و با کلیه کارتهای عضو شبکه ملی مانند تجرات،ملی و کشاورزی می توانید پرداخت نمیادد.
+                        ">پرداخت</button>
+                <br>
+
+                <div class="row">
+                    <div class="span8">
+                        <img src="{% static 'azzhra.jpg' %}" width="35%" style="text-align: center">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+{% endblock %}

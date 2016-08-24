@@ -1,0 +1,623 @@
+{% extends 'base.html' %}
+{% load tags %}
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+{% block scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $("#lab1-btn").click(function () {
+                $("#hidden").attr('value', "label1");
+                $("#form2").submit();
+            });
+            $("#lab2-btn").click(function () {
+                $("#hidden").attr('value', "label2");
+                $("#form2").submit();
+            });
+            $("#lab3-btn").click(function () {
+                $("#hidden").attr('value', "label3");
+                $("#form2").submit();
+            });
+            $("#lab4-btn").click(function () {
+                $("#hidden").attr('value', "label4");
+                $("#form2").submit();
+            });
+            $("#status_choices-btn").click(function () {
+                $("#hidden").attr('value', "status_choices");
+                $("#form2").submit();
+            });
+            $("#numberOfPayments-btn").click(function () {
+                $("#hidden").attr('value', "numberOfPayments");
+                $("#form2").submit();
+            });
+            $("#coupled-btn").click(function () {
+                $("#hidden").attr('value', "coupled");
+                $("#form2").submit();
+            });
+            $("#message").click(function () {
+                $("#hidden").attr('value', "message");
+                $("#form2").submit();
+            });
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#all").click(function (event) {
+                if (this.checked) {
+                    $('.checkbox').each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    $('.checkbox').each(function () {
+                        this.checked = false;
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#show").click(function () {
+                $("#hidden2").attr('value', "show");
+                $("#form0").submit();
+            });
+            $("#print").click(function () {
+                $("#hidden2").attr('value', "print");
+                $("#form0").submit();
+            });
+            $("#accelerate").click(function () {
+                $("#hidden2").attr('value', "accelerate");
+                $("#form0").submit();
+            });
+            $("#monifest").click(function () {
+                $("#hidden2").attr('value', "monifest");
+                $("#form0").submit();
+            });
+            $("#excel").click(function () {
+                $("#hidden2").attr('value', "excel");
+                $("#form0").submit();
+            });
+            $("#select").click(function () {
+                $("#hidden2").attr('value', "select");
+                $("#form0").submit();
+            });
+        });
+    </script>
+
+
+{% endblock %}
+
+
+{% block  content %}
+
+
+    <div class="well container" style="text-align: right">
+        <form method="post" id="form0">
+            {% csrf_token %}
+            <div style="direction:rtl ">
+                <label id="status_choices">
+                    وضعیت ثبت نام:
+                    {% for item in statusChoices|get_keys %}
+                        <b>{{ statusChoices|get_tuple_item:item }}</b>
+                        <input class="checkbox-inline" type="checkbox" name="status_choices" value="{{ item }}"
+                               {% if item in filterAll.status %}checked="checked"{% endif %}
+                        >
+                    {% endfor %}
+
+                </label>
+
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="people_type_choices">
+                    به عنوان:
+
+                    {% for item in peopleTypeChoices|get_keys %}
+                        <b>{{ peopleTypeChoices|get_tuple_item:item }}</b>
+                        <input class="checkbox-inline" type="checkbox" name="people_type_choices" value="{{ item }}"
+                               {% if item in filterAll.people_type %}checked="checked"{% endif %}>
+                    {% endfor %}
+
+                </label>
+
+            </div>
+
+
+            <div style="direction:rtl ">
+                <label id="payment">
+                    وضعیت پرداخت:
+                    <b>بدون پرداخت</b> <input class="checkbox-inline" type="checkbox" name="payment" value="0"
+                                              {% if '0' in filterAll.payment %}checked="checked"{% endif %}>
+                    <b>فقط قسط اول</b> <input class="checkbox-inline" type="checkbox" name="payment" value="1"
+                                              {% if '1' in filterAll.payment %}checked="checked"{% endif %}>
+                    <b>دو قسط</b> <input class="checkbox-inline" type="checkbox" name="payment" value="2"
+                                         {% if '2' in filterAll.payment %}checked="checked"{% endif %}>
+                    <b>هرسه قسط</b><input class="checkbox-inline" type="checkbox" name="payment" value="3"
+                                          {% if '3' in filterAll.payment %}checked="checked"{% endif %}>
+                </label>
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="gender">
+                    جنسیت:
+                    <b>مرد</b><input class="checkbox-inline" type="checkbox" name="gender" value="male"
+                                     {% if 'male' in filterAll.gender %}checked="checked"{% endif %}>
+                    <b>زن</b><input class="checkbox-inline" type="checkbox" name="gender" value="female"
+                                    {% if 'female' in filterAll.gender %}checked="checked"{% endif %}>
+                </label>
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="coupled">
+                    نوع سفر:
+                    <b>مجردی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="single"
+                                       {% if 'single' in filterAll.couple %}checked="checked"{% endif %}>
+                    <b>متاهلی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="couple"
+                                        {% if 'couple' in filterAll.couple %}checked="checked"{% endif %}>
+                </label>
+            </div>
+
+            {% if program.type == 'etekaf' %}
+                <div style="direction:rtl ">
+                    <label id="age">
+                        سن مجاز:
+                        <b>مجاز</b><input class="checkbox-inline" type="checkbox" name="age" value="can"
+                                          {% if 'can' in filterAll.age %}checked="checked"{% endif %}>
+                        <b>غیرمجاز</b><input class="checkbox-inline" type="checkbox" name="age" value="cannot"
+                                             {% if 'cannot' in filterAll.age %}checked="checked"{% endif %}>
+                    </label>
+                </div>
+            {% elif program.type == 'mashhad' %}
+                <div style="direction:rtl ">
+                    <label id="entrance_year">
+                        سال ورود:
+                        {% for item in student_range %}
+                            <b> ورودی {{ item }}
+                                {% if item == student_range.4 %} و ماقبل{% endif %}</b>
+                            <input class="checkbox-inline" type="checkbox" name="entrance_year" value="{{ item }}"
+                               {% if item in filterAll.entrance_year %}checked="checked"{% endif %}>
+                        {% endfor %}
+                    </label>
+                </div>
+
+                <div style="direction:rtl ">
+                    <label id="level">
+                        مقطع:
+                        <b>کارشناسی</b> <input class="checkbox-inline" type="checkbox" name="level" value="bs"
+                               {% if 'bs' in filterAll.level %}checked="checked"{% endif %}>
+                        <b>کارشناسی ارشد</b> <input class="checkbox-inline" type="checkbox" name="level" value="ms"
+                               {% if 'ms' in filterAll.level %}checked="checked"{% endif %}>
+                        <b>دکتری</b><input class="checkbox-inline" type="checkbox" name="level" value="phd"
+                               {% if 'phd' in filterAll.level %}checked="checked"{% endif %}>
+                        <b>دیگر</b><input class="checkbox-inline" type="checkbox" name="level" value="other"
+                               {% if 'other' in filterAll.level %}checked="checked"{% endif %}>
+                    </label>
+                </div>
+            {% elif program.type == 'arbaeen' %}
+                <div style="direction:rtl ">
+                    <label id="passport">
+                        وضعیت گذرنامه:
+{#                        {% for item in passportChoices|get_keys %}#}
+{#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
+{#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
+{#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
+{#                        {% endfor %}#}
+                    </label>
+                </div>
+                <div style="direction:rtl ">
+                    <label id="conscription">
+                        وضعیت نظام وظیفه:
+                        {% for item in conscriptionChoices|get_keys %}
+
+                            <b>{{ conscriptionChoices|get_tuple_item:item }}</b>
+                            <input class="checkbox-inline" type="checkbox" name="conscription_choices"
+                                   value="{{ item }}"
+                               {% if item in filterAll.conscription %}checked="checked"{% endif %}>
+                        {% endfor %}
+                    </label>
+                </div>
+
+            {% endif %}
+
+            <div style="direction:rtl ">
+                <label id="additional_options">
+                    گزینه دیگر
+                    {#                    <input class="checkbox-inline" type="checkbox" name="car" value="air"><b>هوایی</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="car" value="road"><b>زمینی</b>#}
+                </label>
+            </div>
+
+
+            {% if False %}
+                <div style="direction:rtl ">
+                    <label id="ability">
+                        توانمندی:
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="0"><b>ندارم</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="1"><b>اجرایی</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="2"><b>تدارکات و
+                        پشتیبانی</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="3"><b>فرهنگی</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="4"><b>مداحی و روضه
+                        خوانی</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="5"><b>مدعوین</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="6"><b>رابط خواهران و
+                        برادران</b>
+                        <input class="checkbox-inline" type="checkbox" name="ability" value="7"><b>مالی</b>
+                    </label>
+                </div>
+
+            {% endif %}
+
+            <div style="direction:rtl ">
+                <label id="label1">
+                    برچسب 1:
+                    <b>بله</b><input class="checkbox-inline" type="checkbox" name="label1" value="y"
+                                     {% if 'y' in filterAll.label1 %}checked="checked"{% endif %}>
+                    <b>خیر</b><input class="checkbox-inline" type="checkbox" name="label1" value="n"
+                                     {% if 'n' in filterAll.label1 %}checked="checked"{% endif %}>
+                </label>
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="label2">
+                    برچسب 2:
+                    <b>بله</b><input class="checkbox-inline" type="checkbox" name="label2" value="y"
+                                     {% if 'y' in filterAll.label2 %}checked="checked"{% endif %}>
+                    <b>خیر</b><input class="checkbox-inline" type="checkbox" name="label2" value="n"
+                                     {% if 'n' in filterAll.label2 %}checked="checked"{% endif %}>
+                </label>
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="label3">
+
+                    برچسب 3:
+
+                    {% for item in label_range %}
+
+                        {% if item == 0 %}
+
+                            <b>حالت پیشفرض</b>
+                            <input class="checkbox-inline" type="checkbox" name="label3" value="{{ item }}"
+                                   {% if item in filterAll.label3 %}checked="checked"{% endif %}>
+
+                        {% else %}
+                            <b>حالت {{ item }}</b>
+                            <input class="checkbox-inline" type="checkbox" name="label3" value="{{ item }}"
+                                   {% if item in filterAll.label3 %}checked="checked"{% endif %}>
+
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </label>
+            </div>
+
+            <div style="direction:rtl ">
+                <label id="label4">
+                    برچسب 4:
+
+
+
+                    {% for item in label_range %}
+                        {% if item == 0 %}
+
+                            <b>حالت پیشفرض</b>
+                            <input class="checkbox-inline" type="checkbox" name="label4" value="{{ item }}"
+                                   {% if item in filterAll.label4 %}checked="checked"{% endif %}>
+
+                        {% else %}
+                            <b>حالت {{ item }}</b>
+                            <input class="checkbox-inline" type="checkbox" name="label4" value="{{ item }}"
+                                   {% if item in filterAll.label4 %}checked="checked"{% endif %}>
+
+
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    {#                This is a view of last implementation of the above codes:#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="1"><b>پیش فرض</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="2"><b>حالت اول</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="3"><b>حالت دوم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="4"><b>حالت سوم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="5"><b>حالت چهارم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="6"><b>حالت پنجم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="7"><b>حالت ششم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="8"><b>حالت هفتم</b>#}
+                    {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="9"><b>حالت هشتم</b>#}
+                </label>
+
+
+            </div>
+
+            <button type="submit" id="show" name="show" class="btn btn-primary" value="نمایش">نمایش</button>
+            <button type="submit" id="print" name="print" class="btn btn-success" value="پرینت">پرینت</button>
+            <button type="submit" id="accelerate" name="accelerate" class="btn btn-danger" value="تسریع">تسریع</button>
+            <button type="submit" id="excel" name="excel" class="btn btn-info" value="اکسل">اکسل</button>
+            <button type="submit" id="monifest" name="monifest" class="btn btn-warning" value="مانیفست">مانیفست</button>
+            <div>
+                {% if manager.canSelect %}
+                    <br>
+                    <input type="number" name="selectFilter" value="select" id="selectFilter" style="text-align: center"
+                           placeholder="تعداد">
+                    <button type="submit" id="select" name="select" class="btn btn-default" value="قرعه کشی">قرعه کشی
+                    </button>
+                {% endif %}
+            </div>
+            <input type="hidden" name="editFilter" value="show" id="hidden2">
+        </form>
+    </div>
+
+
+
+
+{% if manager.canAdd %}
+            <div>
+                <form method="post" action="/program/addreg/{{ program.id }}" id="form1">
+                    {% csrf_token %}
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 well">
+                        <table class="table table-responsive well container " style="text-align: center;">
+                            <tr>
+                                <th width="25%" style="text-align: center; width: 250px">کد ملی</th>
+                                <th width="25%" style="text-align: center; width: 250px">{% if program.hasCoupling %}
+                                    تاهل
+                                {% endif %}</th>
+                                <th width="25%" style="text-align: center; width: 250px">اعمال</th>
+                            </tr>
+                            <tr>
+                                <td width="25%" style="text-align: center"><input class="form-control" name="mellicode"
+                                                                                  type="text"></td>
+                                <td width="25%" style="text-align: center">
+                                    {% if program.hasCoupling %}
+                                        <input class="checkbox-inline" name="coupled" type="checkbox" value="married">
+                                        متاهلی
+                                    {% endif %}
+                                </td>
+                                <td width="25%" style="text-align: center"><input type="submit" class="btn btn-success"
+                                                                                  value="افزودن">
+                                </td>
+                            </tr>
+                        </table>
+{% if programcheck %}
+                        {% if passportcheck2 == True or  passportcheck == 'not have' %}
+                            <p dir="rtl"><b>
+                                ثبت نام مورد نظر شما انجام شد.اما برای تمدید گذرنامه یا گرفتن گذرنامه هر چه
+                                سریعتر
+                                اقدام شود.
+                            </b>
+                            </p>
+                        {% endif %}
+    {% endif %}
+                        {% if a %}
+                            <p dir="rtl"><b>این شخص قبلا ثبت نام شده!</b></p>
+
+                        {% endif %}
+                        {% if b %}
+                            <p dir="rtl"><b>داخل قسمت کدملی را پر کنید،یا شخص مورد نظر شما اصلی پروفایلی در هیئت ندارد و
+                                عضو هیات نیست!
+                            </b></p>
+                        {% endif %}
+                        {% if c %}
+                            <p dir="rtl"><b>
+                                شخصی که شما اضافه کردید جزء لیست  قسط ها نیست. برایشان قسط تعریف کنید
+                            </b></p>
+
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3"></div>
+                </form>
+
+
+            </div>
+        {% endif %}
+
+
+
+
+
+    <form method="post" action="/program/editregisteration/{{ program.id }}" id="form2">
+        {% csrf_token %}
+
+
+        <table class="table table-striped table-responsive">
+            <tr>
+                <th style="text-align: center">ردیف</th>
+                <th style="text-align: center">کدملی</th>
+                <th style="text-align: center">نام</th>
+                {% if manager.program.type == "mashhad" %}
+                    <th style="text-align: center">شماره دانشجویی</th>
+                {% else %}
+                    <th style="text-align: center">به عنوان</th>
+                {% endif %}
+                {% if manager.program.type == "mashhad" %}
+                    <th style="text-align: center">به صورت</th>
+                {% endif %}
+                <th style="text-align: center">جنسیت</th>
+                <th style="text-align: center">ایمیل</th>
+                <th style="text-align: center">وضعیت</th>
+                <th style="text-align: center"><label><input class="checkbox-inline" type="checkbox" id="all"
+                                                             name="tickall">انتخاب</label></th>
+                <th style="text-align: center">پرینت</th>
+            </tr>
+            {% for item in all %}
+                <tr>
+
+                    <td style="text-align: center;  {% if item.couple_inconsistency %}
+                                     background:orange{% endif %}">{{ item.id }}</td>
+                    <td style="text-align: center">{{ item.profile.melliCode }}</td>
+                    <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
+                    {% if manager.program.type == "mashhad" %}
+                        <td style="text-align: center">{{ item.profile.studentNumber }}</td>
+                    {% else %}
+                        <td style="text-align: center">{{ item.profile.people_type_choices|get_tuple_item:item.profile.people_type }}</td>
+                    {% endif %}
+                    {% if manager.program.type == "mashhad" %}
+                        <td style="text-align: center">{% if item.coupling %}
+                            متاهلی
+                        {% else %}
+                            مجردی
+                        {% endif %}
+                        </td>
+                    {% endif %}
+                    <td style="text-align: center">{% if item.profile.gender %}
+                        مرد
+                    {% else %}
+                        زن
+                    {% endif %}
+                    </td>
+                    <td style="text-align: center">{{ item.profile.user.email }}</td>
+                    <td style="text-align: center">{{ item.status_choices|get_tuple_item:item.status }}</td>
+                    <td style="text-align: center"><label><input class="checkbox-inline checkbox" type="checkbox"
+                                                                 name="tick"
+                                                                 value="{{ item.id }}"></label></td>
+                    <td style="text-align: center"><a href="http://www.google.com"><img border="0" alt="print"
+                                                                                        src="data:image/jpeg;base64,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"
+                                                                                        width="25" height="25"></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
+        <div class="col-lg-8">
+            <label><input style="margin-left: 6%" class="form-control" type="text" name="message text"
+                          placeholder="موضوع پیام"
+                          id="message text"></label>
+<span style="display: inline-block;float: left">
+            <label style="direction: rtl">
+
+                <span class=" ">پیامک <input class="checkbox-inline" type="checkbox" name="sms" value="sms"></span>
+                <span class=" ">ایمیل <input class="checkbox-inline" type="checkbox" name="email" value="email"></span>
+                <span class=" ">صندوق ورودی <input class="checkbox-inline" type="checkbox" name="inbox" value="inbox"></span>
+                <button class="btn btn-primary" type="submit" id="message" name="message" value="mesage">ارسال</button>
+
+
+            </label>
+    </span>
+            <br>
+            <label><textarea rows="13" cols="54" class="form-control" name="message text" id="message text"></textarea></label>
+        </div>
+
+        <div class="col-md-4">
+            {% if manager.canEditRegistration %}
+                <table class="table table-responsive table-striped">
+                    <tr>
+                        <td width="50">
+                            <button class="btn btn-success center-block" type="button" id="lab1-btn">تغییر برچسب 1
+                            </button>
+                            <select class="form-control" name="label1" id="label1">
+                                <option value="lab1-yes" id="lab1-yes">بله</option>
+                                <option value="lab1-no" id="lab1-no">خیر</option>
+                            </select>
+                        </td>
+                        <td width="50">
+                            <button class="btn btn-success center-block" type="button" id="status_choices-btn">تغییر
+                                وضعیت
+                            </button>
+                            <select class="form-control" name="status_choices">
+
+                                {% for item in statusChoices|get_keys %}
+                                    <option value="{{ item }}">
+                                        {{ statusChoices|get_tuple_item:item }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-success center-block" type="button" id="lab2-btn">تغییر برچسب 2
+                            </button>
+                            <select class="form-control" name="label2">
+                                <option value="lab2-yes" id="lab2-yes">بله</option>
+                                <option value="lab2-no" id="lab2-no">خیر</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-success center-block" type="button" id="numberOfPayments-btn">تغییر
+                                پرداخت
+                            </button>
+                            <select class="form-control" name="numberOfPayments">
+                                <option value="numberOfPayments-0" id="numberOfPayments-0">بدون پرداخت</option>
+                                <option value="numberOfPayments-1" id="numberOfPayments-1">فقط قسط اول</option>
+                                <option value="numberOfPayments-2" id="numberOfPayments-2">دو قسط</option>
+                                <option value="numberOfPayments-3" id="numberOfPayments-3">هر سه قسط</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-success center-block" type="button" id="lab3-btn">تغییر برچسب 3
+                            </button>
+                            <select class="form-control" name="label3">
+                                {% for item in label_range %}
+                                    {% if item == 0 %}
+
+                                        <option value="{{ item }}">
+                                            حالت پیشفرض
+                                        </option>
+                                    {% else %}
+                                        <option value="{{ item }}">
+                                            حالت
+                                            {{ item }}
+                                        </option>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-success center-block" type="button" id="lab4-btn">تغییر برچسب 4
+                            </button>
+                            <select class="form-control" name="label4">
+                                {% for item in label_range %}
+                                    {% if item == 0 %}
+
+                                        <option value="{{ item }}">
+                                            حالت پیشفرض
+                                        </option>
+                                    {% else %}
+                                        <option value="{{ item }}">
+                                            حالت
+                                            {{ item }}
+                                        </option>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-success center-block" type="button" id="coupled-btn">تغییر نوع سفر
+                            </button>
+                            <select name="coupled" class="form-control">
+                                <option value="coupled" id="coupled">متاهل</option>
+                                <option value="single" id="single">مجرد</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" name="editAction" value="default" id="hidden">
+            {% endif %}
+        </div>
+    </form>
+
+
+
+
+{% endblock %}
