@@ -255,11 +255,35 @@
 
                             <tr>
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
-                                    تاریخ تولد:
+                                    سال تولد:
                                 </td>
                                 <td>
-                                    <input class="form-control" id="birthdate" value="{{ pro.birthdate }}" type="text"
-                                           name="birthdate">
+                                <p>13 <input value="{{ pro.birthYear }}" type="text" name="birthyear"
+                                                 style="width: 20%" class="form-control" maxlength="2"></p>
+                                </td>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                  ماه تولد:
+                                </td>
+                                <td>
+                                    <select name="birthmonth" class="form-control">
+                                        {% for type in month %}
+                                            <option  {% if pro.birthMonth == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ month|get_tuple_item:type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    روز تولد:
+                                </td>
+                                <td>
+                                    <select name="birthday" class="form-control">
+                                        {% for type in days %}
+                                            <option  {% if pro.birthDay == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ type }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </td>
 
 
@@ -393,7 +417,7 @@
                                 style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                 شماره ملی همسر اول:
                             </td>
-                            <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                            <td><input value="{{ pro.couple.melliCode }}" class="form-control" maxlength="10"
                                        name="wife_mellicode"></td>
                             </tr>
                             <tr id="couple_melli2">
