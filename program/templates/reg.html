@@ -2,21 +2,35 @@
 
 {% block navbar %}
     {% include '_navbar.html' with active_link='management' %}
-    {% if user.my_profile.hasManagement %}
-        <li {% if active_link == "manage" %}class="active"{% endif %}><a href="/program/manage/"
-                                                                         style="font-family: 'B Mitra';font-weight: bold">ویرایش
-            برنامه</a></li>
-        <li {% if active_link == "panel" %}class="active"{% endif %}><a href="/program/panel/"
-                                                                        style="font-family: 'B Mitra';font-weight: bold">پانل
-            مدیریت</a></li>
-        <li {% if active_link == "document" %}class="active"{% endif %}><a href="/program/document/"
-                                                                           style="font-family: 'B Mitra';font-weight: bold">مستند
-            سازی</a></li>
-    {% endif %}
 {% endblock %}
+
 {% block second_navbar %}
-    {% include '_second_navbar.html' with active_link='manage' %}
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
+        <div class="container-fluid">
+            <div class="navbar-header" style="padding-left: 40px"></div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav second-nav navbar-right" style="margin-right: 40%">
+                    {% if user.my_profile.hasManagement %}
+
+                        <li class="active"><a href="/program/manage/{{ mymanagement.pk }}/"
+                                              style="font-family: 'B Mitra';font-weight: bold">ویرایش برنامه</a>
+                        </li>
+                        {% if canFilter %}
+                            <li><a href="/program/panel/{{ mymanagement.pk }}/"
+                                   style="font-family: 'B Mitra';font-weight: bold">پانل مدیریت</a></li>
+                        {% endif %}
+                        <li><a href="/program/documents/{{ mymanagement.pk }}/"
+                               style="font-family: 'B Mitra';font-weight: bold">مستند سازی</a></li>
+
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 {% endblock %}
+
+
 {% load tags %}
 
 {% block content %}

@@ -3,30 +3,50 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 
-{#            {% block navbar-menu %}#}
-{##}
-{#                <div class="collapse navbar-collapse ">#}
-{#                    <ul class="nav navbar-nav">#}
-{#                        {% block navbar-right %}#}
-{#                            {% include "_navbar.html" with prog.id="1"  %}#}
-{#                        {% endblock %}#}
-{#                    </ul>#}
-{#                </div><!--/.nav-collapse -->#}
-{#            {% endblock %}#}
+{% block navbar %}
+                {% include '_navbar.html' with active_link='management' %}
+{% endblock %}
+
+{% block second_navbar %}
+    {% if mymanagement.canFilter or mymanagement.canEditProgram %}
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
+        <div class="container-fluid">
+        <div class="navbar-header" style="padding-left: 40px"></div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav second-nav navbar-right" style="margin-right: 40%">
+                    {% if user.my_profile.hasManagement %}
+
+                           {% if  mymanagement.canEditProgram %}
+                        <li><a href="/program/manage/{{ mymanagement.pk }}/" style="font-family: 'B Mitra';font-weight: bold">ویرایش برنامه</a></li>
+                        {% endif %}
+                        {% if mymanagement.canFilter %}
+                        <li><a href="/program/panel/{{ mymanagement.pk }}/" style="font-family: 'B Mitra';font-weight: bold">پانل مدیریت</a></li>
+                        {% endif %}
+                        <li class="active"><a href="/program/documents/{{ mymanagement.pk }}/" style="font-family: 'B Mitra';font-weight: bold">مستند سازی</a></li>
+
+                    {% endif %}
+            </ul>
+        </div>
+        </div>
+</nav>
+    {% endif %}
+{% endblock %}
+
 
 {% block  content %}
 
-    {% for item in registered %}
-        {% if item.program.id in prog %}
-            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>
-        {% else %}
-            {{ item.program.title }}
-        {% endif %}
-
-
-        <br>
-
-    {% endfor %}
+{##}
+{#    {% for item in registered %}#}
+{#        {% if item.program.id in prog %}#}
+{#            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>#}
+{#        {% else %}#}
+{#            {{ item.program.title }}#}
+{#        {% endif %}#}
+{##}
+{##}
+{#        <br>#}
+{##}
+{#    {% endfor %}#}
 
     {% for item in post %}
 

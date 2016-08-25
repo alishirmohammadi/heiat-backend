@@ -1,10 +1,34 @@
 {% extends 'base.html' %}
 {% block navbar %}
-                {% include '_navbar.html' with active_link='management' %}
+    {% include '_navbar.html' with active_link='management' %}
 {% endblock %}
+
 {% block second_navbar %}
-    {% include '_second_navbar.html' with active_link='panel' %}
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
+        <div class="container-fluid">
+            <div class="navbar-header" style="padding-left: 40px"></div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav second-nav navbar-right" style="margin-right: 40%">
+                    {% if user.my_profile.hasManagement %}
+
+                        {% if canEditProgram %}
+                            <li><a href="/program/manage/{{ mymanagement.pk }}/"
+                                   style="font-family: 'B Mitra';font-weight: bold">ویرایش برنامه</a></li>
+                        {% endif %}
+                        <li class="active"><a href="/program/panel/{{ mymanagement.pk }}/"
+                                              style="font-family: 'B Mitra';font-weight: bold">پانل مدیریت</a></li>
+                        <li><a href="/program/documents/{{ mymanagement.pk }}/"
+                               style="font-family: 'B Mitra';font-weight: bold">مستند سازی</a></li>
+
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 {% endblock %}
+
+
 {% load tags %}
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
@@ -184,7 +208,7 @@
                             <b> ورودی {{ item }}
                                 {% if item == student_range.4 %} و ماقبل{% endif %}</b>
                             <input class="checkbox-inline" type="checkbox" name="entrance_year" value="{{ item }}"
-                               {% if item in filterAll.entrance_year %}checked="checked"{% endif %}>
+                                   {% if item in filterAll.entrance_year %}checked="checked"{% endif %}>
                         {% endfor %}
                     </label>
                 </div>
@@ -193,24 +217,24 @@
                     <label id="level">
                         مقطع:
                         <b>کارشناسی</b> <input class="checkbox-inline" type="checkbox" name="level" value="bs"
-                               {% if 'bs' in filterAll.level %}checked="checked"{% endif %}>
+                                               {% if 'bs' in filterAll.level %}checked="checked"{% endif %}>
                         <b>کارشناسی ارشد</b> <input class="checkbox-inline" type="checkbox" name="level" value="ms"
-                               {% if 'ms' in filterAll.level %}checked="checked"{% endif %}>
+                                                    {% if 'ms' in filterAll.level %}checked="checked"{% endif %}>
                         <b>دکتری</b><input class="checkbox-inline" type="checkbox" name="level" value="phd"
-                               {% if 'phd' in filterAll.level %}checked="checked"{% endif %}>
+                                           {% if 'phd' in filterAll.level %}checked="checked"{% endif %}>
                         <b>دیگر</b><input class="checkbox-inline" type="checkbox" name="level" value="other"
-                               {% if 'other' in filterAll.level %}checked="checked"{% endif %}>
+                                          {% if 'other' in filterAll.level %}checked="checked"{% endif %}>
                     </label>
                 </div>
             {% elif program.type == 'arbaeen' %}
                 <div style="direction:rtl ">
                     <label id="passport">
                         وضعیت گذرنامه:
-{#                        {% for item in passportChoices|get_keys %}#}
-{#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
-{#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
-{#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
-{#                        {% endfor %}#}
+                        {#                        {% for item in passportChoices|get_keys %}#}
+                        {#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
+                        {#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
+                        {#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
+                        {#                        {% endfor %}#}
                     </label>
                 </div>
                 <div style="direction:rtl ">
@@ -221,7 +245,7 @@
                             <b>{{ conscriptionChoices|get_tuple_item:item }}</b>
                             <input class="checkbox-inline" type="checkbox" name="conscription_choices"
                                    value="{{ item }}"
-                               {% if item in filterAll.conscription %}checked="checked"{% endif %}>
+                                   {% if item in filterAll.conscription %}checked="checked"{% endif %}>
                         {% endfor %}
                     </label>
                 </div>
@@ -363,35 +387,35 @@
 
 
 
-{% if manager.canAdd %}
-            <div>
-                <form method="post" action="/program/addreg/{{ program.id }}" id="form1">
-                    {% csrf_token %}
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6 well">
-                        <table class="table table-responsive well container " style="text-align: center;">
-                            <tr>
-                                <th width="25%" style="text-align: center; width: 250px">کد ملی</th>
-                                <th width="25%" style="text-align: center; width: 250px">{% if program.hasCoupling %}
-                                    تاهل
-                                {% endif %}</th>
-                                <th width="25%" style="text-align: center; width: 250px">اعمال</th>
-                            </tr>
-                            <tr>
-                                <td width="25%" style="text-align: center"><input class="form-control" name="mellicode"
-                                                                                  type="text"></td>
-                                <td width="25%" style="text-align: center">
-                                    {% if program.hasCoupling %}
-                                        <input class="checkbox-inline" name="coupled" type="checkbox" value="married">
-                                        متاهلی
-                                    {% endif %}
-                                </td>
-                                <td width="25%" style="text-align: center"><input type="submit" class="btn btn-success"
-                                                                                  value="افزودن">
-                                </td>
-                            </tr>
-                        </table>
-{% if programcheck %}
+    {% if manager.canAdd %}
+        <div>
+            <form method="post" action="/program/addreg/{{ program.id }}" id="form1">
+                {% csrf_token %}
+                <div class="col-md-3"></div>
+                <div class="col-md-6 well">
+                    <table class="table table-responsive well container " style="text-align: center;">
+                        <tr>
+                            <th width="25%" style="text-align: center; width: 250px">کد ملی</th>
+                            <th width="25%" style="text-align: center; width: 250px">{% if program.hasCoupling %}
+                                تاهل
+                            {% endif %}</th>
+                            <th width="25%" style="text-align: center; width: 250px">اعمال</th>
+                        </tr>
+                        <tr>
+                            <td width="25%" style="text-align: center"><input class="form-control" name="mellicode"
+                                                                              type="text"></td>
+                            <td width="25%" style="text-align: center">
+                                {% if program.hasCoupling %}
+                                    <input class="checkbox-inline" name="coupled" type="checkbox" value="married">
+                                    متاهلی
+                                {% endif %}
+                            </td>
+                            <td width="25%" style="text-align: center"><input type="submit" class="btn btn-success"
+                                                                              value="افزودن">
+                            </td>
+                        </tr>
+                    </table>
+                    {% if programcheck %}
                         {% if passportcheck2 == True or  passportcheck == 'not have' %}
                             <p dir="rtl"><b>
                                 ثبت نام مورد نظر شما انجام شد.اما برای تمدید گذرنامه یا گرفتن گذرنامه هر چه
@@ -400,29 +424,29 @@
                             </b>
                             </p>
                         {% endif %}
+                    {% endif %}
+                    {% if a %}
+                        <p dir="rtl"><b>این شخص قبلا ثبت نام شده!</b></p>
+
+                    {% endif %}
+                    {% if b %}
+                        <p dir="rtl"><b>داخل قسمت کدملی را پر کنید،یا شخص مورد نظر شما اصلی پروفایلی در هیئت ندارد و
+                            عضو هیات نیست!
+                        </b></p>
+                    {% endif %}
+                    {% if c %}
+                        <p dir="rtl"><b>
+                            شخصی که شما اضافه کردید جزء لیست قسط ها نیست. برایشان قسط تعریف کنید
+                        </b></p>
+
+                    {% endif %}
+                </div>
+                <div class="col-md-3"></div>
+            </form>
+
+
+        </div>
     {% endif %}
-                        {% if a %}
-                            <p dir="rtl"><b>این شخص قبلا ثبت نام شده!</b></p>
-
-                        {% endif %}
-                        {% if b %}
-                            <p dir="rtl"><b>داخل قسمت کدملی را پر کنید،یا شخص مورد نظر شما اصلی پروفایلی در هیئت ندارد و
-                                عضو هیات نیست!
-                            </b></p>
-                        {% endif %}
-                        {% if c %}
-                            <p dir="rtl"><b>
-                                شخصی که شما اضافه کردید جزء لیست  قسط ها نیست. برایشان قسط تعریف کنید
-                            </b></p>
-
-                        {% endif %}
-                    </div>
-                    <div class="col-md-3"></div>
-                </form>
-
-
-            </div>
-        {% endif %}
 
 
 
@@ -456,7 +480,7 @@
                 <tr>
 
                     <td style="text-align: center;  {% if item.couple_inconsistency %}
-                                     background:orange{% endif %}">{{ item.id }}</td>
+                        background:orange{% endif %}">{{ item.id }}</td>
                     <td style="text-align: center">{{ item.profile.melliCode }}</td>
                     <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
                     {% if manager.program.type == "mashhad" %}
@@ -494,13 +518,14 @@
         <div class="col-lg-8">
             <label><input style="margin-left: 6%" class="form-control" type="text" name="messageTitle"
                           placeholder="موضوع پیام"
-                          ></label>
+            ></label>
 <span style="display: inline-block;float: left">
             <label style="direction: rtl">
 
                 <span class=" ">پیامک <input class="checkbox-inline" type="checkbox" name="sms" value="sms"></span>
                 <span class=" ">ایمیل <input class="checkbox-inline" type="checkbox" name="email" value="email"></span>
-                <span class=" ">صندوق ورودی <input class="checkbox-inline" type="checkbox" name="inbox" value="inbox"></span>
+                <span class=" ">صندوق ورودی <input class="checkbox-inline" type="checkbox" name="inbox"
+                                                   value="inbox"></span>
                 <button class="btn btn-primary" type="submit" id="message" name="message" value="message">ارسال</button>
 
 
