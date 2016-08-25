@@ -156,12 +156,8 @@ def panel(request, program_id):
             return HttpResponseRedirect('/program/panel/' + str(programe.id))
         else:
             return HttpResponseRedirect('/error')
-<<<<<<< HEAD
 
-
-=======
 @login_required
->>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def TestDocument(request, registered):
     docx_title = "monifest.docx"
     f = nmi.crea(request, registered)
@@ -177,13 +173,8 @@ def TestDocument(request, registered):
 
 
 def pri1(request, registered):
-<<<<<<< HEAD
-    docx_title = "monifest.docx"
-    f = nmi.pri(request, registered)
-=======
     docx_title="print.docx"
     f=nmi.pri(request, registered)
->>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
     length = f.tell()
     f.seek(0)
     response = HttpResponse(
@@ -193,12 +184,9 @@ def pri1(request, registered):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
-<<<<<<< HEAD
 
 
-=======
 @login_required
->>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def allfilter(filter, programe):
     registered = Registration.objects.filter(program=programe)
 
@@ -279,10 +267,8 @@ def allfilter(filter, programe):
 
     return registered
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
+
 def export_users_xls(status_list):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
@@ -375,12 +361,8 @@ def addregistration(request, program_id):
                                     addregister.coupling = False
                             else:
                                 addregister.coupling = False
-<<<<<<< HEAD
 
-
-=======
 @login_required
->>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def editstatus(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
