@@ -164,3 +164,5 @@ USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
 USERENA_SIGNIN_REDIRECT_URL = getattr(settings,
                                       'USERENA_SIGNIN_REDIRECT_URL',
                                       '/program')
+
+LOGIN_URL='/accounts/signin/'
