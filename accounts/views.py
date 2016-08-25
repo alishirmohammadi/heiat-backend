@@ -148,14 +148,14 @@ def charity(request):
 
 
 #
-month={1:'فروردین',2:'اردیبهشت',3:'خرداد',4:'تیر',5:'مرداد',6:'شهریور',7:'مهر',8:'آبان',9:'آذر',10:'دی',11:'بهمن',12:'اسفند'}
+
 
 def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
 
         return render(request, 'profile.html', {'pro': a, 'days': range(1, 32), 'allTypes': a.people_type_choices,
-                                                'pas_type': a.passport_choices, 'vazife': a.conscription_choices,'month':month})
+                                                'pas_type': a.passport_choices, 'vazife': a.conscription_choices})
     else:
         a.address = request.POST.get('adress', )
         a.shenasname = request.POST.get('she_number', )
@@ -188,16 +188,20 @@ def edit(request):
         a.passport=request.POST.get('pas_type',)
         if(request.POST.get('pas_type',)=='have' or request.POST.get('pas_type',)=='have 7'):
             a.passport_number=request.POST.get('serial_pas',)
+            a.passport_dateofissue=request.POST.get('pas_release2',)
+            a.passport_dateofexpiry=request.POST.get('pas_exprition2',)
 
 
-        # a.coupling=request.POST.get('coupling',)
+
         if(request.POST.get('coupling',)):
-            x=request.POST.get('wife_mellicode',)
-            datebase_object=Profile.objects.all()
-            for type in datebase_object:
-                if (type.melliCode==x):
-                    a.couple=type.id
-
+            if(request.POST.get('wife_mellicode',)!=None and checkMelliCode(request.POST.get('wife_mellicode',))):
+                x=request.POST.get('wife_mellicode',)
+                datebase_object=Profile.objects.all()
+                for type in datebase_object:
+                    if (type.melliCode==x):
+                        a.couple=type
+            else:
+                erorr2=1
 
 
 
