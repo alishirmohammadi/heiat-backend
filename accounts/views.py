@@ -188,9 +188,14 @@ def edit(request):
         a.passport=request.POST.get('pas_type',)
         if(request.POST.get('pas_type',)=='have' or request.POST.get('pas_type',)=='have 7'):
             a.passport_number=request.POST.get('serial_pas',)
+<<<<<<< HEAD
             a.passport_dateofissue=request.POST.get('pas_release2',)
             a.passport_dateofexpiry=request.POST.get('pas_exprition2',)
 
+=======
+            a.passport_number = request.POST.get('pas_release', )
+            a.passport_number = request.POST.get('pas_exprition', )
+>>>>>>> d42a96325d89169261b9f13de9c5979c0e55d8f5
 
 
         if(request.POST.get('coupling',)):

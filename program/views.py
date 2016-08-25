@@ -533,8 +533,8 @@ def editstatus(request, program_id):
 
                 inbox_filter = request.POST.get('email', 'false')
                 if inbox_filter == 'email':
-                    subject = request.POST.get('tittle', '')
-                    message = request.POST.get('massage text', '')
+                    subject = request.POST.get('messageTitle', '')
+                    message = request.POST.get('message text', '')
                     # from_email = request.POST.get('from_email', 'debugpls@gmail.com')#hard code for try
                     # to_email = request.POST.get('to_email', 'ivyblackmail@gmail.com')#hard code for try
                     from_email = request.POST.get('from_email',
@@ -543,7 +543,7 @@ def editstatus(request, program_id):
                     my_host = 'smtp.gmail.com'
                     my_port = 587
                     my_username = from_email
-                    my_password = '************'  # password here
+                    my_password = programe.emailPassword
                     my_use_tls = True
                     connection = get_connection(host=my_host,
                                                 port=my_port,
@@ -555,15 +555,6 @@ def editstatus(request, program_id):
                         to_person_mail = sendemail.profile.user.email
                         if subject and message:
                             try:
-                                # with get_connection(
-                                #         host=my_host,
-                                #         port=my_port,
-                                #         username=my_username,
-                                #         password=my_password,
-                                #         use_tls=my_use_tls
-                                # )as connection:
-                                #           EmailMessage(subject, message, username, [to_person_mail],
-                                #              connection=connection).send()
                                 connection.open()
                                 send_mail(subject, message, from_email, [to_person_mail], auth_user=my_username,
                                           auth_password=my_password, connection=connection)
@@ -593,6 +584,18 @@ def my_programs(request):
     lastprogrambool = bool(lastprogram)
     lastpricing = Pricing.objects.filter(program=lastprogram)
     profile = Profile.objects.filter(user=user).first()
+    comment = 'شماره تاریخ شما تا زمان سفر اعتبار ندارد'
+
+    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 2:
+        comment = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+
+    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 1:
+     if lastprogram.creationDate.month <= 6 :
+         comment = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+    if profile.passport_dateofexpiry.year == lastprogram.creationDate.year:
+        if lastprogram.creationDate.month >= profile.passport_dateofexpiry.month + 6:
+            comment = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+
     passportcheck = bool(profile.passport != None)
     mytype = profile.people_type
     typecheck = bool(lastpricing.filter(people_type=mytype))
@@ -622,7 +625,7 @@ def my_programs(request):
                            'profile': profile,
                            'lastprogram': lastprogram,
                            'programregistered': programregistered,
-                           'allStatus': Registration.status_choices,
+                           'allStatus': Registration.status_choices,'comment': comment ,
                            'peopletype': Pricing.people_type_choices}
                           )
         else:
@@ -645,6 +648,7 @@ def my_programs(request):
             programcheck = bool(lastprogram.type == 'arbaeen')
             if programcheck:
                 if passportcheck:
+
                     if typecheck:
                         if Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
                                 status='removed').first():
@@ -727,7 +731,7 @@ def my_programs(request):
                           {'registered': registered, 'lastpricing': lastpricing, 'lastprogram': lastprogram,
                            'programregistered': programregistered,
                            'allStatus': Registration.status_choices
-                              , 'peopletype': Pricing.people_type_choices})
+                              , 'peopletype': Pricing.people_type_choices ,'comment': comment})
         else:
             additionalboolean = bool(lastprogram.additionalObject)
             additional = lastprogram.additionalObject
@@ -746,7 +750,8 @@ def my_programs(request):
                                                     'lastprogram': lastprogram,
                                                     'programregistered': programregistered,
                                                     'allStatus': Registration.status_choices,
-                                                    'peopletype': Pricing.people_type_choices
+                                                    'peopletype': Pricing.people_type_choices,
+                                                    'comment': comment ,
                                                     })
 
 @login_required
