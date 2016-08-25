@@ -123,7 +123,7 @@ class Management(models.Model):
     canSelect = models.BooleanField(default=False)
     canEditRegistration = models.BooleanField(default=False)
     canDocument = models.BooleanField(default=False)
-    canMassage = models.BooleanField(default=False)
+    canMessage = models.BooleanField(default=False)
     canAdd = models.BooleanField(default=False)
     documentation = models.CharField(null=True, blank=True, max_length=10000)
     ROLE_MASTER_MANAGER = 'master manager'

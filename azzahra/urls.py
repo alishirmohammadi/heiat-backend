@@ -36,7 +36,7 @@ urlpatterns = [
     # url(r'^signin/', 'accounts.views.signin'),
     # url(r'^signup/', 'accounts.views.signup'),
     url(r'^profile/', 'accounts.views.edit'),
-    url(r'^$', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
+    url(r'^$', RedirectView.as_view(url='/program/', permanent=True), name='home'),
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
     url(r'^FAQ/', 'accounts.views.FAQ'),
