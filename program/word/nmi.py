@@ -197,11 +197,11 @@ def crea(request,recordset):
          # size of rows
          r1[0].width = Cm(3.5)
          r1[1].width = Cm(2)
-         r1[2].width = Cm(3)
-         r1[3].width = Cm(1.5)
+         r1[2].width = Cm(1)
+         r1[3].width = Cm(1)
          r1[4].width = Cm(1)
          r1[5].width = Cm(1)
-         r1[6].width = Cm(4)
+         r1[6].width = Cm(10)
          r1[7].width = Cm(3)
          r1[8].width = Cm(3)
          r1[9].width = Cm(4)
@@ -248,7 +248,10 @@ def crea(request,recordset):
      styling(row_cells[9], str(item.profile.user.first_name), 12)
      styling(row_cells[9], str(item.profile.fatherName), 12)
      styling(row_cells[9], str(item.profile.user.last_name), 12)
-     styling(row_cells[6], str(item.profile.passport_number), 12)
+     a1=str(item.profile.passport_number)
+     if len(a1)==9:
+         a1=a1[1:8]
+     styling(row_cells[6], a1, 12)
      styling(row_cells[6], str('ایران'), 12)
      styling(row_cells[6], str(item.profile.passport_dateofissue), 12)
      styling(row_cells[6], str(item.profile.passport_dateofexpiry), 12)
