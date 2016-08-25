@@ -6,6 +6,7 @@
    {% include '_navbar.html' with active_link='signin' %}
 {% endblock %}
 {% block content %}
+    <div style="width: 100%">
     <div style="padding-top: 60px;">
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0">
             <ul class="list-group ">
@@ -19,13 +20,13 @@
 
         <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12" style="background-color: #dfdfdf; border-radius: 10px;">
 
-            <form action="" method="post" class="form-signin" style="padding-top: 15px;padding-bottom: 10px">
+            <form action="" method="post" class="form-signin" style=" padding-top: 15px; padding-bottom: 10px;">
                 {% csrf_token %}
                 <fieldset>
                     <div class="field-error" style="color: red">{{ form.non_field_errors }}</div>
 
 
-                    <div class="row" style="padding-bottom:10px;width: 100%; margin:0 auto;">
+                    <div class="row" style="padding-bottom:10px; margin:0 auto;">
                         <div class="row input-group" style="border:2px solid #58b6d2;background-color: #ffffff;">
                             <div class="input-group-btn">
                                 <i class="fa fa-envelope-o"
@@ -39,7 +40,7 @@
                         </div><!-- /input-group -->
                     </div>
 
-                    <div class="row" style="padding-bottom:10px;width: 100%; margin:0 auto;">
+                    <div class="row" style="padding-bottom:10px; margin:0 auto;">
                         <div class="row input-group" style="border:2px solid #58b6d2;background-color: #FFFFFF">
                             <div class="input-group-btn">
                                 <i class="fa fa-lock" style="font-size:25px;color:#58b6d2;padding:0 0px 0 20px;"></i>
@@ -86,6 +87,7 @@
             </form>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
+    </div>
     </div>
     <script type="text/javascript">
         $(document).ready(function () {

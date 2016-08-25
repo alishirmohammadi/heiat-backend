@@ -188,7 +188,8 @@ def edit(request):
         a.passport=request.POST.get('pas_type',)
         if(request.POST.get('pas_type',)=='have' or request.POST.get('pas_type',)=='have 7'):
             a.passport_number=request.POST.get('serial_pas',)
-
+            a.passport_number = request.POST.get('pas_release', )
+            a.passport_number = request.POST.get('pas_exprition', )
 
         # a.coupling=request.POST.get('coupling',)
         if(request.POST.get('coupling',)):
