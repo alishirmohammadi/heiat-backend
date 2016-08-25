@@ -186,7 +186,7 @@ def pri1(request, registered):
     return response
 
 
-@login_required
+
 def allfilter(filter, programe):
     registered = Registration.objects.filter(program=programe)
 
