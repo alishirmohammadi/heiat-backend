@@ -43,7 +43,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" style="font-family: 'B Mitra';font-weight: bold">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li {% if active_link == "profile" %}class="active"{% endif %}><a href="/profile/" style="font-family: 'B Mitra';font-weight: bold">پروفایل</a></li>
+                            <li {% if active_link == "profile" %}class="active"{% endif %}><a href="/accounts/{{ user.username }}" style="font-family: 'B Mitra';font-weight: bold">پروفایل</a></li>
                             <li {% if active_link == "changepass" %}class="active"{% endif %}><a href="/accounts/{{ user.username }}/password/" style="font-family: 'B Mitra';font-weight: bold">تغییر گذرواژه</a></li>
                             <li {% if active_link == "changeemail" %}class="active"{% endif %}><a href="/accounts/{{ user.username }}/email/" style="font-family: 'B Mitra';font-weight: bold">تغییر ایمیل</a></li>
 
