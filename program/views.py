@@ -7,15 +7,16 @@ from .models import Program, User, Registration, Profile, Management, Pricing, M
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.decorators import login_required
-import xlwt, time,random
+import xlwt, time, random
 from django.db.models import Sum, Q
-from django.core.mail import send_mail,BadHeaderError, get_connection
+from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.word import nmi
 from django.core import mail
 
+
 # Create your views here.
 
-
+@login_required
 def documentation(request, program_id):
     # if (request.method == 'GET'):
     #     post = Management.objects.all()
@@ -28,7 +29,7 @@ def documentation(request, program_id):
     managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
     return render(request, 'documents.html', {'post': managements})
 
-
+@login_required
 def panel(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -40,35 +41,34 @@ def panel(request, program_id):
             # if manager.canEditProgram:
             #     return HttpResponseRedirect('/error')
             # else:
-                if manager.canFilter:
-                    filter_all = request.session.get('filter',
-                                                     {'status': [], 'people_type': [], 'payment': [],
-                                                      'gender': ['male'],
-                                                      'couple': [], 'age': [], 'entrance_year': [], 'level': [],
-                                                      'conscription': [], 'passport': [], 'label1': [], 'label2': [],
-                                                      'label3': [],
-                                                      'label4': []})
+            if manager.canFilter:
+                filter_all = request.session.get('filter',
+                                                 {'status': [], 'people_type': [], 'payment': [],
+                                                  'gender': ['male'],
+                                                  'couple': [], 'age': [], 'entrance_year': [], 'level': [],
+                                                  'conscription': [], 'passport': [], 'label1': [], 'label2': [],
+                                                  'label3': [],
+                                                  'label4': []})
 
-                    registered = allfilter(filter_all, programe)
-                    studentRange = []
-                    for item in range(5):
-                        studentRange.append(programe.year - item)
+                registered = allfilter(filter_all, programe)
+                studentRange = []
+                for item in range(5):
+                    studentRange.append(programe.year - item)
 
-                    return render(request, 'panel.html', {'all': registered, 'program': programe,
-                                                          'statusChoices': Registration.status_choices,
-                                                          'peopleTypeChoices': Profile.people_type_choices,
-                                                          'conscriptionChoices': Profile.conscription_choices,
-                                                          # 'passportChoices': Profile.passport_choices,
-                                                          'filterAll': filter_all,
-                                                          'student_range': studentRange,
-                                                          'label_range': range(11),
-                                                          'manager': manager})
+                return render(request, 'panel.html', {'all': registered, 'program': programe,
+                                                      'statusChoices': Registration.status_choices,
+                                                      'peopleTypeChoices': Profile.people_type_choices,
+                                                      'conscriptionChoices': Profile.conscription_choices,
+                                                      # 'passportChoices': Profile.passport_choices,
+                                                      'filterAll': filter_all,
+                                                      'student_range': studentRange,
+                                                      'label_range': range(11),
+                                                      'manager': manager})
 
-                else:
-                    return HttpResponseRedirect('/program/documents/' + str(programe.id))
+            else:
+                return HttpResponseRedirect('/program/documents/' + str(programe.id))
         else:
             return HttpResponseRedirect('/error')
-
     else:
         action = request.POST.get('editFilter', '')
 
@@ -134,32 +134,33 @@ def panel(request, program_id):
                 return export_users_xls(status_list)
         elif action == 'monifest':
             # return render(request, 'panel.html', {'all': registered})
-                return TestDocument(request, registered)
+            return TestDocument(request, registered)
         elif action == 'print':
             # return render(request, 'panel.html', {'all': registered})
-                return pri1(request, registered)
+            return pri1(request, registered)
         elif action == 'select':
             if manager.canSelect:
-                    numberOfSelect = request.POST.get("selectFilter", '')
-                    face = int(numberOfSelect)
-                    total = registered.count()
+                numberOfSelect = request.POST.get("selectFilter", '')
+                face = int(numberOfSelect)
+                total = registered.count()
 
-                    for selected in registered:
-                        t = random.randint(1, total)
-                        if face >= t:
-                            selected.status = 'certain'
-                            face = face - 1
-                        else:
-                            selected.status = 'reserved'
-                        selected.save()
-                        total = total - 1
+                for selected in registered:
+                    t = random.randint(1, total)
+                    if face >= t:
+                        selected.status = 'certain'
+                        face = face - 1
+                    else:
+                        selected.status = 'reserved'
+                    selected.save()
+                    total = total - 1
             return HttpResponseRedirect('/program/panel/' + str(programe.id))
         else:
             return HttpResponseRedirect('/error')
 
+@login_required
 def TestDocument(request, registered):
-    docx_title="monifest.docx"
-    f=nmi.crea(request, registered)
+    docx_title = "monifest.docx"
+    f = nmi.crea(request, registered)
     length = f.tell()
     f.seek(0)
     response = HttpResponse(
@@ -169,6 +170,8 @@ def TestDocument(request, registered):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
+
+
 def pri1(request, registered):
     docx_title="print.docx"
     f=nmi.pri(request, registered)
@@ -181,6 +184,9 @@ def pri1(request, registered):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
+
+
+
 def allfilter(filter, programe):
     registered = Registration.objects.filter(program=programe)
 
@@ -261,6 +267,8 @@ def allfilter(filter, programe):
 
     return registered
 
+
+
 def export_users_xls(status_list):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
@@ -292,7 +300,7 @@ def export_users_xls(status_list):
     wb.save(response)
     return response
 
-
+@login_required
 def addregistration(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -307,11 +315,12 @@ def addregistration(request, program_id):
 
             codemelli = request.POST.get('mellicode', '')
             coupled = request.POST.get('coupled', '')
-            a=bool(coupled)
+            a = bool(coupled)
             prof = Profile.objects.filter(melliCode=codemelli).first()
             if prof:
-                peopletype=prof.people_type
-                price=Pricing.objects.filter(program=programe).filter(Coupling=bool(coupled)).filter(people_type=peopletype).first()
+                peopletype = prof.people_type
+                price = Pricing.objects.filter(program=programe).filter(Coupling=bool(coupled)).filter(
+                    people_type=peopletype).first()
                 passportcheck = prof.passport
                 passportcheck1 = bool(prof.passport == 'have')
                 passportcheck2 = bool(prof.passport == 'have 7')
@@ -323,7 +332,7 @@ def addregistration(request, program_id):
                                                           'statusChoices': Registration.status_choices,
                                                           'peopleTypeChoices': Profile.people_type_choices,
                                                           'label_range': range(9),
-                                                          'manager': manager, 'a':a})
+                                                          'manager': manager, 'a': a})
 
                 else:
                     if price:
@@ -353,6 +362,7 @@ def addregistration(request, program_id):
                             else:
                                 addregister.coupling = False
 
+@login_required
 def editstatus(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -543,7 +553,7 @@ def editstatus(request, program_id):
 
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
 
-
+@login_required
 def my_programs(request):
     user = request.user
     programregistered = Registration.objects.filter(profile__user__exact=user)
@@ -596,8 +606,9 @@ def my_programs(request):
         hascoupling = request.POST.get("hascoupling", '')
         boolhascoupling = bool(hascoupling)
         additonaltick = request.POST.get("additonaltick", '')
-        booladditonaltick =bool(additonaltick)
-        pricecheck = Pricing.objects.filter(people_type=mytype).filter(Coupling=boolhascoupling).filter(
+        booladditonaltick = bool(additonaltick)
+        pricecheck = Pricing.objects.filter(people_type=mytype).filter(program=lastprogram).filter(
+            Coupling=boolhascoupling).filter(
             additionalObject=booladditonaltick).first()
         if pricecheck:
             programcheck = bool(lastprogram.type == 'arbaeen')
@@ -608,7 +619,7 @@ def my_programs(request):
                                 status='removed').first():
                             pass
                         else:
-                            if profile.coupling:
+                            if profile.couple:
                                 hascoupling = request.POST.get("hascoupling", '')
                                 additonaltick = request.POST.get("additonaltick", '')
                                 registration = Registration()
@@ -707,7 +718,7 @@ def my_programs(request):
                                                     'peopletype': Pricing.people_type_choices
                                                     })
 
-
+@login_required
 def my_management(request):
     user = request.user
     programmanaged = Management.objects.filter(profile__user__exact=user)
@@ -716,7 +727,7 @@ def my_management(request):
                    'programmanagedbool': bool(programmanaged),
                    'role_choices': Management.role_choices})
 
-
+@login_required
 def manage(request, management_id):
     user = request.user
     pric = Pricing.people_type_choices
@@ -800,7 +811,7 @@ def manage(request, management_id):
     else:
         return render(request, 'danger!!!!!!! attack.html', {})
 
-
+@login_required
 def myform(request, registration_id):
     user = request.user
     myregister = Registration.objects.filter(id=registration_id).first()
@@ -833,7 +844,7 @@ def myform(request, registration_id):
     mycoupleregister = Registration.objects.filter(program=pro).filter(profile=usco).first()
     usercoupling = bool(usco)
     pt = myregister.profile.people_type
-    pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling)
+    pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).filter(additionalObject=add).first()
     # pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).first()
     lastprogram = Program.objects.filter(isPublic=True).last()
     registerprogram = Pricing.objects.filter(program=pr)
@@ -875,7 +886,7 @@ def myform(request, registration_id):
                        'allStatus': Registration.status_choices,
                        'peopletype': Profile.people_type_choices})
 
-
+@login_required
 def addInstallment(request):
     programid = request.POST.get("programId", '')
     program = Program.objects.filter(id=int(programid)).first()
@@ -906,7 +917,7 @@ def addInstallment(request):
     # rid = Registration.objects.filter(program=program).filter(profile=request.user.profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(pid))
 
-
+@login_required
 def removeInstallment(request, pricing_id, price_num):
     pricing = Pricing.objects.filter(id=pricing_id).first()
     if price_num == '1':

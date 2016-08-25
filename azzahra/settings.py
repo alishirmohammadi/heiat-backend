@@ -156,7 +156,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID=1
-MEDIA_ROOT='C:/Users/digital/'
+from .local import MEDIA_ROOT_LOCAL
+
+MEDIA_ROOT=MEDIA_ROOT_LOCAL
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',
@@ -164,3 +166,5 @@ USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
 USERENA_SIGNIN_REDIRECT_URL = getattr(settings,
                                       'USERENA_SIGNIN_REDIRECT_URL',
                                       '/program')
+
+LOGIN_URL='/accounts/signin/'
