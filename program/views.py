@@ -186,7 +186,7 @@ def pri1(request, registered):
     return response
 
 
-@login_required
+
 def allfilter(filter, programe):
     registered = Registration.objects.filter(program=programe)
 
@@ -531,25 +531,56 @@ def editstatus(request, program_id):
                         post2.save()
                         # post2.save()
 
-                email = request.POST.get('email', 'false')
-
-                if email == 'email':
-                    connection = mail.get_connection()
+                inbox_filter = request.POST.get('email', 'false')
+                if inbox_filter == 'email':
                     subject = request.POST.get('tittle', '')
                     message = request.POST.get('massage text', '')
-                    from_email = request.POST.get('from_email', 'example@gmail.com')
-                    to_email = Registration.objects.filter(id__in=checked).first().my_profile.user.email
-                    if subject and message:
-                        try:
-                            connection.open()
-                            send_mail(subject, message, from_email, [to_email])
-                            connection.close()
-                        except BadHeaderError:
-                            return HttpResponse('Invalid header found.')
-                        return HttpResponseRedirect('/error')
-                    else:
+                    # from_email = request.POST.get('from_email', 'debugpls@gmail.com')#hard code for try
+                    # to_email = request.POST.get('to_email', 'ivyblackmail@gmail.com')#hard code for try
+                    from_email = request.POST.get('from_email',
+                                                  programe.email)  # sender email name who is maneger of the program
+                    to_email = Registration.objects.filter(id__in=checked).filter(program=programe)
+                    my_host = 'smtp.gmail.com'
+                    my_port = 587
+                    my_username = from_email
+                    my_password = '************'  # password here
+                    my_use_tls = True
+                    connection = get_connection(host=my_host,
+                                                port=my_port,
+                                                username=my_username,
+                                                password=my_password,
+                                                use_tls=my_use_tls)
 
-                        return HttpResponse('Make sure all fields are entered and valid.')
+                    for sendemail in to_email:
+                        to_person_mail = sendemail.profile.user.email
+                        if subject and message:
+                            try:
+                                # with get_connection(
+                                #         host=my_host,
+                                #         port=my_port,
+                                #         username=my_username,
+                                #         password=my_password,
+                                #         use_tls=my_use_tls
+                                # )as connection:
+                                #           EmailMessage(subject, message, username, [to_person_mail],
+                                #              connection=connection).send()
+                                connection.open()
+                                send_mail(subject, message, from_email, [to_person_mail], auth_user=my_username,
+                                          auth_password=my_password, connection=connection)
+                                connection.close()
+                            except BadHeaderError:
+                                return HttpResponse('Invalid header found.')
+                        else:
+
+                            return HttpResponse('Make sure all fields are entered and valid.')
+
+                    else:
+                        return HttpResponseRedirect('/error')
+
+                inbox_filter = request.POST.get('sms', 'false')
+                if inbox_filter == 'sms':
+                    pass
+                    sms_methode = send()
 
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
 

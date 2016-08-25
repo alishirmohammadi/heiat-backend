@@ -121,10 +121,10 @@ class SignupFormExtra(SignupForm):
                     user__username__iexact=self.cleaned_data['username']).exclude(
                     activation_key=userena_settings.USERENA_ACTIVATED):
                 raise forms.ValidationError(_(
-                    'This username is already taken but not confirmed. Please check your email for verification steps.'))
-            raise forms.ValidationError(_('This username is already taken.'))
+                    'این کدملی پیش تر در سیستم ثبت شده ولی فعال نشده است. لطفا برای فعال سازی ایمیل خود را چک نمایید'))
+            raise forms.ValidationError(_('این کدملی پیش تر ثبت شده است'))
         if self.cleaned_data['username'].lower() in userena_settings.USERENA_FORBIDDEN_USERNAMES:
-            raise forms.ValidationError(_('This username is not allowed.'))
+            raise forms.ValidationError(_('این کدملی مجاز نمی باشد'))
         return self.cleaned_data['username']
 
     def clean_email(self):
@@ -134,7 +134,7 @@ class SignupFormExtra(SignupForm):
                     user__email__iexact=self.cleaned_data['email']).exclude(
                     activation_key=userena_settings.USERENA_ACTIVATED):
                 raise forms.ValidationError(_(
-                    'This email is already in use but not confirmed. Please check your email for verification steps.'))
+'این ایمیل پیش تر در سیستم ثبت شده ولی فعال نگردیده است. لطفا ایمیل خود را برای فعال سازی چک نمایید'))
         return self.cleaned_data['email']
 
     def clean_cellPhone(self):
@@ -149,7 +149,7 @@ class SignupFormExtra(SignupForm):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields didn't match."))
+                raise forms.ValidationError(_("گذرواژه های وارد شده یکسان نیستند"))
         return self.cleaned_data
     #
     # def save(self):
@@ -167,7 +167,7 @@ class SignupFormExtra(SignupForm):
     #     return new_user
 
 class PasswordResetForm(forms.Form):
-    username = forms.CharField(label=_("Username"), max_length=60)
+    username = forms.CharField(label=_("کدملی"), max_length=60)
 
     def send_mail(self, subject_template_name, email_template_name,
                   context, from_email, to_email, html_email_template_name=None):

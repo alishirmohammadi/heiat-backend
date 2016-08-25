@@ -117,6 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -156,7 +157,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID=1
-MEDIA_ROOT='C:/Users/digital/'
+from .local import MEDIA_ROOT_LOCAL
+
+MEDIA_ROOT=MEDIA_ROOT_LOCAL
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',
