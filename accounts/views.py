@@ -190,7 +190,7 @@ def edit(request):
             a.passport_number=request.POST.get('serial_pas',)
 
 
-        a.coupling=request.POST.get('coupling',)
+        # a.coupling=request.POST.get('coupling',)
         if(request.POST.get('coupling',)):
             x=request.POST.get('wife_mellicode',)
             datebase_object=Profile.objects.all()

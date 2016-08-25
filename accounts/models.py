@@ -17,7 +17,6 @@ class Profile(UserenaBaseProfile):
     entranceDate = models.DateTimeField(max_length=20, default=datetime.now)
     melliCode = models.CharField(max_length=10)
     gender = models.BooleanField(default=1)
-    coupling=models.BooleanField(default=1)
     couple = models.ForeignKey('self', null=True, blank=True)
     address = models.CharField(max_length=400, null=True, blank=True)
     shenasname = models.CharField(max_length=11, null=True, blank=True)
@@ -84,3 +83,7 @@ class Profile(UserenaBaseProfile):
         from program.models import Management
         manage = Management.objects.filter(profile=self).first()
         return manage
+    def coupling(self):
+        if self.couple==None:
+            return False
+        return True
