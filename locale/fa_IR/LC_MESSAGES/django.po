@@ -481,25 +481,33 @@ msgstr ""
 
 #: .\accounts\templates\userena\signout.html:8
 msgid "You have been signed out. Till we meet again."
-msgstr ""
+msgstr "شما خارج شدید. تا دیدار بعدی بدرود."
 
 #: .\accounts\templates\userena\signup_complete.html:4
 msgid "Signup almost done!"
-msgstr ""
+msgstr "ثبت نام تکمیل شد."
 
 #: .\accounts\templates\userena\signup_complete.html:6
 #: .\accounts\templates\userena\signup_form.html:6
 msgid "Signup"
-msgstr ""
+msgstr "ثبت نام"
 
 #: .\accounts\views.py:253
 msgid "Your account has been activated and you have been signed in."
-msgstr ""
+msgstr "حساب کاربری شما فعال شد و شما وارد سایت شدید."
 
 #: .\azzahra\settings.py:135
 msgid "English"
-msgstr ""
+msgstr "انگلیسی"
 
 #: .\azzahra\settings.py:136
 msgid "Farsi"
-msgstr ""
+msgstr "فارسی"
+
+#: .\azzahra\settings.py:136
+msgid "Please enter a correct username or email and password. Note that both fields are case-sensitive."
+msgstr "لطفا کدملی و گذرواژه را به درستی وارد کنید"
+
+#: .\azzahra\settings.py:136
+msgid "New email"
+msgstr "ایمیل جدید"

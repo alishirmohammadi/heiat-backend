@@ -1,57 +1,460 @@
-{% extends 'userena/base_userena.html' %}
-{% load i18n %}
+{% extends 'base.html' %}
+{% load tags %}
+{% block scripts %}
 
-{% block title %}{% blocktrans with profile.user.username as username %}{{ username }}'s profile.{% endblocktrans %}{% endblock %}
-{% block content_title %}<h2>{{ profile.user.username }} {% if profile.user.get_full_name %}({{ profile.user.get_full_name }}){% endif %}</h2>{% endblock %}
 
+    <script>
+        $(document).ready(function () {
+                    $("#menu1").addClass('in active');
+                    $("#li1").addClass('in active');
+                    $("#alert").hide();
+                    $("#menu2").click(function () {
+                        $("#alert").fadeIn("slow");
+                    });
+
+
+                    $('[data-toggle^=pill]').click(function (e) {
+
+
+                        if ($(this).parent().hasClass('active')) {
+                            console.log($(this).parent().removeClass('active'));
+                            console.log($($(this).attr('href')).removeClass('in active'));
+
+                        } else {
+                            $('[data-toggle^=pill]').parent().removeClass('active');
+                            $('[class^=tab-pane]').removeClass('in active');
+
+                            console.log($(this).parent().addClass('active'));
+                            console.log($($(this).attr('href')).addClass('in active'));
+                        }
+
+                        e.stopPropagation();
+                    });
+
+                    $("#education").ready(function () {
+                        $("#std_num").hide();
+                        if (($("#education").val() == 'sharif student') | ($("#education").val() == 'sharif graduated') | ( $("#education").val() == 'sharif graduated talabe')) {
+                            $("#std_num").show();
+                        }
+
+
+                    });
+                    $("#education").change(function () {
+                        if (($("#education").val() == 'sharif student') | ($("#education").val() == 'sharif graduated') | ( $("#education").val() == 'sharif graduated talabe')) {
+
+                            $("#std_num").fadeIn("slow");
+                        }
+                        else {
+                            $("#std_num").fadeOut("slow");
+                        }
+
+                    });
+
+
+                    $("#passsport").ready(function () {
+                        $("#gozar").hide();
+                        $("#gozar2").hide();
+                        $("#gozar3").hide();
+                        if (($("#passsport").val() == 'have') | ( $("#passsport").val() == 'have 7')) {
+                            $("#gozar").show();
+                            $("#gozar2").show();
+                            $("#gozar3").show();
+                        }
+
+
+                    });
+                    $("#passsport").change(function () {
+                        if (($("#passsport").val() == 'have') | ($("#passsport").val() == 'have 7')) {
+
+                            $("#gozar").fadeIn("slow");
+                            $("#gozar2").fadeIn("slow");
+                            $("#gozar3").fadeIn("slow");
+                        }
+                        else {
+                            $("#gozar").fadeOut("slow");
+                            $("#gozar2").fadeOut("slow");
+                            $("#gozar3").fadeOut("slow");
+                        }
+
+
+                    });
+
+
+                    {#                    $('input:radio').change(function () {#}
+                    {#                        console.log('testsets')#}
+                    {#                    });#}
+
+
+                    $('.controls').change(function () {
+                        if ($('input[name=gender]:checked').val() == 'true' && $('input[name=coupling]:checked').val() == 'true') {
+                            console.log($('input[name=gender]:checked').val());
+                            console.log($('input[name=coupling]:checked').val());
+                            console.log(1);
+                            $("#conscription").fadeIn("slow");
+                            $("#couple_melli").fadeIn("slow");
+                            $("#couple_melli2").fadeIn("slow");
+                            $("#couple_melli3").fadeIn("slow");
+                            $("#couple_melli4").fadeIn("slow");
+                        }
+                        else if ($('input[name=gender]:checked').val()  == 'true' && $('input[name=coupling]:checked').val() == 'false') {
+                            console.log($('input[name=gender]:checked').val());
+                            console.log($('input[name=coupling]:checked').val());
+                            console.log(2);
+                            $("#conscription").fadeIn("slow");
+                            $("#couple_melli").fadeOut("slow");
+                            $("#couple_melli2").fadeOut("slow");
+                            $("#couple_melli3").fadeOut("slow");
+                            $("#couple_melli4").fadeOut("slow");
+                        }
+                        else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'true') {
+                            console.log($('input[name=gender]:checked').val());
+                            console.log($('input[name=coupling]:checked').val());
+                            console.log(3);
+                            $("#conscription").fadeOut("slow");
+                            $("#couple_melli").fadeIn("slow");
+                            $("#couple_melli2").fadeOut("slow");
+                            $("#couple_melli3").fadeOut("slow");
+                            $("#couple_melli4").fadeOut("slow");
+                        }
+                        else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'false') {
+                            console.log($('input[name=gender]:checked').val());
+                            console.log($('input[name=coupling]:checked').val());
+                            console.log(4);
+                            $("#conscription").fadeOut("slow");
+                            $("#couple_melli").fadeOut("slow");
+                            $("#couple_melli2").fadeOut("slow");
+                            $("#couple_melli3").fadeOut("slow");
+                            $("#couple_melli4").fadeOut("slow");
+                        }
+                    });
+
+
+                    $('#birthdate').datepicker({
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                }
+        )
+
+
+    </script>
+{% endblock %}
 {% block content %}
-  <div class="white-box">
-    {% block profile_navigation %}
-      {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
-      {% if user.username == profile.user.username %}
-        <ul id="box-nav">
-          {% block profile_navigation_items %}
-            <li><a href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a></li>
-            <li><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a></li>
-            <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
-            <li><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
-          {% endblock %}
-        </ul>
-      {% endif %}
-    {% endblock %}
+<div style="width: 100%">
 
-    <div id="details">
-      {% block profile_details %}
-        <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "Your mugshot" %}" />
-        <dl>
-          {% block profile_definition_list %}
-            {% if profile.user.get_full_name %}
-              <dt>{% trans "Name" %}</dt>
-              <dd>{{ profile.user.get_full_name }}</dd>
-            {% endif %}
-            {% if profile.user.email and not hide_email %}
-              <dt>{% trans "Email" %}</dt>
-              <dd>{{ profile.user.email }}</dd>
-            {% endif %}
-            {% if profile.age %}
-              <dt>{% trans "Age" %}</dt>
-              <dd>{{ profile.age }}</dd>
-            {% endif %}
-            {% if profile.website %}
-              <dt>{% trans "Website" %}</dt>
-              <dd>{{ profile.website|urlize }}</dd>
-            {% endif %}
-            {% if profile.location %}
-              <dt>{% trans "Location" %}</dt>
-              <dd>{{ profile.location }}</dd>
-            {% endif %}
-            {% if profile.about_me %}
-              <dt>{% trans "About me" %}</dt>
-              <dd>{{ profile.about_me }}</dd>
-            {% endif %}
-          {% endblock %}
-        </dl>
-      {% endblock %}
+
+    <div class="center-block" style="margin-left: 25%; margin-right: 25%; margin-bottom: 1px"><span
+            class="label label-primary center-block"
+            style="font-size: x-large; font-family:'B Titr'; line-height: 30px">پروفایل شخصی</span>
     </div>
-  </div>
+
+    <div style="direction: rtl">
+
+
+        <ul class="nav nav-pills" style="margin-left: 20%; margin-right: 15%; margin-bottom: 1px">
+            <li style="text-align: right; font-family:'B Titr'; font-weight: bolder; width: 33%"><a data-toggle="pill"
+                                                                                                    href="#menu3">اطلاعات
+                همسر</a>
+            </li>
+            <li style="text-align: center; font-family:'B Titr'; font-weight: bolder; width: 33%"><a data-toggle="pill"
+                                                                                                     href="#menu2">اطلاعات
+                نظام
+                وظیفه و گذر نامه </a>
+            </li>
+
+            <li id="li1" style="text-align: left; font-family:'B Titr'; font-weight: bolder; width: 33%"><a
+                    data-toggle="pill"
+                    href="#menu1">اطلاعات
+                شخصی</a>
+            </li>
+
+
+        </ul>
+
+
+        <form action="/profile/" method="post">
+            {% csrf_token %}
+
+            <div class="tab-content">
+
+                <div id="menu1" class="tab-pane fade">
+                    <div class="well" style="margin-right: 19%; margin-left: 19%">
+
+
+                        <table class="table" id="table1">
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    جنسیت:
+                                </td>
+
+                                <td>
+                                    <div>
+                                        مرد
+
+                                        <input id="couple_type" checked="checked" name="gender" type="radio"
+                                               value="true" class="controls">
+                                        زن
+
+                                        <input type="radio" value="false" name="gender" class="controls">
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    شماره شناسنامه:
+                                </td>
+                                <td>
+                                    <input value="{{ pro.shenasname }}" type="text" name="she_number"
+                                           class="form-control">
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    نام پدر:
+                                </td>
+                                <td>
+                                    <input value="{{ pro.fatherName }}" type="text" name="father_name"
+                                           class="form-control">
+
+                                </td>
+
+
+                            </tr>
+
+
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    وضعیت تحصیل:
+                                </td>
+                                <td>
+                                    <select id="education" name="education" class="form-control">
+                                        {% for type in profile.people_type_choices|get_keys %}
+                                            <option{% if pro.people_type == type %} selected="selected"{% endif %}
+                                                                                    value="{{ type }}">{{  profile.people_type_choices|get_tuple_item:type }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    </select>
+                                </td>
+
+
+                            </tr>
+                            <tr id="std_num">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    شماره دانشجویی:
+                                </td>
+                                <td>
+                                    <input value="{{ pro.studentNumber }}" type="text" name="student_number"
+                                           placeholder="********"
+                                           class="form-control">
+                                </td>
+
+
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    سال تولد:
+                                </td>
+                                <td>
+                                <p>13 <input value="{{ pro.birthYear }}" type="text" name="birthyear"
+                                                 style="width: 20%" class="form-control" maxlength="2"></p>
+                                </td>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                  ماه تولد:
+                                </td>
+                                <td>
+                                    <select name="birthmonth" class="form-control">
+                                        {% for type in month %}
+                                            <option  {% if pro.birthMonth == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ month|get_tuple_item:type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    روز تولد:
+                                </td>
+                                <td>
+                                    <select name="birthday" class="form-control">
+                                        {% for type in days %}
+                                            <option  {% if pro.birthDay == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    آدرس:
+
+                                </td>
+                                <td>
+                                    <input value="{{ pro.address }}" type="text" name="adress" class="form-control">
+                                </td>
+
+
+                            </tr>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                    <div class="well" style="margin-right: 19%; margin-left: 19%">
+
+                        <table class="table">
+
+                            <div class="alert center-block alert-danger" id="alert"
+                                 style="text-align: center; font-family: 'B Nazanin'"><b>پر کردن این فرم فقط برای اردوی
+                                کربلا مورد نیاز است و در موارد دیگر نیازی به تکمیل آن نیست.</b></div>
+
+                            <tr>
+                            <tr id="conscription">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    وضعیت نظام وظیفه:
+                                </td>
+
+                                <td>
+                                    <select name="vazife-type" class="form-control">
+                                        {% for type in profile.conscription_choices|get_keys %}
+                                            <option{% if pro.conscription == type %} selected="selected"{% endif %}
+                                                                                     value="{{ type }}">{{ profile.conscription_choices|get_tuple_item:type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    وضعیت گذرنامه:
+                                </td>
+
+                                <td>
+                                    <select id="passsport" name="pas_type" class="form-control">
+                                        {% for type in profile.passport_choices|get_keys %}
+                                            <option {% if pro.passport == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ profile.passport_choices|get_tuple_item:type }}</option>
+                                        {% endfor %}
+                                    </select>
+
+
+                                    </select>
+                                </td>
+
+                            </tr>
+
+
+                            <tr id="gozar">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    سریال پاسپورت:
+                                </td>
+                                <td>
+                                    <input value="{{ pro.passport_serial }}" type="text" name="serial_pas"
+                                           class="form-control">
+                                </td>
+
+                            </tr>
+                            <tr id="gozar2">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    تاریخ صدور گذرنامه:
+                                </td>
+
+                                <td>
+                                    <input value="{{ pro.passport_release }}" id="sodour" type="text" name="pas_release"
+                                           class="form-control">
+                                </td>
+
+                            </tr>
+                            <tr id="gozar3">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    تاریخ انقضای گذرنامه:
+                                </td>
+
+                                <td>
+                                    <input value="{{ pro.passport_exprition }}" id="engheza" type="text"
+                                           name="pas_exprition" class="form-control">
+                                </td>
+
+                            </tr>
+
+
+                        </table>
+
+
+                    </div>
+                </div>
+                <div id="menu3" class="tab-pane fade">
+                    <div class="well" style="margin-right: 20%; margin-left: 20%">
+
+                        <table class="table">
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    وضعیت تاهل:
+                                </td>
+                                <td>
+                                    <div>
+                                        متاهل
+
+                                        <input id="couple_type" checked="checked" name="coupling" type="radio"
+                                               value="true" class="controls">
+                                        مجرد
+
+                                        <input type="radio" value="false" name="coupling" class="controls">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="couple_melli">
+                            <td
+                                style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                شماره ملی همسر اول:
+                            </td>
+                            <td><input value="{{ pro.couple.melliCode }}" class="form-control" maxlength="10"
+                                       name="wife_mellicode"></td>
+                            </tr>
+                            <tr id="couple_melli2">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    شماره ملی همسر دوم:
+                                </td>
+                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                           name="wife_mellicode2"></td>
+                            </tr>
+                            <tr id="couple_melli3">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    شماره ملی همسر سوم:
+                                </td>
+                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                           name="wife_mellicode3"></td>
+                            </tr>
+                            <tr id="couple_melli4">
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
+                                    شماره ملی همسر چهارم:
+                                </td>
+                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                           name="wife_mellicode4"></td>
+                            </tr>
+
+                            <tr>
+
+                        </table>
+
+                    </div>
+                </div>
+                <button class="btn btn-success btn-lg center-block" style="font-family: 'B Titr'">ذخیره اطلاعات</button>
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
 {% endblock %}
