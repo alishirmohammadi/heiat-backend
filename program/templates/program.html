@@ -12,6 +12,13 @@
             });
         });
     </script>
+
+    <script>
+        $('form').submit(function () {
+            $(this).find("button[type='submit']").prop('disabled', true);
+        });
+    </script>
+
     <div style="width: 100%">
 
         {#    <-----Users can see their past registration in programs here----->    #}
@@ -153,7 +160,7 @@
                                                 </span>
                                             {% endif %}
                                         {% elif profile.coupling == None %}
-                                            <span data-toggle="tooltip"
+                                            <span data-toggle="popover"
                                                   title="عدم امکان ثبت نام متاهلی"
                                                   data-content="شما مجردی لذا گزینه سفر متاهلی برای شما غیر فعال است"><font
                                                     color="red">شما مجردی</font></span>
@@ -312,7 +319,8 @@
                                                 ><font color="red">غیر فعال</font></span>
                                             {% endif %}
                                         {% elif profile.coupling == None %}
-                                            <span data-toggle="popover" title="عدم امکان"
+                                            <span data-toggle="popover"
+                                                  title="عدم امکان"
                                                   data-content="شما مجردی فلذا گزینه سفر متاهلی برای شما غیر فعال است"><font
                                                     color="red">شما مجردی</font></span>
                                         {% else %}
