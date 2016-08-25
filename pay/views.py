@@ -28,6 +28,7 @@ def start_pay(request, registration_id):
     payment = Payment.create(registration=reg, amount=amount, numberOfInstallment=numberOfInstallment)
     return render(request, "post.html", {'payment': payment})
 
+
 @csrf_exempt
 def payment_callback(request):
     refId = request.POST.get("RefId")

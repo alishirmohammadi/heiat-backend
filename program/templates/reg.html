@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
+
+{% block navbar %}
+                {% include '_navbar.html' with active_link='management' %}
+{% endblock %}
+{% block second_navbar %}
+    {% include '_second_navbar.html' with active_link='manage' %}
+{% endblock %}
 {% load tags %}
-<body>
+
 {% block content %}
         <div class="row" style="width: 100%">
             <div class="col-md-6">
@@ -150,4 +157,3 @@
             </div>
         </div>
 {% endblock %}
-</body>

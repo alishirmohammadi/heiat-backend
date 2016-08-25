@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 
-                 <ul class="nav navbar-nav navbar-left" style="padding-right: 20px">
+<ul class="nav navbar-nav navbar-left" style="padding-right: 20px">
             <li {% if active_link == "FAQ" %}class="active"{% endif %}><a href="/FAQ"
                                                                           style="font-family: 'B Mitra';font-weight: bold">سوالات
                 متداول</a></li>
@@ -9,14 +9,7 @@
                                                                           style="font-family: 'B Mitra';font-weight: bold">مشارکت
                 در هزینه های هیئت</a></li>
                 </ul>
-{#                <form class="navbar-form navbar-left">#}
-{##}
-{#                    <div class="form-group">#}
-{#                        <input name="searchit" type="text" class="form-control" placeholder="Looking for ...">#}
-{#                    </div>#}
-{#                      <button  class="btn btn-default" href="/search/searchit">Search</button>#}
-{#                </form>#}
-                <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
+<ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
                     {% if not user.is_authenticated %}
                         <li {% if active_link == "signin" %}class="active"{% endif %}><a href="/accounts/signin" style="font-family: 'B Mitra';font-weight: bold">ورود</a></li>
                         <li {% if active_link == "noaccount" %}class="active"{% endif %}><a href="/accounts/signup" style="font-family: 'B Mitra';font-weight: bold">آیا اکانت ندارید؟</a></li>

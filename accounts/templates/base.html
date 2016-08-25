@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {#{% load thumbnail %}#}
-
+{% load  %}
 <!DOCTYPE html>
 <html>
 
@@ -12,7 +12,6 @@
     <meta name="author" content="Arun Ravindran">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     <script src="{% static 'jquery-1.11.1.min.js' %}"></script>
-
     <title>{% block title %}azzahra{% endblock %}</title>
     <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
     <script>tinymce.init({mode: "textareas", selector: 'textarea'});</script>
@@ -74,11 +73,14 @@
                 {% include '_navbar.html' with active_link='home' %}
             {% endblock %}
 
+
         </div>
         <!— /.navbar-collapse —>
     </div>
     <!— /.container-fluid —>
 </nav>
+{% block second_navbar %}
+{% endblock %}
 
 
 {#<div class="container" style="margin-top: 50px;">#}

@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% block navbar %}
+                {% include '_navbar.html' with active_link='management' %}
+{% endblock %}
+{% block second_navbar %}
+    {% include '_second_navbar.html' with active_link='panel' %}
+{% endblock %}
 {% load tags %}
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
@@ -488,16 +494,16 @@
 
 
         <div class="col-lg-8">
-            <label><input style="margin-left: 6%" class="form-control" type="text" name="message text"
+            <label><input style="margin-left: 6%" class="form-control" type="text" name="messageTitle"
                           placeholder="موضوع پیام"
-                          id="message text"></label>
+                          ></label>
 <span style="display: inline-block;float: left">
             <label style="direction: rtl">
 
                 <span class=" ">پیامک <input class="checkbox-inline" type="checkbox" name="sms" value="sms"></span>
                 <span class=" ">ایمیل <input class="checkbox-inline" type="checkbox" name="email" value="email"></span>
                 <span class=" ">صندوق ورودی <input class="checkbox-inline" type="checkbox" name="inbox" value="inbox"></span>
-                <button class="btn btn-primary" type="submit" id="message" name="message" value="mesage">ارسال</button>
+                <button class="btn btn-primary" type="submit" id="message" name="message" value="message">ارسال</button>
 
 
             </label>
