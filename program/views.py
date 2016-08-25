@@ -16,7 +16,7 @@ from django.core import mail
 
 # Create your views here.
 
-
+@login_required
 def documentation(request, program_id):
     # if (request.method == 'GET'):
     #     post = Management.objects.all()
@@ -29,7 +29,7 @@ def documentation(request, program_id):
     managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
     return render(request, 'documents.html', {'post': managements})
 
-
+@login_required
 def panel(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -105,15 +105,14 @@ def panel(request, program_id):
         }
         request.session['filter'] = all_filter
 
+        registered = Registration.objects.filter(program=programe)
+
+        registered = allfilter(all_filter, programe)
+
         if action == 'show':
             if manager.canFilter:
                 return HttpResponseRedirect('/program/panel/' + str(programe.id))
         elif action == 'excel':
-
-            registered = Registration.objects.filter(program=programe)
-
-            registered = allfilter(all_filter, programe)
-
             if manager.canFilter:
                 status_list = []
                 for j in registered:
@@ -140,11 +139,6 @@ def panel(request, program_id):
             # return render(request, 'panel.html', {'all': registered})
             return pri1(request, registered)
         elif action == 'select':
-
-            registered = Registration.objects.filter(program=programe)
-
-            registered = allfilter(all_filter, programe)
-
             if manager.canSelect:
                 numberOfSelect = request.POST.get("selectFilter", '')
                 face = int(numberOfSelect)
@@ -162,8 +156,12 @@ def panel(request, program_id):
             return HttpResponseRedirect('/program/panel/' + str(programe.id))
         else:
             return HttpResponseRedirect('/error')
+<<<<<<< HEAD
 
 
+=======
+@login_required
+>>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def TestDocument(request, registered):
     docx_title = "monifest.docx"
     f = nmi.crea(request, registered)
@@ -179,8 +177,13 @@ def TestDocument(request, registered):
 
 
 def pri1(request, registered):
+<<<<<<< HEAD
     docx_title = "monifest.docx"
     f = nmi.pri(request, registered)
+=======
+    docx_title="print.docx"
+    f=nmi.pri(request, registered)
+>>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
     length = f.tell()
     f.seek(0)
     response = HttpResponse(
@@ -190,8 +193,12 @@ def pri1(request, registered):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
+<<<<<<< HEAD
 
 
+=======
+@login_required
+>>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def allfilter(filter, programe):
     registered = Registration.objects.filter(program=programe)
 
@@ -272,7 +279,10 @@ def allfilter(filter, programe):
 
     return registered
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def export_users_xls(status_list):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
@@ -282,7 +292,7 @@ def export_users_xls(status_list):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['numOfPayment', 'coupling', 'status', 'program', 'first_name', 'last_name', 'email', 'cellphone']
+    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Sheet body, remaining rows
@@ -304,7 +314,7 @@ def export_users_xls(status_list):
     wb.save(response)
     return response
 
-
+@login_required
 def addregistration(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -365,8 +375,12 @@ def addregistration(request, program_id):
                                     addregister.coupling = False
                             else:
                                 addregister.coupling = False
+<<<<<<< HEAD
 
 
+=======
+@login_required
+>>>>>>> 5a3fede46ce3d6a1d5beb70cd0776a9b84c466df
 def editstatus(request, program_id):
     programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
@@ -557,7 +571,7 @@ def editstatus(request, program_id):
 
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
 
-
+@login_required
 def my_programs(request):
     user = request.user
     programregistered = Registration.objects.filter(profile__user__exact=user)
@@ -722,7 +736,7 @@ def my_programs(request):
                                                     'peopletype': Pricing.people_type_choices
                                                     })
 
-
+@login_required
 def my_management(request):
     user = request.user
     programmanaged = Management.objects.filter(profile__user__exact=user)
@@ -731,7 +745,7 @@ def my_management(request):
                    'programmanagedbool': bool(programmanaged),
                    'role_choices': Management.role_choices})
 
-
+@login_required
 def manage(request, management_id):
     user = request.user
     pric = Pricing.people_type_choices
@@ -815,7 +829,7 @@ def manage(request, management_id):
     else:
         return render(request, 'danger!!!!!!! attack.html', {})
 
-
+@login_required
 def myform(request, registration_id):
     user = request.user
     myregister = Registration.objects.filter(id=registration_id).first()
@@ -890,7 +904,7 @@ def myform(request, registration_id):
                        'allStatus': Registration.status_choices,
                        'peopletype': Profile.people_type_choices})
 
-
+@login_required
 def addInstallment(request):
     programid = request.POST.get("programId", '')
     program = Program.objects.filter(id=int(programid)).first()
@@ -921,7 +935,7 @@ def addInstallment(request):
     # rid = Registration.objects.filter(program=program).filter(profile=request.user.profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(pid))
 
-
+@login_required
 def removeInstallment(request, pricing_id, price_num):
     pricing = Pricing.objects.filter(id=pricing_id).first()
     if price_num == '1':
