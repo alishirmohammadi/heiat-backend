@@ -4,37 +4,12 @@
 {% endblock %}
 
 {% block second_navbar %}
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
-        <div class="container-fluid">
-            <div class="navbar-header" style="padding-left: 40px"></div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav second-nav navbar-right" style="margin-right: 40%">
-                    {% if user.my_profile.hasManagement %}
-
-                        {% if canEditProgram %}
-                            <li><a href="/program/manage/{{ mymanagement.pk }}/"
-                                   style="font-family: 'B Mitra';font-weight: bold">ویرایش برنامه</a></li>
-                        {% endif %}
-                        <li class="active"><a href="/program/panel/{{ mymanagement.pk }}/"
-                                              style="font-family: 'B Mitra';font-weight: bold">پانل مدیریت</a></li>
-                        <li><a href="/program/documents/{{ mymanagement.pk }}/"
-                               style="font-family: 'B Mitra';font-weight: bold">مستند سازی</a></li>
-
-
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% include '_second_navbar.html' with active_linc='panel' %}
 {% endblock %}
 
 
 {% load tags %}
-<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
 {% block scripts %}
-
     <script>
         $(document).ready(function () {
             $("#lab1-btn").click(function () {
@@ -125,6 +100,7 @@
 
 {% block  content %}
     <div class="well container" style="text-align: right">
+
         <form method="post" id="form0">
             {% csrf_token %}
             <div style="direction:rtl ">
@@ -644,6 +620,7 @@
                 <input type="hidden" name="editAction" value="default" id="hidden">
             {% endif %}
         </div>
+
     </form>
 
 
