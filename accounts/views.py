@@ -148,31 +148,59 @@ def charity(request):
 
 
 #
+month={1:'فروردین',2:'اردیبهشت',3:'خرداد',4:'تیر',5:'مرداد',6:'شهریور',7:'مهر',8:'آبان',9:'آذر',10:'دی',11:'بهمن',12:'اسفند'}
+
 def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
 
         return render(request, 'profile.html', {'pro': a, 'days': range(1, 32), 'allTypes': a.people_type_choices,
-                                                'pas_type': a.passport_choices, 'vazife': a.conscription_choices})
+                                                'pas_type': a.passport_choices, 'vazife': a.conscription_choices,'month':month})
     else:
         a.address = request.POST.get('adress', )
         a.shenasname = request.POST.get('she_number', )
         a.people_type = request.POST.get('education', )
-        # if(a.my_profile.people_type =! 'sharif student' and a.my_profile.people_type == 'sharif graduated' and a.my_profile.people_type =! 'sharif graduated talabe'):
-        t = (request.POST.get('student_number'))
-        a.studentNumber = t
-        a.fatherName = request.POST.get('father_name', )
-        a.gender = request.POST.get('gender', )
-        # a.conscription=request.POST.get('vazife_type')
-        # a.passport=request.POST.get('pas_type',)
-        # a.passport_serial=request.POST.get('serial_pas',)
-        # a.passport_release=request.POST.get('pas_release',)
-        # a.passport_exprition=request.POST.get('pas_exprition',)
-        # a.couple=request.POST.get('coupling')
-        if a.passport == 'have':
-            a.passport_number = request.POST.get('serial_pas', )
-            a.passport_dateofissue = request.POST.get('pas_release', )
-            a.passport_dateofexpiry = request.POST.get('pas_exprition', )
+        if ( a.people_type == 'sharif student' or a.people_type == 'sharif graduated' or a.people_type == 'sharif graduated talabe'):
+            k=request.POST.get('student_number',)
+            try:
+                val = int(k)
+            except ValueError:
+                val = None
+            a.studentNumber = val
+            if (a.studentNumber == None):
+                erorr1=1
+        else:
+            a.studentNumber=None
+
+        a.fatherName=request.POST.get('father_name',)
+        a.gender=request.POST.get('gender',)
+        a.birthYear=request.POST.get('birthyear',)
+        a.birthMonth=request.POST.get('birthmonth',)
+        a.birthDay=request.POST.get('birthday',)
+
+
+
+
+
+        a.gender=request.POST.get('gender',)
+        if(request.POST.get('gender',)):
+            a.conscription=request.POST.get('vazife-type',)
+        a.passport=request.POST.get('pas_type',)
+        if(request.POST.get('pas_type',)=='have' or request.POST.get('pas_type',)=='have 7'):
+            a.passport_number=request.POST.get('serial_pas',)
+
+
+        # a.coupling=request.POST.get('coupling',)
+        if(request.POST.get('coupling',)):
+            x=request.POST.get('wife_mellicode',)
+            datebase_object=Profile.objects.all()
+            for type in datebase_object:
+                if (type.melliCode==x):
+                    a.couple=type.id
+
+
+
+
         a.save()
         return HttpResponseRedirect('/')
 

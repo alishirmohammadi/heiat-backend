@@ -83,3 +83,7 @@ class Profile(UserenaBaseProfile):
         from program.models import Management
         manage = Management.objects.filter(profile=self).first()
         return manage
+    def coupling(self):
+        if self.couple==None:
+            return False
+        return True
