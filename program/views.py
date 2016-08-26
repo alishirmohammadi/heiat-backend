@@ -533,8 +533,8 @@ def editstatus(request, program_id):
 
                 inbox_filter = request.POST.get('email', 'false')
                 if inbox_filter == 'email':
-                    subject = request.POST.get('tittle', '')
-                    message = request.POST.get('massage text', '')
+                    subject = request.POST.get('messageTitle', '')
+                    message = request.POST.get('message text', '')
                     # from_email = request.POST.get('from_email', 'debugpls@gmail.com')#hard code for try
                     # to_email = request.POST.get('to_email', 'ivyblackmail@gmail.com')#hard code for try
                     from_email = request.POST.get('from_email',
@@ -543,7 +543,7 @@ def editstatus(request, program_id):
                     my_host = 'smtp.gmail.com'
                     my_port = 587
                     my_username = from_email
-                    my_password = '************'  # password here
+                    my_password = programe.emailPassword
                     my_use_tls = True
                     connection = get_connection(host=my_host,
                                                 port=my_port,
@@ -555,15 +555,6 @@ def editstatus(request, program_id):
                         to_person_mail = sendemail.profile.user.email
                         if subject and message:
                             try:
-                                # with get_connection(
-                                #         host=my_host,
-                                #         port=my_port,
-                                #         username=my_username,
-                                #         password=my_password,
-                                #         use_tls=my_use_tls
-                                # )as connection:
-                                #           EmailMessage(subject, message, username, [to_person_mail],
-                                #              connection=connection).send()
                                 connection.open()
                                 send_mail(subject, message, from_email, [to_person_mail], auth_user=my_username,
                                           auth_password=my_password, connection=connection)
