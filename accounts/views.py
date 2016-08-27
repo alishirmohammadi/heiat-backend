@@ -56,98 +56,14 @@ def checkMelliCode(mellicode):
         return False
 
 
-def signin(request, post_id):
-    if post_id == '1':
-        return render(request, 'signin.html', {'message_id': post_id})
-    else:
-        if request.method == 'GET':
-            return render(request, 'signin.html', {})
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            # the password verified for the user
-            if user.is_active:
-
-                print("User is valid, active and authenticated")
-                login(request, user)
-            else:
-                print("The password is valid, but the account has been disabled!")
-        else:
-            # the authentication system was unable to verify the username and password
-            print("The username and password were incorrect.")
-        return HttpResponseRedirect('/')
-
-
-def signout(request):
-    logout(request)
-    return HttpResponseRedirect('/')
-
-
-def signup(request):
-    if request.method == 'GET':
-        return render(request, 'signup.html', {})
-    else:
-        password1 = request.POST.get('password', '')
-        firstname = request.POST.get('firstname', '')
-        lastname = request.POST.get('lastname', '')
-        email = request.POST.get('email', '')
-
-        cellphone = request.POST.get('cellphone', '')
-        mellicode = request.POST.get('mellicode', '')
-        error = False
-        if User.objects.filter(username__exact=mellicode):
-            error = True
-            return render(request, 'signup.html', {'error3': error,
-                                                   'first_name': firstname,
-                                                   'last_name': lastname,
-                                                   'email': email,
-                                                   'mellicode': mellicode,
-                                                   'cellphone': cellphone})
-        if validateEmail(email) == False:
-            error = True
-            return render(request, 'signup.html', {'error2': error,
-                                                   'first_name': firstname,
-                                                   'last_name': lastname,
-                                                   'email': email,
-                                                   'mellicode': mellicode,
-                                                   'cellphone': cellphone})
-        if checkMelliCode(mellicode) == False:
-            error = True
-            return render(request, 'signup.html', {'error1': error,
-                                                   'first_name': firstname,
-                                                   'last_name': lastname,
-                                                   'email': email,
-                                                   'mellicode': mellicode,
-                                                   'cellphone': cellphone})
-
-        user1 = User.objects.create_user(username=mellicode,
-                                         email=email,
-                                         password=password1,
-                                         first_name=firstname,
-                                         last_name=lastname)
-        user1.is_active = False
-        user1.save()
-        profile1 = Profile()
-        profile1.cellPhone = cellphone
-        profile1.melliCode = mellicode
-        profile1.user = user1
-        profile1.save()
-        return HttpResponseRedirect('/1')
-
-
-
-
 def FAQ(request):
     if request.method == 'GET':
         return render(request, 'FAQ.html', {'allTypes': Profile.people_type_choices})
 
+
 def charity(request):
-        if request.method == 'GET':
-            return render(request, 'Charity.html', {'allTypes': Profile.people_type_choices})
-
-
-#
+    if request.method == 'GET':
+        return render(request, 'Charity.html', {'allTypes': Profile.people_type_choices})
 
 
 def edit(request):
@@ -157,58 +73,44 @@ def edit(request):
         return render(request, 'profile.html', {'pro': a, 'days': range(1, 32), 'allTypes': a.people_type_choices,
                                                 'pas_type': a.passport_choices, 'vazife': a.conscription_choices})
     else:
-        a.address = request.POST.get('adress', )
-        a.shenasname = request.POST.get('she_number', )
-        a.people_type = request.POST.get('education', )
-        if ( a.people_type == 'sharif student' or a.people_type == 'sharif graduated' or a.people_type == 'sharif graduated talabe'):
-            k=request.POST.get('student_number',)
+        a.address = request.POST.get('adress', '')
+        a.shenasname = request.POST.get('she_number', '')
+        a.people_type = request.POST.get('education', '')
+        if (
+                    a.people_type == 'sharif student' or a.people_type == 'sharif graduated' or a.people_type == 'sharif graduated talabe'):
+            k = request.POST.get('student_number', '')
             try:
                 val = int(k)
             except ValueError:
                 val = None
             a.studentNumber = val
             if (a.studentNumber == None):
-                erorr1=1
+                erorr1 = 1
         else:
-            a.studentNumber=None
+            a.studentNumber = None
 
-        a.fatherName=request.POST.get('father_name',)
-        a.gender=request.POST.get('gender',)
-        a.birthYear=request.POST.get('birthyear',)
-        a.birthMonth=request.POST.get('birthmonth',)
-        a.birthDay=request.POST.get('birthday',)
-
-
-
-
-
-        a.gender=request.POST.get('gender',)
-        if(request.POST.get('gender',)):
-            a.conscription=request.POST.get('vazife-type',)
-        a.passport=request.POST.get('pas_type',)
-        if(request.POST.get('pas_type',)=='have' or request.POST.get('pas_type',)=='have 7'):
-            a.passport_number=request.POST.get('serial_pas',)
-<<<<<<< HEAD
-            a.passport_dateofissue=request.POST.get('pas_release2',)
-            a.passport_dateofexpiry=request.POST.get('pas_exprition2',)
-
-=======
-            a.passport_number = request.POST.get('pas_release', )
-            a.passport_number = request.POST.get('pas_exprition', )
->>>>>>> d42a96325d89169261b9f13de9c5979c0e55d8f5
-
-
-        if(request.POST.get('coupling',)):
-            if(request.POST.get('wife_mellicode',)!=None and checkMelliCode(request.POST.get('wife_mellicode',))):
-                x=request.POST.get('wife_mellicode',)
-                datebase_object=Profile.objects.all()
+        a.fatherName = request.POST.get('father_name', )
+        a.gender = request.POST.get('gender', )
+        a.birthYear = request.POST.get('birthyear', )
+        a.birthMonth = request.POST.get('birthmonth', )
+        a.birthDay = request.POST.get('birthday', )
+        a.gender = request.POST.get('gender', )
+        if (request.POST.get('gender', )):
+            a.conscription = request.POST.get('vazife-type', )
+        a.passport = request.POST.get('pas_type', )
+        if (request.POST.get('pas_type', ) == 'have' or request.POST.get('pas_type', ) == 'have 7'):
+            a.passport_number = request.POST.get('serial_pas','' )
+            a.passport_dateofissue = request.POST.get('pas_release','' )
+            a.passport_dateofexpiry = request.POST.get('pas_exprition','' )
+        if (request.POST.get('coupling', )):
+            if (request.POST.get('wife_mellicode', ) != None and checkMelliCode(request.POST.get('wife_mellicode', ))):
+                x = request.POST.get('wife_mellicode', )
+                datebase_object = Profile.objects.all()
                 for type in datebase_object:
-                    if (type.melliCode==x):
-                        a.couple=type
+                    if (type.melliCode == x):
+                        a.couple = type
             else:
-                erorr2=1
-
-
+                erorr2 = 1
 
         a.save()
         return HttpResponseRedirect('/')
@@ -225,6 +127,7 @@ def manage_nav(request):
 
         if request.method == 'GET':
             return render(request, 'base.html', {'profile': a, 'manage': manage})
+
 
 @secure_required
 def activate(request, activation_key,
@@ -290,20 +193,22 @@ def activate(request, activation_key,
                     messages.success(request, _('Your account has been activated and you have been signed in.'),
                                      fail_silently=True)
 
-                if success_url: redirect_to = success_url % {'username': user.username }
-                else: redirect_to = reverse('userena_profile_detail',
-                                            kwargs={'username': user.username})
+                if success_url:
+                    redirect_to = success_url % {'username': user.username}
+                else:
+                    redirect_to = reverse('userena_profile_detail',
+                                          kwargs={'username': user.username})
                 return redirect(redirect_to)
             else:
                 if not extra_context: extra_context = dict()
                 return ExtraContextTemplateView.as_view(template_name=template_name,
                                                         extra_context=extra_context)(
-                                        request)
+                    request)
         else:
             if not extra_context: extra_context = dict()
             extra_context['activation_key'] = activation_key
             return ExtraContextTemplateView.as_view(template_name=retry_template_name,
-                                                extra_context=extra_context)(request)
+                                                    extra_context=extra_context)(request)
     except UserenaSignup.DoesNotExist:
         if not extra_context: extra_context = dict()
         return ExtraContextTemplateView.as_view(template_name=template_name,

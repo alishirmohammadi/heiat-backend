@@ -582,7 +582,7 @@ def editstatus(request, program_id):
                 inbox_filter = request.POST.get('sms', 'false')
                 if inbox_filter == 'sms':
                     pass
-                    sms_methode = send()
+                    # sms_methode = send()
 
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
 
@@ -824,6 +824,7 @@ def manage(request, management_id):
             hascoupling = request.POST.get("hascoupling", '')
             isopen = request.POST.get("isopen", '')
             email = request.POST.get("email", '')
+            emailPassword = request.POST.get("emailPassword", '')
             note = request.POST.get("note", '')
             program = mymanagement.program
             program.title = title
@@ -831,6 +832,7 @@ def manage(request, management_id):
             program.registerInterval = registerinterval
             program.hasCoupling = hascoupling
             program.isOpen = isopen
+            program.emailPassword = emailPassword
             program.email = email
             program.notes = note
             program.save()

@@ -76,7 +76,6 @@ class Profile(UserenaBaseProfile):
 
     passport_number = models.IntegerField(null=True)
     passport_dateofissue = models.DateField(null=True)
-
     passport_dateofexpiry = models.DateField(null=True)
 
     def hasManagement(self):
