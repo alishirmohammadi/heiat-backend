@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^documents/(?P<management_id>\d+)', 'program.views.documentation'),
     url(r'^panel/(?P<management_id>\d+)/', 'program.views.panel'),
     url(r'^addreg/(?P<program_id>\d+)', 'program.views.addregistration'),
-    url(r'^editregisteration/(?P<program_id>\d+)', 'program.views.editstatus'),
+    url(r'^editregisteration/(?P<program_id>\d+)', 'program.views.editStatus'),
     # url(r'^signout/', 'accounts.views.signout'),
     # url(r'^signup/', 'accounts.views.signup'),
     # url(r'^passwordchange/', 'accounts.views.change_password'),

@@ -40,6 +40,7 @@ urlpatterns = [
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
     url(r'^FAQ/', 'accounts.views.FAQ'),
+    url(r'^error/', 'accounts.views.error'),
     url(r'^charity/', 'accounts.views.charity'),
 
     # url(r'^accounts/edit_profile', 'accounts.views.saveProfile'),

@@ -79,8 +79,8 @@
                 $("#hidden2").attr('value', "accelerate");
                 $("#form0").submit();
             });
-            $("#monifest").click(function () {
-                $("#hidden2").attr('value', "monifest");
+            $("#manifest").click(function () {
+                $("#hidden2").attr('value', "manifest");
                 $("#form0").submit();
             });
             $("#excel").click(function () {
@@ -166,7 +166,7 @@
                 </label>
             </div>
 
-            {% if program.type == 'etekaf' %}
+            {% if mymanagement.program.type == mymanagement.program.TYPE_ETEKAF %}
                 <div style="direction:rtl ">
                     <label id="age">
                         سن مجاز:
@@ -176,7 +176,7 @@
                                              {% if 'cannot' in filterAll.age %}checked="checked"{% endif %}>
                     </label>
                 </div>
-            {% elif program.type == 'mashhad' %}
+            {% elif mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
                 <div style="direction:rtl ">
                     <label id="entrance_year">
                         سال ورود:
@@ -202,7 +202,7 @@
                                           {% if 'other' in filterAll.level %}checked="checked"{% endif %}>
                     </label>
                 </div>
-            {% elif program.type == 'arbaeen' %}
+            {% elif mymanagement.program.type == 'arbaeen' %}
                 <div style="direction:rtl ">
                     <label id="passport">
                         وضعیت گذرنامه:
@@ -346,9 +346,9 @@
             <button type="submit" id="print" name="print" class="btn btn-success" value="پرینت">پرینت</button>
             <button type="submit" id="accelerate" name="accelerate" class="btn btn-danger" value="تسریع">تسریع</button>
             <button type="submit" id="excel" name="excel" class="btn btn-info" value="اکسل">اکسل</button>
-            <button type="submit" id="monifest" name="monifest" class="btn btn-warning" value="مانیفست">مانیفست</button>
+            <button type="submit" id="manifest" name="manifest" class="btn btn-warning" value="مانیفست">مانیفست</button>
             <div>
-                {% if manager.canSelect %}
+                {% if mymanagement.canSelect %}
                     <br>
                     <input type="number" name="selectFilter" value="select" id="selectFilter" style="text-align: center"
                            placeholder="تعداد">
@@ -363,16 +363,16 @@
 
 
 
-    {% if manager.canAdd %}
+    {% if mymanagement.canAdd %}
         <div>
-            <form method="post" action="/program/addreg/{{ program.id }}" id="form1">
+            <form method="post" action="/program/addreg/{{ mymanagement.program.id }}" id="form1">
                 {% csrf_token %}
                 <div class="col-md-3"></div>
                 <div class="col-md-6 well">
                     <table class="table table-responsive well container " style="text-align: center;">
                         <tr>
                             <th width="25%" style="text-align: center; width: 250px">کد ملی</th>
-                            <th width="25%" style="text-align: center; width: 250px">{% if program.hasCoupling %}
+                            <th width="25%" style="text-align: center; width: 250px">{% if mymanagement.program.hasCoupling %}
                                 تاهل
                             {% endif %}</th>
                             <th width="25%" style="text-align: center; width: 250px">اعمال</th>
@@ -428,7 +428,7 @@
 
 
 
-    <form method="post" action="/program/editregisteration/{{ program.id }}" id="form2">
+    <form method="post" action="/program/editregisteration/{{ mymanagement.program.id }}" id="form2">
         {% csrf_token %}
 
 
@@ -437,12 +437,12 @@
                 <th style="text-align: center">ردیف</th>
                 <th style="text-align: center">کدملی</th>
                 <th style="text-align: center">نام</th>
-                {% if manager.program.type == "mashhad" %}
+                {% if mymanagement.program.type == "mashhad" %}
                     <th style="text-align: center">شماره دانشجویی</th>
                 {% else %}
                     <th style="text-align: center">به عنوان</th>
                 {% endif %}
-                {% if manager.program.type == "mashhad" %}
+                {% if mymanagement.program.type == "mashhad" %}
                     <th style="text-align: center">به صورت</th>
                 {% endif %}
                 <th style="text-align: center">جنسیت</th>
@@ -459,12 +459,12 @@
                         background:orange{% endif %}">{{ item.id }}</td>
                     <td style="text-align: center">{{ item.profile.melliCode }}</td>
                     <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
-                    {% if manager.program.type == "mashhad" %}
+                    {% if mymanagement.program.type == "mashhad" %}
                         <td style="text-align: center">{{ item.profile.studentNumber }}</td>
                     {% else %}
                         <td style="text-align: center">{{ item.profile.people_type_choices|get_tuple_item:item.profile.people_type }}</td>
                     {% endif %}
-                    {% if manager.program.type == "mashhad" %}
+                    {% if mymanagement.program.type == "mashhad" %}
                         <td style="text-align: center">{% if item.coupling %}
                             متاهلی
                         {% else %}
@@ -512,7 +512,7 @@
         </div>
 
         <div class="col-md-4">
-            {% if manager.canEditRegistration %}
+            {% if mymanagement.canEditRegistration %}
                 <table class="table table-responsive table-striped">
                     <tr>
                         <td width="50">
@@ -551,10 +551,10 @@
                                 پرداخت
                             </button>
                             <select class="form-control" name="numberOfPayments">
-                                <option value="numberOfPayments-0" id="numberOfPayments-0">بدون پرداخت</option>
-                                <option value="numberOfPayments-1" id="numberOfPayments-1">فقط قسط اول</option>
-                                <option value="numberOfPayments-2" id="numberOfPayments-2">دو قسط</option>
-                                <option value="numberOfPayments-3" id="numberOfPayments-3">هر سه قسط</option>
+                                <option value="0" id="numberOfPayments-0">بدون پرداخت</option>
+                                <option value="1" id="numberOfPayments-1">فقط قسط اول</option>
+                                <option value="2" id="numberOfPayments-2">دو قسط</option>
+                                <option value="3" id="numberOfPayments-3">هر سه قسط</option>
                             </select>
                         </td>
                     </tr>
