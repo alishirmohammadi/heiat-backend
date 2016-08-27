@@ -20,7 +20,7 @@ class Payment(models.Model):
     def create(cls, amount, registration, numberOfInstallment):
         payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment)
         payment.save()
-        for i in range(1, 6):
+        for i in range(1,6):
             try:
                 client = SoapClient(wsdl="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl", trace=False)
                 site = Site.objects.get_current()

@@ -48,3 +48,6 @@ def payment_callback(request):
         payment.registration.numberOfPayments = a
         payment.registration.save()
     return render(request, 'result.html', {'payment': payment})
+
+
+

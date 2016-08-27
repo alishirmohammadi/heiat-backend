@@ -579,12 +579,10 @@ def editstatus(request, program_id):
                     else:
                         return HttpResponseRedirect('/error')
 
-                inbox_filter = request.POST.get('sms', 'false')
-                if inbox_filter == 'sms':
-                    pass
-                    sms_methode = send()
-
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
+
+
+
 
 
 @login_required
