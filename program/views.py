@@ -98,20 +98,20 @@ def panel(request, management_id):
         label4_filter = request.POST.getlist('label4')
 
         all_filter = {
-            'status': status_filter,
-            'people_type': people_type_filter,
-            'payment': payment_filter,
-            'gender': gender_filter,
-            'couple': couple_filter,
-            'age': age_filter,
-            'entrance_year': entrance_year_filter,
-            'level': level_filter,
-            'conscription': conscription_filter,
-            'passport': passport_filter,
-            'label1': label1_filter,
-            'label2': label2_filter,
-            'label3': label3_filter,
-            'label4': label4_filter,
+            'status': request.POST.getlist('status_choices'),
+            'people_type': request.POST.getlist('people_type_choices'),
+            'payment': request.POST.getlist('payment'),
+            'gender': request.POST.getlist('gender'),
+            'couple': request.POST.getlist('coupled'),
+            'age': request.POST.getlist('age'),
+            'entrance_year': request.POST.getlist('entrance_year'),
+            'level': request.POST.getlist('level'),
+            'conscription': request.POST.getlist('conscription_choices'),
+            'passport': request.POST.getlist('passport_choices'),
+            'label1': request.POST.getlist('label1'),
+            'label2':request.POST.getlist('label2'),
+            'label3': request.POST.getlist('label3'),
+            'label4': request.POST.getlist('label4'),
         }
         request.session['filter'] = all_filter
 
