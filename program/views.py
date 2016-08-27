@@ -272,17 +272,19 @@ def my_programs(request):
     profile = Profile.objects.filter(user=user).first()
     # passport error About atlest passportexpatitondata must be 6 month after creationdata
     passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار ندارد'
-
-    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 2:
-        passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
-
-    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 1:
-        if lastprogram.creationDate.month <= 6:
-            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
-    if profile.passport_dateofexpiry.year == lastprogram.creationDate.year:
-        if lastprogram.creationDate.month >= profile.passport_dateofexpiry.month + 6:
-            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
     passportcheck = bool(profile.passport != None)
+    if passportcheck:
+        if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 2:
+            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+
+        if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 1:
+            if lastprogram.creationDate.month <= 6:
+                passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+        if profile.passport_dateofexpiry.year == lastprogram.creationDate.year:
+            if lastprogram.creationDate.month >= profile.passport_dateofexpiry.month + 6:
+                passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+    else:
+        return HttpResponseRedirect('/accounts/signin/')
     mytype = profile.people_type
     typecheck = bool(lastpricing.filter(people_type=mytype))
     mycoupling = profile.couple
