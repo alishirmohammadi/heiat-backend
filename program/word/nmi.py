@@ -364,6 +364,11 @@ def pri(request,recordset):
      else :
          a = 'مجردی'
      p.add_run(' '+str(a)+' ').bold = True
+     if item.additionalObject:
+         b1='هوایی'
+     else:
+         b1='زمینی'
+     p.add_run(b1).bold = True
      p.add_run(' شماره دانشجویی')
      p.add_run('  ')
      p.add_run(str(item.profile.studentNumber) + ':').bold = True

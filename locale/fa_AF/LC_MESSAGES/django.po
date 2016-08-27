@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 15:33+0430\n"
+"POT-Creation-Date: 2016-08-25 10:34+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,604 +17,489 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: accounts/templates/accounts/emails/password-reset-email.html:2
+#: .\accounts\forms.py:36
+msgid "کدملی "
+msgstr ""
+
+#: .\accounts\forms.py:38
+msgid "این قسمت فقط مخصوص کد ملی می باشد"
+msgstr ""
+
+#: .\accounts\forms.py:40
+msgid "نام "
+msgstr ""
+
+#: .\accounts\forms.py:44
+msgid "نام خانوادگی "
+msgstr ""
+
+#: .\accounts\forms.py:47
+msgid "تلفن همراه "
+msgstr ""
+
+#: .\accounts\forms.py:52
+msgid "ایمیل "
+msgstr ""
+
+#: .\accounts\forms.py:57
+msgid "رمز عبور "
+msgstr ""
+
+#: .\accounts\forms.py:60
+msgid "تکرار رمز "
+msgstr ""
+
+#: .\accounts\forms.py:124
+msgid ""
+"این کدملی پیش تر در سیستم ثبت شده ولی فعال نشده است. لطفا برای فعال سازی "
+"ایمیل خود را چک نمایید"
+msgstr ""
+
+#: .\accounts\forms.py:125
+msgid "این کدملی پیش تر ثبت شده است"
+msgstr ""
+
+#: .\accounts\forms.py:127
+msgid "این کدملی مجاز نمی باشد"
+msgstr ""
+
+#: .\accounts\forms.py:137
+msgid ""
+"این ایمیل پیش تر در سیستم ثبت شده ولی فعال نگردیده است. لطفا ایمیل خود را "
+"برای فعال سازی چک نمایید"
+msgstr ""
+
+#: .\accounts\forms.py:152
+msgid "گذرواژه های وارد شده یکسان نیستند"
+msgstr ""
+
+#: .\accounts\forms.py:170
+msgid "کدملی"
+msgstr ""
+
+#: .\accounts\forms.py:255 .\accounts\forms.py:257
+msgid "کد ملی وارد شده معتبر نیست"
+msgstr ""
+
+#: .\accounts\forms.py:267
+msgid "شماره تلفن وارد شده متعلق به ایران نمی باشد"
+msgstr ""
+
+#: .\accounts\forms.py:269
+msgid "شماره تلفن وارد شده صحیح نمی باشد"
+msgstr ""
+
+#: .\accounts\models.py:15
+msgid "user"
+msgstr ""
+
+#: .\accounts\templates\userena\activate_fail.html:4
+#: .\accounts\templates\userena\activate_retry.html:5
+msgid "Account activation failed."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_fail.html:5
+#: .\accounts\templates\userena\activate_retry.html:6
+msgid "Your account could not be activated..."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_fail.html:8
+msgid ""
+"Your account could not be activated. This could be because your activation "
+"link has aged."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_fail.html:9
+msgid ""
+"Please try signing up again or contact us if you think something went wrong."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_fail.html:10
+msgid "monkey"
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry.html:9
+msgid "Your account could not be activated because activation link is expired."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry.html:10
+msgid "Request a new activation link."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry_success.html:5
+msgid "Account re-activation succeeded."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry_success.html:6
+msgid "Account re-activation"
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry_success.html:9
+msgid "You requested a new activation of your account.."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry_success.html:10
+msgid ""
+"You have been sent an e-mail with an activation link to the supplied email."
+msgstr ""
+
+#: .\accounts\templates\userena\activate_retry_success.html:11
 #, python-format
 msgid ""
-"You're receiving this email because you requested a password reset for your "
-"user account at %(site_name)s."
+"We will store your signup information for %(userena_activation_days)s days "
+"on our server. "
 msgstr ""
 
-#: accounts/templates/accounts/emails/password-reset-email.html:4
-msgid "Please go to the following page and choose a new password:"
+#: .\accounts\templates\userena\disabled.html:3
+msgid "Disabled account"
 msgstr ""
 
-#: accounts/templates/accounts/emails/password-reset-email.html:8
-msgid "Your login email, in case you've forgotten, is same this email address:"
+#: .\accounts\templates\userena\disabled.html:4
+msgid "Your account has been disabled"
 msgstr ""
 
-#: accounts/templates/accounts/emails/password-reset-email.html:10
+#: .\accounts\templates\userena\email_change_complete.html:4
+msgid "Email verification"
+msgstr ""
+
+#: .\accounts\templates\userena\email_change_complete.html:5
+msgid "Confirm your new email"
+msgstr ""
+
+#: .\accounts\templates\userena\email_change_complete.html:8
+#, python-format
+msgid "You have received an email at %(email)s."
+msgstr ""
+
+#: .\accounts\templates\userena\email_change_complete.html:9
+#, python-format
+msgid ""
+"To associate this email address with your account (%(username)s) click on "
+"the link provided in this email."
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_complete.html:4
+msgid "Email changed!"
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_complete.html:6
+msgid "New email"
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_complete.html:8
+#, python-format
+msgid ""
+"Your new email address is saved. You can continue using %(site)s with this "
+"email."
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_fail.html:4
+msgid "Email verification failed."
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_fail.html:5
+#: .\accounts\templates\userena\email_confirm_fail.html:8
+msgid "Your email could not be verified..."
+msgstr ""
+
+#: .\accounts\templates\userena\email_confirm_fail.html:9
+msgid "You could try changing it again in your account settings."
+msgstr ""
+
+#: .\accounts\templates\userena\email_form.html:6
+#: .\accounts\templates\userena\profile_form.html:6
+#, python-format
+msgid "Account &raquo; %(username)s"
+msgstr ""
+
+#: .\accounts\templates\userena\emails\activation_email_message.html:4
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.html:4
+#, python-format
+msgid "Dear %(username)s,</p>"
+msgstr ""
+
+#: .\accounts\templates\userena\emails\activation_email_message.html:5
+#, python-format
+msgid "<p>Thank you for signing up at %(site)s.</p>"
+msgstr ""
+
+#: .\accounts\templates\userena\emails\activation_email_message.html:7
+#: .\accounts\templates\userena\emails\activation_email_message.txt:6
+msgid "To activate your account you should click on the link below:"
+msgstr ""
+
+#: .\accounts\templates\userena\emails\activation_email_message.html:11
+#: .\accounts\templates\userena\emails\activation_email_message.txt:10
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.html:13
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.txt:12
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.html:13
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.txt:8
+#: .\accounts\templates\userena\emails\password_reset_message.html:18
+#: .\accounts\templates\userena\emails\password_reset_message.txt:14
 msgid "Thanks for using our site!"
 msgstr ""
 
-#: accounts/templates/accounts/emails/password-reset-email.html:12
+#: .\accounts\templates\userena\emails\activation_email_message.html:12
+#: .\accounts\templates\userena\emails\activation_email_message.txt:12
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.html:14
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.txt:14
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.html:16
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.txt:10
+#: .\accounts\templates\userena\emails\password_reset_message.html:19
+#: .\accounts\templates\userena\emails\password_reset_message.txt:16
+msgid "Sincerely"
+msgstr ""
+
+#: .\accounts\templates\userena\emails\activation_email_message.txt:2
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.txt:2
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.html:4
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.txt:2
 #, python-format
-msgid "The %(site_name)s team"
+msgid "Dear %(username)s,"
 msgstr ""
 
-#: accounts/templates/accounts/login.html:6
-#: accounts/templates/accounts/signup.html:15 web/templates/base.html:80
-#: web/templates/signinup.html:7
-msgid "Login"
+#: .\accounts\templates\userena\emails\activation_email_message.txt:4
+#, python-format
+msgid "Thank you for signing up at %(site)s."
 msgstr ""
 
-#: accounts/templates/accounts/login.html:8
-msgid "Please Log In"
+#: .\accounts\templates\userena\emails\activation_email_subject.txt:2
+#, python-format
+msgid "Your signup at %(site)s."
 msgstr ""
 
-#: accounts/templates/accounts/login.html:15
-msgid "Don't have an account?"
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.html:6
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.txt:4
+#, python-format
+msgid "You requested a change of your email address at %(site)s."
 msgstr ""
 
-#: accounts/templates/accounts/login.html:15
-#: accounts/templates/accounts/signup.html:6 web/templates/base.html:81
-#: web/templates/signinup.html:8
-msgid "Register"
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.html:9
+#: .\accounts\templates\userena\emails\confirmation_email_message_new.txt:7
+msgid "Please confirm this email address by clicking on the link below:"
 msgstr ""
 
-#: accounts/templates/accounts/signup.html:8
-msgid "Signing Up is Free"
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.html:6
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.txt:4
+#, python-format
+msgid "There was a request to change your email address at %(site)s."
 msgstr ""
 
-#: accounts/templates/accounts/signup.html:15
-msgid "Already signed up?"
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.html:10
+#: .\accounts\templates\userena\emails\confirmation_email_message_old.txt:6
+#, python-format
+msgid ""
+"An email has been send to %(new_email)s which contains a verification link. "
+"Click on the link in this email to activate it."
 msgstr ""
 
-#: downloader/models.py:14 profiles/models.py:47 profiles/models.py:71
-msgid "Title"
+#: .\accounts\templates\userena\emails\confirmation_email_subject_new.html:4
+#: .\accounts\templates\userena\emails\confirmation_email_subject_new.txt:2
+#, python-format
+msgid "Email verification for %(site)s."
 msgstr ""
 
-#: downloader/models.py:16
-msgid "Proxy Base URL"
+#: .\accounts\templates\userena\emails\confirmation_email_subject_old.txt:2
+#, python-format
+msgid "A request to change your email address is made at %(site)s."
 msgstr ""
 
-#: downloader/models.py:17
-msgid "Proxy Login URL"
+#: .\accounts\templates\userena\emails\password_reset_message.html:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"            for your user account at %(site_name)s"
 msgstr ""
 
-#: downloader/models.py:18
-msgid "Proxy Logout URL"
+#: .\accounts\templates\userena\emails\password_reset_message.html:9
+#: .\accounts\templates\userena\emails\password_reset_message.txt:5
+msgid "Please go to the following page and choose a new password:"
 msgstr ""
 
-#: downloader/models.py:19
-msgid "Proxy Form Username"
+#: .\accounts\templates\userena\emails\password_reset_message.html:15
+#, python-format
+msgid "Your username, in case you've forgotten: %(username)s"
 msgstr ""
 
-#: downloader/models.py:20
-msgid "Proxy Form Password"
+#: .\accounts\templates\userena\emails\password_reset_message.txt:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"for your user account at %(site_name)s"
 msgstr ""
 
-#: downloader/models.py:21
-msgid "Proxy Form XPath"
+#: .\accounts\templates\userena\emails\password_reset_message.txt:10
+#, python-format
+msgid ""
+"\n"
+"Your username, in case you've forgotten: %(username)s\n"
 msgstr ""
 
-#: downloader/models.py:22
-msgid "SFX Base URL"
+#: .\accounts\templates\userena\password_complete.html:3
+msgid "گذرواژه تغییر نمود"
 msgstr ""
 
-#: downloader/models.py:23
-msgid "Serial Solutions Key"
+#: .\accounts\templates\userena\password_form.html:6
+#: .\accounts\templates\userena\profile_detail.html:17
+#: .\accounts\templates\userena\profile_form.html:14
+msgid "Change password"
 msgstr ""
 
-#: downloader/models.py:29 downloader/models.py:35 downloader/models.py:93
-msgid "Library"
+#: .\accounts\templates\userena\password_form.html:8
+#, python-format
+msgid ""
+"Account &raquo;\n"
+"    %(username)s"
 msgstr ""
 
-#: downloader/models.py:30
-msgid "Libraries"
+#: .\accounts\templates\userena\password_form.html:14
+msgid "تغییر پسوورد"
 msgstr ""
 
-#: downloader/models.py:40
-msgid "Start Date"
+#: .\accounts\templates\userena\password_form.html:18
+msgid "اعمال تغییرات"
 msgstr ""
 
-#: downloader/models.py:41
-msgid "End Date"
+#: .\accounts\templates\userena\password_reset_complete.html:3
+#: .\accounts\templates\userena\password_reset_confirm_form.html:4
+#: .\accounts\templates\userena\password_reset_confirm_form.html:9
+#: .\accounts\templates\userena\password_reset_form.html:9
+msgid "بازیابی گذرواژه"
 msgstr ""
 
-#: downloader/models.py:42
-msgid "Provider ID"
+#: .\accounts\templates\userena\password_reset_confirm_form.html:13
+msgid "تایید"
 msgstr ""
 
-#: downloader/models.py:43
-msgid "Provider Name"
+#: .\accounts\templates\userena\password_reset_done.html:3
+#: .\accounts\templates\userena\password_reset_done.html:4
+msgid "ایمیل بازیابی گذرواژه برای شما ارسال گردید"
 msgstr ""
 
-#: downloader/models.py:44
-msgid "Database ID"
+#: .\accounts\templates\userena\password_reset_form.html:4
+msgid "Reset password"
 msgstr ""
 
-#: downloader/models.py:45
-msgid "Database Name"
+#: .\accounts\templates\userena\password_reset_form.html:13
+msgid "ارسال گذرواژه به ایمیل"
 msgstr ""
 
-#: downloader/models.py:46
-msgid "Database Date"
+#: .\accounts\templates\userena\profile_detail.html:4
+#, python-format
+msgid "%(username)s's profile."
 msgstr ""
 
-#: downloader/models.py:75
-msgid "Holding"
+#: .\accounts\templates\userena\profile_detail.html:15
+#: .\accounts\templates\userena\profile_form.html:12
+msgid "View profile"
 msgstr ""
 
-#: downloader/models.py:76
-msgid "Holdings"
+#: .\accounts\templates\userena\profile_detail.html:16
+msgid "Edit details"
 msgstr ""
 
-#: downloader/models.py:86
-msgid "Active"
+#: .\accounts\templates\userena\profile_detail.html:18
+#: .\accounts\templates\userena\profile_form.html:15
+msgid "Change email"
 msgstr ""
 
-#: downloader/models.py:87
-msgid "Inactive"
+#: .\accounts\templates\userena\profile_detail.html:26
+msgid "Your mugshot"
 msgstr ""
 
-#: downloader/models.py:88
-msgid "Logging in"
-msgstr ""
-
-#: downloader/models.py:89
-msgid "Suspended"
-msgstr ""
-
-#: downloader/models.py:90 web/models.py:254
-msgid "Invalid"
-msgstr ""
-
-#: downloader/models.py:92 web/models.py:261
-msgid "Status"
-msgstr ""
-
-#: downloader/models.py:94
-msgid "Username"
-msgstr ""
-
-#: downloader/models.py:95
-msgid "Password"
-msgstr ""
-
-#: downloader/models.py:96
-msgid "Cookies"
-msgstr ""
-
-#: downloader/models.py:151
-msgid "Credential"
-msgstr ""
-
-#: downloader/models.py:152
-msgid "Credentials"
-msgstr ""
-
-#: profiles/models.py:35 profiles/models.py:53 profiles/models.py:54
-#: profiles/models.py:60 profiles/models.py:76
-msgid "Organization"
-msgstr ""
-
-#: profiles/models.py:36
-msgid "Degree"
-msgstr ""
-
-#: profiles/models.py:37
-msgid "Graduate"
-msgstr ""
-
-#: profiles/models.py:38
-msgid "Doctrate"
-msgstr ""
-
-#: profiles/models.py:39
-msgid "Assistant/Associate Professor"
-msgstr ""
-
-#: profiles/models.py:40
-msgid "Full Professor"
-msgstr ""
-
-#: profiles/models.py:58
+#: .\accounts\templates\userena\profile_detail.html:30
 msgid "Name"
 msgstr ""
 
-#: profiles/models.py:59
-msgid "Description"
-msgstr ""
-
-#: profiles/models.py:66
-msgid "Domain"
-msgstr ""
-
-#: profiles/models.py:67
-msgid "Domains"
-msgstr ""
-
-#: profiles/models.py:72
+#: .\accounts\templates\userena\profile_detail.html:34
 msgid "Email"
 msgstr ""
 
-#: profiles/models.py:73
-msgid "Address"
+#: .\accounts\templates\userena\profile_detail.html:38
+msgid "Age"
 msgstr ""
 
-#: profiles/models.py:74
-msgid "Phone"
+#: .\accounts\templates\userena\profile_detail.html:42
+msgid "Website"
 msgstr ""
 
-#: profiles/models.py:75
-msgid "Number of Digits is incorrect"
+#: .\accounts\templates\userena\profile_detail.html:46
+msgid "Location"
 msgstr ""
 
-#: profiles/models.py:82
-msgid "Contact"
+#: .\accounts\templates\userena\profile_detail.html:50
+msgid "About me"
 msgstr ""
 
-#: profiles/models.py:83
-msgid "Contacts"
+#: .\accounts\templates\userena\profile_form.html:4
+msgid "Account setup"
 msgstr ""
 
-#: scipub/settings.py:84
-msgid "Persian"
+#: .\accounts\templates\userena\profile_form.html:13
+msgid "Edit profile"
 msgstr ""
 
-#: scipub/settings.py:85
-msgid "Afghan Persian"
+#: .\accounts\templates\userena\profile_form.html:19
+msgid "Edit Profile"
 msgstr ""
 
-#: scipub/settings.py:86
+#: .\accounts\templates\userena\profile_form.html:22
+msgid "Save changes"
+msgstr ""
+
+#: .\accounts\templates\userena\profile_list.html:4
+msgid "Profiles"
+msgstr ""
+
+#: .\accounts\templates\userena\profile_list.html:21
+msgid "previous"
+msgstr ""
+
+#: .\accounts\templates\userena\profile_list.html:25
+#, python-format
+msgid ""
+"\n"
+"      Page %(page)s of %(num_pages)s\n"
+"      "
+msgstr ""
+
+#: .\accounts\templates\userena\profile_list.html:31
+msgid "next"
+msgstr ""
+
+#: .\accounts\templates\userena\signin_form.html:4
+msgid "Signin"
+msgstr ""
+
+#: .\accounts\templates\userena\signout.html:4
+msgid "Signed out"
+msgstr ""
+
+#: .\accounts\templates\userena\signout.html:5
+msgid "You have been signed out"
+msgstr ""
+
+#: .\accounts\templates\userena\signout.html:8
+msgid "You have been signed out. Till we meet again."
+msgstr ""
+
+#: .\accounts\templates\userena\signup_complete.html:4
+msgid "Signup almost done!"
+msgstr ""
+
+#: .\accounts\templates\userena\signup_complete.html:6
+#: .\accounts\templates\userena\signup_form.html:6
+msgid "Signup"
+msgstr ""
+
+#: .\accounts\views.py:253
+msgid "Your account has been activated and you have been signed in."
+msgstr ""
+
+#: .\azzahra\settings.py:135
 msgid "English"
 msgstr ""
 
-#: scipub/settings.py:137
-msgid "Administration"
-msgstr ""
-
-#: web/admin.py:14
-msgid "Make Selected Requests Unavailable"
-msgstr ""
-
-#: web/forms.py:17
-msgid "Journal Articles"
-msgstr ""
-
-#: web/forms.py:18
-msgid "Book Chapters"
-msgstr ""
-
-#: web/forms.py:19
-msgid "Dissertations"
-msgstr ""
-
-#: web/forms.py:23
-msgid "In"
-msgstr ""
-
-#: web/forms.py:27
-msgid "All Time"
-msgstr ""
-
-#: web/forms.py:30
-msgid "Since"
-msgstr ""
-
-#: web/forms.py:42
-msgid "Search"
-msgstr ""
-
-#: web/forms.py:112
-msgid "The Input type is not Identified"
-msgstr ""
-
-#: web/models.py:52
-msgid "Proceedings"
-msgstr ""
-
-#: web/models.py:53
-msgid "Reference Book"
-msgstr ""
-
-#: web/models.py:54
-msgid "Journal Issue"
-msgstr ""
-
-#: web/models.py:55
-msgid "Proceedings Article"
-msgstr ""
-
-#: web/models.py:56
-msgid "Other"
-msgstr ""
-
-#: web/models.py:57
-msgid "Dissertation"
-msgstr ""
-
-#: web/models.py:58
-msgid "Dataset"
-msgstr ""
-
-#: web/models.py:59
-msgid "Edited Book"
-msgstr ""
-
-#: web/models.py:60
-msgid "Journal Article"
-msgstr ""
-
-#: web/models.py:61
-msgid "Journal"
-msgstr ""
-
-#: web/models.py:62
-msgid "Report"
-msgstr ""
-
-#: web/models.py:63
-msgid "Book Series"
-msgstr ""
-
-#: web/models.py:64
-msgid "Report Series"
-msgstr ""
-
-#: web/models.py:65
-msgid "Book Track"
-msgstr ""
-
-#: web/models.py:66
-msgid "Standard"
-msgstr ""
-
-#: web/models.py:67
-msgid "Book Section"
-msgstr ""
-
-#: web/models.py:68
-msgid "Part"
-msgstr ""
-
-#: web/models.py:69
-msgid "Book"
-msgstr ""
-
-#: web/models.py:70
-msgid "Book Chapter"
-msgstr ""
-
-#: web/models.py:71
-msgid "Standard Series"
-msgstr ""
-
-#: web/models.py:72
-msgid "Monograph"
-msgstr ""
-
-#: web/models.py:73
-msgid "Component"
-msgstr ""
-
-#: web/models.py:74
-msgid "Reference Entry"
-msgstr ""
-
-#: web/models.py:75
-msgid "Journal Volume"
-msgstr ""
-
-#: web/models.py:76
-msgid "Book Set"
-msgstr ""
-
-#: web/models.py:79
-msgid "Type"
-msgstr ""
-
-#: web/models.py:80
-msgid "Titles"
-msgstr ""
-
-#: web/models.py:81
-msgid "Subtitles"
-msgstr ""
-
-#: web/models.py:82
-msgid "Authors"
-msgstr ""
-
-#: web/models.py:83
-msgid "Editors"
-msgstr ""
-
-#: web/models.py:85
-msgid "Publication Date"
-msgstr ""
-
-#: web/models.py:87
-msgid "Subjects"
-msgstr ""
-
-#: web/models.py:88
-msgid "Volume"
-msgstr ""
-
-#: web/models.py:89
-msgid "Issue"
-msgstr ""
-
-#: web/models.py:90
-msgid "Page"
-msgstr ""
-
-#: web/models.py:96 web/models.py:238
-msgid "Publisher"
-msgstr ""
-
-#: web/models.py:100
-msgid "Container Title"
-msgstr ""
-
-#: web/models.py:102
-msgid "Indexed at"
-msgstr ""
-
-#: web/models.py:178 web/models.py:204 web/models.py:244
-msgid "Metadata"
-msgstr ""
-
-#: web/models.py:179
-msgid "Metadatas"
-msgstr ""
-
-#: web/models.py:205
-msgid "File"
-msgstr ""
-
-#: web/models.py:206
-msgid "MD5 Hash"
-msgstr ""
-
-#: web/models.py:207
-msgid "Size"
-msgstr ""
-
-#: web/models.py:208
-msgid "Thumbnail"
-msgstr ""
-
-#: web/models.py:209 web/models.py:245
-msgid "Created at"
-msgstr ""
-
-#: web/models.py:223
-msgid "Resource"
-msgstr ""
-
-#: web/models.py:224
-msgid "Resources"
-msgstr ""
-
-#: web/models.py:229
-msgid "Primary Name"
-msgstr ""
-
-#: web/models.py:230
-msgid "Prefixes"
-msgstr ""
-
-#: web/models.py:231
-msgid "Names"
-msgstr ""
-
-#: web/models.py:232
-msgid "Tokens"
-msgstr ""
-
-#: web/models.py:239
-msgid "Publishers"
-msgstr ""
-
-#: web/models.py:243
-msgid "Requester"
-msgstr ""
-
-#: web/models.py:246
-msgid "Resolved at"
-msgstr ""
-
-#: web/models.py:255
-msgid "Unhandled"
-msgstr ""
-
-#: web/models.py:256
-msgid "Unavailable"
-msgstr ""
-
-#: web/models.py:257
-msgid "Download Error"
-msgstr ""
-
-#: web/models.py:258
-msgid "Unexpected Error"
-msgstr ""
-
-#: web/models.py:259
-msgid "Resolved"
-msgstr ""
-
-#: web/models.py:263
-msgid "IP"
-msgstr ""
-
-#: web/models.py:264
-msgid "Origin"
-msgstr ""
-
-#: web/models.py:265
-msgid "Is marked"
-msgstr ""
-
-#: web/models.py:271
-msgid "Request"
-msgstr ""
-
-#: web/models.py:272
-msgid "Requests"
-msgstr ""
-
-#: web/templates/_navbar.html:2 web/templates/home.html:7
-#: web/templates/user.html:7
-msgid "Home"
-msgstr ""
-
-#: web/templates/_navbar.html:3
-msgid "About"
-msgstr ""
-
-#: web/templates/base.html:46
-msgid "Change Navigation"
-msgstr ""
-
-#: web/templates/base.html:69
-msgid "Administrator"
-msgstr ""
-
-#: web/templates/base.html:74
-msgid "Logout"
-msgstr ""
-
-#: web/templates/search/search.html:9
-msgid "Search in Scientific Publications"
-msgstr ""
-
-#: web/templates/search/search.html:51
-msgid "No results found."
-msgstr ""
-
-#: web/templates/search/search.html:57
-msgid "Previous"
-msgstr ""
-
-#: web/templates/search/search.html:59
-msgid "Next"
-msgstr ""
-
-#: web/views.py:64 web/views.py:75
-msgid "The requested resource is not available"
-msgstr ""
-
-#: web/views.py:81
-msgid "The requested resource is not valid"
-msgstr ""
-
-#: web/views.py:87
-msgid "The requested resource could not be downloaded now"
-msgstr ""
-
-#: web/views.py:93
-msgid "An unexpected error occurred, we will check it as soon as possible"
+#: .\azzahra\settings.py:136
+msgid "Farsi"
 msgstr ""

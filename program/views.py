@@ -17,22 +17,29 @@ from django.core import mail
 # Create your views here.
 
 @login_required
-def documentation(request, program_id):
+def documentation(request, management_id):
     # if (request.method == 'GET'):
     #     post = Management.objects.all()
     #     return render(request, 'documents.html', {'post': post})
-    program = Program.objects.filter(id=program_id).first()
-    my_management = Management.objects.filter(program=program).filter(profile=request.user.profile).first()
+    program = Management.objects.filter(id=management_id).first().program
+    mymanagement = Management.objects.filter(id=management_id).first()
+    my_management = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first()
     if not my_management:
         return render(request, 'danger!!!!!!! attack.html', {})
     managements = Management.objects.filter(program__type=program.type).filter(role__in=my_management.seedocument())
     managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
-    return render(request, 'documents.html', {'post': managements})
+    return render(request, 'documents.html', {'post': managements,
+                                              'mymanagement': mymanagement,})
+
 
 @login_required
-def panel(request, program_id):
-    programe = Program.objects.filter(id=program_id).first()
+def panel(request, management_id):
+    programe = Management.objects.filter(id=management_id).first().program
+    # programe = Program.objects.filter(id=program_id).first()
     managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
+    mymanagement = Management.objects.filter(profile=request.user.my_profile).filter(program=programe).first()
+    canEditProgram = Management.objects.filter(profile=request.user.my_profile).filter(
+        program=programe).first().canEditProgram
     manager = managerlist.first()
     registered = Registration.objects.filter(program=programe)
 
@@ -55,7 +62,10 @@ def panel(request, program_id):
                 for item in range(5):
                     studentRange.append(programe.year - item)
 
-                return render(request, 'panel.html', {'all': registered, 'program': programe,
+                return render(request, 'panel.html', {'all': registered,
+                                                      'program': programe,
+                                                      'mymanagement': mymanagement,
+                                                      'canEditProgram': canEditProgram,
                                                       'statusChoices': Registration.status_choices,
                                                       'peopleTypeChoices': Profile.people_type_choices,
                                                       'conscriptionChoices': Profile.conscription_choices,
@@ -157,6 +167,7 @@ def panel(request, program_id):
         else:
             return HttpResponseRedirect('/error')
 
+
 @login_required
 def TestDocument(request, registered):
     docx_title = "monifest.docx"
@@ -173,8 +184,8 @@ def TestDocument(request, registered):
 
 
 def pri1(request, registered):
-    docx_title="print.docx"
-    f=nmi.pri(request, registered)
+    docx_title = "print.docx"
+    f = nmi.pri(request, registered)
     length = f.tell()
     f.seek(0)
     response = HttpResponse(
@@ -184,7 +195,6 @@ def pri1(request, registered):
     response['Content-Disposition'] = 'attachment; filename=' + docx_title
     response['Content-Length'] = length
     return response
-
 
 
 def allfilter(filter, programe):
@@ -268,7 +278,6 @@ def allfilter(filter, programe):
     return registered
 
 
-
 def export_users_xls(status_list):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
@@ -299,6 +308,7 @@ def export_users_xls(status_list):
 
     wb.save(response)
     return response
+
 
 @login_required
 def addregistration(request, program_id):
@@ -361,6 +371,7 @@ def addregistration(request, program_id):
                                     addregister.coupling = False
                             else:
                                 addregister.coupling = False
+
 
 @login_required
 def editstatus(request, program_id):
@@ -533,8 +544,8 @@ def editstatus(request, program_id):
 
                 inbox_filter = request.POST.get('email', 'false')
                 if inbox_filter == 'email':
-                    subject = request.POST.get('tittle', '')
-                    message = request.POST.get('massage text', '')
+                    subject = request.POST.get('messageTitle', '')
+                    message = request.POST.get('message text', '')
                     # from_email = request.POST.get('from_email', 'debugpls@gmail.com')#hard code for try
                     # to_email = request.POST.get('to_email', 'ivyblackmail@gmail.com')#hard code for try
                     from_email = request.POST.get('from_email',
@@ -543,7 +554,7 @@ def editstatus(request, program_id):
                     my_host = 'smtp.gmail.com'
                     my_port = 587
                     my_username = from_email
-                    my_password = '************'  # password here
+                    my_password = programe.emailPassword
                     my_use_tls = True
                     connection = get_connection(host=my_host,
                                                 port=my_port,
@@ -555,15 +566,6 @@ def editstatus(request, program_id):
                         to_person_mail = sendemail.profile.user.email
                         if subject and message:
                             try:
-                                # with get_connection(
-                                #         host=my_host,
-                                #         port=my_port,
-                                #         username=my_username,
-                                #         password=my_password,
-                                #         use_tls=my_use_tls
-                                # )as connection:
-                                #           EmailMessage(subject, message, username, [to_person_mail],
-                                #              connection=connection).send()
                                 connection.open()
                                 send_mail(subject, message, from_email, [to_person_mail], auth_user=my_username,
                                           auth_password=my_password, connection=connection)
@@ -583,6 +585,7 @@ def editstatus(request, program_id):
                     sms_methode = send()
 
         return HttpResponseRedirect('/program/panel/' + str(programe.id))
+
 
 @login_required
 def my_programs(request):
@@ -749,6 +752,7 @@ def my_programs(request):
                                                     'peopletype': Pricing.people_type_choices
                                                     })
 
+
 @login_required
 def my_management(request):
     user = request.user
@@ -758,13 +762,16 @@ def my_management(request):
                    'programmanagedbool': bool(programmanaged),
                    'role_choices': Management.role_choices})
 
+
 @login_required
 def manage(request, management_id):
     user = request.user
     pric = Pricing.people_type_choices
     regType = dict(Profile.people_type_choices).keys()
     pri = Pricing.objects.all()
+    canFilter = Management.objects.filter(id=management_id).filter().first().canFilter
     mymanagement = Management.objects.filter(id=management_id).first()
+    h = mymanagement.pk
     kk = mymanagement.program.additionalObject
     additonal = bool(mymanagement.program.additionalObject)
     muser = mymanagement.profile.user
@@ -805,7 +812,8 @@ def manage(request, management_id):
                         obj = {'pe': p, 'c': True, 'pri': pr}
                         pricelist.append(obj)
                 return render(request, 'reg.html',
-                              {'mymanagement': mymanagement,
+                              {'canFilter': canFilter,
+                               'mymanagement': mymanagement,
                                'list': pricelist, 'pri': pri,
                                'regType': Profile.people_type_choices,
                                'additonal': additonal,
@@ -842,6 +850,7 @@ def manage(request, management_id):
     else:
         return render(request, 'danger!!!!!!! attack.html', {})
 
+
 @login_required
 def myform(request, registration_id):
     user = request.user
@@ -875,7 +884,8 @@ def myform(request, registration_id):
     mycoupleregister = Registration.objects.filter(program=pro).filter(profile=usco).first()
     usercoupling = bool(usco)
     pt = myregister.profile.people_type
-    pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).filter(additionalObject=add).first()
+    pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).filter(
+        additionalObject=add).first()
     # pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).first()
     lastprogram = Program.objects.filter(isPublic=True).last()
     registerprogram = Pricing.objects.filter(program=pr)
@@ -917,6 +927,7 @@ def myform(request, registration_id):
                        'allStatus': Registration.status_choices,
                        'peopletype': Profile.people_type_choices})
 
+
 @login_required
 def addInstallment(request):
     programid = request.POST.get("programId", '')
@@ -947,6 +958,7 @@ def addInstallment(request):
     pid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     # rid = Registration.objects.filter(program=program).filter(profile=request.user.profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(pid))
+
 
 @login_required
 def removeInstallment(request, pricing_id, price_num):

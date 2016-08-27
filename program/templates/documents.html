@@ -3,30 +3,28 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 
-{#            {% block navbar-menu %}#}
-{##}
-{#                <div class="collapse navbar-collapse ">#}
-{#                    <ul class="nav navbar-nav">#}
-{#                        {% block navbar-right %}#}
-{#                            {% include "_navbar.html" with prog.id="1"  %}#}
-{#                        {% endblock %}#}
-{#                    </ul>#}
-{#                </div><!--/.nav-collapse -->#}
-{#            {% endblock %}#}
+{% block navbar %}
+                {% include '_navbar.html' with active_link='management' %}
+{% endblock %}
+
+{% block second_navbar %}
+{% include '_second_navbar.html' with active_link='documents' %}
+{% endblock %}
 
 {% block  content %}
 
-    {% for item in registered %}
-        {% if item.program.id in prog %}
-            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>
-        {% else %}
-            {{ item.program.title }}
-        {% endif %}
-
-
-        <br>
-
-    {% endfor %}
+{##}
+{#    {% for item in registered %}#}
+{#        {% if item.program.id in prog %}#}
+{#            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>#}
+{#        {% else %}#}
+{#            {{ item.program.title }}#}
+{#        {% endif %}#}
+{##}
+{##}
+{#        <br>#}
+{##}
+{#    {% endfor %}#}
 
     {% for item in post %}
 

@@ -21,6 +21,7 @@ class Program(models.Model):
     creationDate = models.DateTimeField(default=datetime.now)
     notes = models.CharField(max_length=200)
     email = models.EmailField(max_length=200, null=True, blank=True)
+    emailPassword = models.CharField(max_length=200, null=True, blank=True)
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
