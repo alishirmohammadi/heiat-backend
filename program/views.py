@@ -1,87 +1,76 @@
+import time
+import random
+
 from django.shortcuts import render
-from pay.models import Payment
-import jdatetime
-from program import jalali
-from accounts.templatetags.tags import get_tuple_item
-from .models import Program, User, Registration, Profile, Management, Pricing, Message, Message_reciving
 from django.http import HttpResponseRedirect, HttpResponse
-from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.decorators import login_required
-import xlwt, time, random
-from django.db.models import Sum, Q
-from django.core.mail import send_mail, BadHeaderError, get_connection
-from program.word import nmi
-from django.core import mail
+from django.core.mail import BadHeaderError
+
+from pay.models import Payment
+from program import jalali
+from .models import Program, Registration, Profile, Management, Pricing, Message, Message_reciving
+
+
+
 
 
 # Create your views here.
+from program.utils import filter_to_registrations
+from program.word.export_to_word import registrations_to_print, registrations_to_manifest
+
 
 @login_required
 def documentation(request, management_id):
-    # if (request.method == 'GET'):
-    #     post = Management.objects.all()
-    #     return render(request, 'documents.html', {'post': post})
-    program = Management.objects.filter(id=management_id).first().program
-    mymanagement = Management.objects.filter(id=management_id).first()
-    my_management = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first()
-    if not my_management:
-        return render(request, 'danger!!!!!!! attack.html', {})
-    managements = Management.objects.filter(program__type=program.type).filter(role__in=my_management.seedocument())
-    managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
-    return render(request, 'documents.html', {'post': managements,
-                                              'mymanagement': mymanagement,})
+    management = Management.objects.filter(id=management_id).first()
+    if not management or management.profile != request.user.my_profile:
+        return render(request, 'attack.html', {})
+    if request.method == 'GET':
+        managements = Management.objects.filter(program__type=management.program.type).filter(
+            role__in=management.seedocument())
+        managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
+        return render(request, 'documents.html', {'document_managements': managements, 'mymanagement': management, })
+    else:
+        # todo: save documentation
+        pass
 
 
 @login_required
 def panel(request, management_id):
-    programe = Management.objects.filter(id=management_id).first().program
-    # programe = Program.objects.filter(id=program_id).first()
-    managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
-    mymanagement = Management.objects.filter(profile=request.user.my_profile).filter(program=programe).first()
-    canEditProgram = Management.objects.filter(profile=request.user.my_profile).filter(
-        program=programe).first().canEditProgram
-    manager = managerlist.first()
-    registered = Registration.objects.filter(program=programe)
+    management = Management.objects.filter(id=management_id).first()
+    if not management or management.profile != request.user.my_profile:
+        return render(request, 'attack.html', {})
+    if not management.canFilter:
+        return HttpResponseRedirect('/program/documents/')
 
-    if (request.method == 'GET'):
-        if manager:
-            # if manager.canEditProgram:
-            #     return HttpResponseRedirect('/error')
-            # else:
-            if manager.canFilter:
-                filter_all = request.session.get('filter',
-                                                 {'status': [], 'people_type': [], 'payment': [],
-                                                  'gender': ['male'],
-                                                  'couple': [], 'age': [], 'entrance_year': [], 'level': [],
-                                                  'conscription': [], 'passport': [], 'label1': [], 'label2': [],
-                                                  'label3': [],
-                                                  'label4': []})
+    if request.method == 'GET':
+        filter_all = request.session.get('filter',
+                                         {'status': [], 'people_type': [], 'payment': [],
+                                          'gender': ['male'],
+                                          'couple': [], 'age': [], 'entrance_year': [], 'level': [],
+                                          'conscription': [], 'passport': [], 'label1': [], 'label2': [],
+                                          'label3': [],
+                                          'label4': []})
 
-                registered = allfilter(filter_all, programe)
-                studentRange = []
-                for item in range(5):
-                    studentRange.append(programe.year - item)
+        registrations = filter_to_registrations(filter_all, management.program)
+        studentRange = []
+        for item in range(5):
+            studentRange.append(management.program.year - item)
 
-                return render(request, 'panel.html', {'all': registered,
-                                                      'program': programe,
-                                                      'mymanagement': mymanagement,
-                                                      'canEditProgram': canEditProgram,
-                                                      'statusChoices': Registration.status_choices,
-                                                      'peopleTypeChoices': Profile.people_type_choices,
-                                                      'conscriptionChoices': Profile.conscription_choices,
-                                                      # 'passportChoices': Profile.passport_choices,
-                                                      'filterAll': filter_all,
-                                                      'student_range': studentRange,
-                                                      'label_range': range(11),
-                                                      'manager': manager})
+        return render(request, 'panel.html', {'all': registrations,
+                                              # 'program': management.program,
+                                              'mymanagement': management,
+                                              # 'canEditProgram': canEditProgram,
+                                              'statusChoices': Registration.status_choices,
+                                              'peopleTypeChoices': Profile.people_type_choices,
+                                              'conscriptionChoices': Profile.conscription_choices,
+                                              # 'passportChoices': Profile.passport_choices,
+                                              'filterAll': filter_all,
+                                              'student_range': studentRange,
+                                              'label_range': range(11),
+                                              })
 
-            else:
-                return HttpResponseRedirect('/program/documents/' + str(programe.id))
-        else:
-            return HttpResponseRedirect('/error')
     else:
         action = request.POST.get('editFilter', '')
-
         status_filter = request.POST.getlist('status_choices')
         people_type_filter = request.POST.getlist('people_type_choices')
         payment_filter = request.POST.getlist('payment')
@@ -115,8 +104,6 @@ def panel(request, management_id):
         }
         request.session['filter'] = all_filter
 
-        registered = Registration.objects.filter(program=programe)
-
         registered = allfilter(all_filter, programe)
 
         if action == 'show':
@@ -124,30 +111,15 @@ def panel(request, management_id):
                 return HttpResponseRedirect('/program/panel/' + str(programe.id))
         elif action == 'excel':
             if manager.canFilter:
-                status_list = []
-                for j in registered:
-                    status = get_tuple_item(Registration.status_choices, j.status)
-                    numberOfPayment = j.numberOfPayments
-                    coupling = j.coupling
-                    profile__user__first_name = j.profile.user.first_name
-                    profile__user__last_name = j.profile.user.last_name
-                    profile__user__email = j.profile.user.email
-                    profile__cellPhone = j.profile.cellPhone
-                    object = (numberOfPayment,
-                              coupling,
-                              status,
-                              profile__user__first_name,
-                              profile__user__last_name,
-                              profile__user__email,
-                              profile__cellPhone)
-                    status_list.append(object)
-                return export_users_xls(status_list)
-        elif action == 'monifest':
+                from .utils import registrations_to_excel
+
+                return registrations_to_excel(registered)
+        elif action == 'manifest':
             # return render(request, 'panel.html', {'all': registered})
-            return TestDocument(request, registered)
+            return registrations_to_manifest(registered)
         elif action == 'print':
             # return render(request, 'panel.html', {'all': registered})
-            return pri1(request, registered)
+            return registrations_to_print(registered)
         elif action == 'select':
             if manager.canSelect:
                 numberOfSelect = request.POST.get("selectFilter", '')
@@ -157,157 +129,15 @@ def panel(request, management_id):
                 for selected in registered:
                     t = random.randint(1, total)
                     if face >= t:
-                        selected.status = 'certain'
+                        selected.status = Registration.STATUS_CERTAIN
                         face = face - 1
                     else:
-                        selected.status = 'reserved'
+                        selected.status = Registration.STATUS_RESERVED
                     selected.save()
                     total = total - 1
             return HttpResponseRedirect('/program/panel/' + str(programe.id))
         else:
             return HttpResponseRedirect('/error')
-
-
-@login_required
-def TestDocument(request, registered):
-    docx_title = "monifest.docx"
-    f = nmi.crea(request, registered)
-    length = f.tell()
-    f.seek(0)
-    response = HttpResponse(
-        f.getvalue(),
-        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
-    response['Content-Disposition'] = 'attachment; filename=' + docx_title
-    response['Content-Length'] = length
-    return response
-
-
-def pri1(request, registered):
-    docx_title = "print.docx"
-    f = nmi.pri(request, registered)
-    length = f.tell()
-    f.seek(0)
-    response = HttpResponse(
-        f.getvalue(),
-        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    )
-    response['Content-Disposition'] = 'attachment; filename=' + docx_title
-    response['Content-Length'] = length
-    return response
-
-
-def allfilter(filter, programe):
-    registered = Registration.objects.filter(program=programe)
-
-    if filter.get('status', []):
-        registered = registered.filter(status__in=filter.get('status', []))
-
-    if filter.get('people_type', []):
-        registered = registered.filter(profile__people_type__in=filter.get('people_type', []))
-
-    if filter.get('payment', []):
-        registered = registered.filter(numberOfPayments__in=filter.get('payment', []))
-
-    gender_filter = filter.get('gender', [])
-    if gender_filter:
-        if len(gender_filter) == 1:
-            gender_filter = gender_filter[0]
-            if gender_filter == 'male':
-                registered = registered.filter(profile__gender=True)
-            elif gender_filter == 'female':
-                registered = registered.filter(profile__gender=False)
-    couple_filter = filter.get('couple', [])
-    if couple_filter:
-        if len(couple_filter) == 1:
-            couple_filter = couple_filter[0]
-            if gender_filter == 'single':
-                registered = registered.filter(coupling=False)
-            elif couple_filter == 'couple':
-                registered = registered.filter(coupling=True)
-    age_filter = filter.get('age', [])
-    ## This Filter should be reorginesed after matching codes (for Date of Birth Changes)
-    if age_filter:
-        if len(age_filter) == 1:
-            age_filter = age_filter[0]
-            teen_age = programe.year - 15
-            old_age = programe.year - 65
-            if age_filter == 'can':
-                registered = registered.filter(profile__birthYear__lt=teen_age).filter(
-                    profile__birthYear__gt=old_age)
-            elif age_filter == 'cannot':
-                registered = registered.exclude(
-                    Q(profile__birthYear__lt=teen_age) | Q(profile__birthYear__gt=old_age))
-                # This Filter i not complete, and reqire below Filter code:
-                # profile__birthYear__lt=old_age
-
-    label1_filter = filter.get('label1', [])
-    if label1_filter:
-        if len(label1_filter) == 1:
-            label1_filter = label1_filter[0]
-            if label1_filter == 'y':
-                registered = registered.filter(label1=True)
-            elif label1_filter == 'n':
-                registered = registered.filter(label1=False)
-
-    label2_filter = filter.get('label2', [])
-    if label2_filter:
-        if len(label2_filter) == 1:
-            label2_filter = label2_filter[0]
-            if label2_filter == 'y':
-                registered = registered.filter(label2=True)
-            elif label2_filter == 'n':
-                registered = registered.filter(label2=False)
-
-    if filter.get('label3', []):
-        registered = registered.filter(label3__in=filter.get('label3', []))
-
-    if filter.get('label4', []):
-        registered = registered.filter(label4__in=filter.get('label4', []))
-    if filter.get('entrance_year', []):
-        # registered = registered.filter(profile__studentNumber__in= )
-        pass
-    if filter.get('level', []):
-        pass
-    if filter.get('conscription', []):
-        registered = registered.filter(profile__conscription__in=filter.get('conscription', []))
-    if filter.get('passport', []):
-        registered = registered.filter(profile__passport__in=filter.get('passport',
-                                                                        []))  # It should be completed, with rectify model, profile
-
-    return registered
-
-
-def export_users_xls(status_list):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="users.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Users')
-    # Sheet header, first row
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    for row in status_list:
-        row_num += 1
-        for col_num in range(len(row)):
-            if col_num == 1:
-                if row[1] == True:
-                    x = 'متاهلی'
-                else:
-                    x = 'مجردی'
-                ws.write(row_num, col_num, x, font_style)
-
-                continue
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-    return response
 
 
 @login_required
@@ -406,73 +236,21 @@ def editstatus(request, program_id):
             elif action == 'label3':
                 selectValue = request.POST.get('label3', '')
                 for item in editingreg:
-                    if selectValue == '0':
-                        item.label3 = 0
-                    elif selectValue == '1':
-                        item.label3 = 1
-                    elif selectValue == '2':
-                        item.label3 = 2
-                    elif selectValue == '3':
-                        item.label3 = 3
-                    elif selectValue == '4':
-                        item.label3 = 4
-                    elif selectValue == '5':
-                        item.label3 = 5
-                    elif selectValue == '6':
-                        item.label3 = 6
-                    elif selectValue == '7':
-                        item.label3 = 7
-                    elif selectValue == '8':
-                        item.label3 = 8
-                    item.save()
+                    if selectValue:
+                        item.label3 = int(selectValue)
+                        item.save()
             elif action == 'label4':
                 selectValue = request.POST.get('label4', '')
                 for item in editingreg:
-                    if selectValue == '0':
-                        item.label4 = 0
-                    elif selectValue == '1':
-                        item.label4 = 1
-                    elif selectValue == '2':
-                        item.label4 = 2
-                    elif selectValue == '3':
-                        item.label4 = 3
-                    elif selectValue == '4':
-                        item.label4 = 4
-                    elif selectValue == '5':
-                        item.label4 = 5
-                    elif selectValue == '6':
-                        item.label4 = 6
-                    elif selectValue == '7':
-                        item.label4 = 7
-                    elif selectValue == '8':
-                        item.label4 = 8
-                    item.save()
+                    if selectValue:
+                        item.label4 = int(selectValue)
+                        item.save()
             elif action == 'status_choices':
                 selectValue = request.POST.get('status_choices', '')
-                for item in editingreg:
-                    if selectValue == 'default':
-                        item.status = 'default'
-                    elif selectValue == 'certain':
-                        item.status = 'certain'
-                    elif selectValue == 'reserved':
-                        item.status = 'reserved'
-                    elif selectValue == 'given up':
-                        item.status = 'given up'
-                    elif selectValue == 'removed':
-                        item.status = 'removed'
-                    elif selectValue == 'suspended':
-                        item.status = 'suspended'
-                    elif selectValue == 'not chosen':
-                        item.status = 'not chosen'
-                    elif selectValue == 'came':
-                        item.status = 'came'
-                    elif selectValue == 'not came':
-                        item.status = 'not came'
-                    elif selectValue == 'temporary':
-                        item.status = 'temporary'
-                    elif selectValue == 'first stage':
-                        item.status = 'first stage'
-                    item.save()
+                if selectValue:
+                    for item in editingreg:
+                        item.status = selectValue
+                        item.save()
             elif action == 'numberOfPayments':
                 selectValue = request.POST.get('numberOfPayments', '')
                 for item in editingreg:
@@ -540,54 +318,30 @@ def editstatus(request, program_id):
                         post2.message_id = post.id
                         post2.registration_id = item.id
                         post2.save()
-                        # post2.save()
 
                 inbox_filter = request.POST.get('email', 'false')
                 if inbox_filter == 'email':
                     subject = request.POST.get('messageTitle', '')
                     message = request.POST.get('message text', '')
-                    # from_email = request.POST.get('from_email', 'debugpls@gmail.com')#hard code for try
-                    # to_email = request.POST.get('to_email', 'ivyblackmail@gmail.com')#hard code for try
-                    from_email = request.POST.get('from_email',
-                                                  programe.email)  # sender email name who is maneger of the program
-                    to_email = Registration.objects.filter(id__in=checked).filter(program=programe)
-                    my_host = 'smtp.gmail.com'
-                    my_port = 587
-                    my_username = from_email
-                    my_password = programe.emailPassword
-                    my_use_tls = True
-                    connection = get_connection(host=my_host,
-                                                port=my_port,
-                                                username=my_username,
-                                                password=my_password,
-                                                use_tls=my_use_tls)
+                    to_email = Registration.objects.filter(id__in=checked).filter(program=programe).values_list(
+                        'profile__user__email', flat=True)
+                    if subject and message:
+                        try:
+                            from .utils import send_email
 
-                    for sendemail in to_email:
-                        to_person_mail = sendemail.profile.user.email
-                        if subject and message:
-                            try:
-                                connection.open()
-                                send_mail(subject, message, from_email, [to_person_mail], auth_user=my_username,
-                                          auth_password=my_password, connection=connection)
-                                connection.close()
-                            except BadHeaderError:
-                                return HttpResponse('Invalid header found.')
-                        else:
-
-                            return HttpResponse('Make sure all fields are entered and valid.')
-
+                            send_email(programe.email, programe.emailPassword, to_email, subject, message)
+                        except BadHeaderError:
+                            return HttpResponse('Invalid header found.')
                     else:
-                        return HttpResponseRedirect('/error')
 
-                inbox_filter = request.POST.get('sms', 'false')
-                if inbox_filter == 'sms':
-                    pass
-                    # sms_methode = send()
+                        return HttpResponse('Make sure all fields are entered and valid.')
 
-        return HttpResponseRedirect('/program/panel/' + str(programe.id))
+            inbox_filter = request.POST.get('sms', 'false')
+            if inbox_filter == 'sms':
+                pass
+                # sms_methode = send()
 
-
-
+    return HttpResponseRedirect('/program/panel/' + str(programe.id))
 
 
 @login_required
@@ -642,7 +396,7 @@ def my_programs(request):
                            'programregistered': programregistered,
                            'allStatus': Registration.status_choices,
                            'peopletype': Pricing.people_type_choices,
-                           'comment': passportexparitonalert,}
+                           'comment': passportexparitonalert, }
                           )
         else:
             return render(request, 'registrationlist.html', {'registered': registered,
@@ -662,7 +416,7 @@ def my_programs(request):
             Coupling=boolhascoupling).filter(
             additionalObject=booladditonaltick).first()
         if pricecheck:
-            programcheck = bool(lastprogram.type == 'arbaeen')
+            programcheck = bool(lastprogram.type == Program.TYPE_ARBAEEN)
             if programcheck:
                 if passportcheck:
                     if typecheck:
@@ -689,7 +443,7 @@ def my_programs(request):
                                         coupleregistration.additionalObject = additonaltick
                                         coupleregistration.save()
                                     else:
-                                        return render(request, 'danger!!!!!!! attack.html', {})
+                                        return render(request, 'attack.html', {})
                             else:
                                 hascoupling = False
                                 additonaltick = request.POST.get("additonaltick", '')
@@ -700,9 +454,9 @@ def my_programs(request):
                                 registration.additionalObject = additonaltick
                                 registration.save()
                     else:
-                        return render(request, 'danger!!!!!!! attack.html', {})
+                        return render(request, 'attack.html', {})
                 else:
-                    return render(request, 'danger!!!!!!! attack.html', {})
+                    return render(request, 'attack.html', {})
             else:
                 if typecheck:
                     if Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
@@ -738,7 +492,7 @@ def my_programs(request):
                             registration.additionalObject = additonaltick
                             registration.save()
                 else:
-                    return render(request, 'danger!!!!!!! attack.html', {})
+                    return render(request, 'attack.html', {})
 
             registered = Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
                 status='removed').first()
@@ -868,7 +622,7 @@ def manage(request, management_id):
             pm = proman.id
             return HttpResponseRedirect('/program/documents/' + str(pm))
     else:
-        return render(request, 'danger!!!!!!! attack.html', {})
+        return render(request, 'attack.html', {})
 
 
 @login_required
@@ -893,7 +647,7 @@ def myform(request, registration_id):
                'amount': amount,
                'refId': refId,
                'saleRefId': saleRefId,
-               'success': success,}
+               'success': success, }
         date_list.append(obj)
 
     massageinbox = Message_reciving.objects.filter(registration_id=registration_id)
@@ -924,7 +678,7 @@ def myform(request, registration_id):
                            'allStatus': Registration.status_choices,
                            'peopletype': Profile.people_type_choices})
         else:
-            return render(request, 'danger!!!!!!! attack.html', {})
+            return render(request, 'attack.html', {})
     else:
         if 'givenup_btn' in request.POST:
             myregister.status = 'given up'
