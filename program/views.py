@@ -70,63 +70,44 @@ def panel(request, management_id):
                                               })
 
     else:
-        action = request.POST.get('editFilter', '')
-        status_filter = request.POST.getlist('status_choices')
-        people_type_filter = request.POST.getlist('people_type_choices')
-        payment_filter = request.POST.getlist('payment')
-        gender_filter = request.POST.getlist('gender')
-        couple_filter = request.POST.getlist('coupled')
-        age_filter = request.POST.getlist('age')
-        entrance_year_filter = request.POST.getlist('entrance_year')
-        level_filter = request.POST.getlist('level')
-        conscription_filter = request.POST.getlist('conscription_choices')
-        passport_filter = request.POST.getlist('passport_choices')
-        label1_filter = request.POST.getlist('label1')
-        label2_filter = request.POST.getlist('label2')
-        label3_filter = request.POST.getlist('label3')
-        label4_filter = request.POST.getlist('label4')
-
         all_filter = {
-            'status': status_filter,
-            'people_type': people_type_filter,
-            'payment': payment_filter,
-            'gender': gender_filter,
-            'couple': couple_filter,
-            'age': age_filter,
-            'entrance_year': entrance_year_filter,
-            'level': level_filter,
-            'conscription': conscription_filter,
-            'passport': passport_filter,
-            'label1': label1_filter,
-            'label2': label2_filter,
-            'label3': label3_filter,
-            'label4': label4_filter,
+            'status': request.POST.getlist('status_choices'),
+            'people_type': request.POST.getlist('people_type_choices'),
+            'payment': request.POST.getlist('payment'),
+            'gender': request.POST.getlist('gender'),
+            'couple': request.POST.getlist('coupled'),
+            'age': request.POST.getlist('age'),
+            'entrance_year': request.POST.getlist('entrance_year'),
+            'level': request.POST.getlist('level'),
+            'conscription': request.POST.getlist('conscription_choices'),
+            'passport': request.POST.getlist('passport_choices'),
+            'label1': request.POST.getlist('label1'),
+            'label2': request.POST.getlist('label2'),
+            'label3': request.POST.getlist('label3'),
+            'label4': request.POST.getlist('label4'),
         }
         request.session['filter'] = all_filter
 
-        registered = allfilter(all_filter, programe)
-
+        action = request.POST.get('editFilter', 'show')
         if action == 'show':
-            if manager.canFilter:
-                return HttpResponseRedirect('/program/panel/' + str(programe.id))
-        elif action == 'excel':
-            if manager.canFilter:
-                from .utils import registrations_to_excel
+            return HttpResponseRedirect('/program/panel/' + str(management.program.id))
 
-                return registrations_to_excel(registered)
-        elif action == 'manifest':
-            # return render(request, 'panel.html', {'all': registered})
-            return registrations_to_manifest(registered)
-        elif action == 'print':
-            # return render(request, 'panel.html', {'all': registered})
-            return registrations_to_print(registered)
-        elif action == 'select':
-            if manager.canSelect:
+        registrations = filter_to_registrations(all_filter, management.program)
+        if action == 'excel':
+            from .utils import registrations_to_excel
+
+            return registrations_to_excel(registrations)
+        if action == 'manifest':
+            return registrations_to_manifest(registrations)
+        if action == 'print':
+            return registrations_to_print(registrations)
+        if action == 'select':
+            if management.canSelect:
                 numberOfSelect = request.POST.get("selectFilter", '')
                 face = int(numberOfSelect)
-                total = registered.count()
+                total = registrations.count()
 
-                for selected in registered:
+                for selected in registrations:
                     t = random.randint(1, total)
                     if face >= t:
                         selected.status = Registration.STATUS_CERTAIN
@@ -135,213 +116,149 @@ def panel(request, management_id):
                         selected.status = Registration.STATUS_RESERVED
                     selected.save()
                     total = total - 1
-            return HttpResponseRedirect('/program/panel/' + str(programe.id))
+            return HttpResponseRedirect('/program/panel/' + str(management.program.id))
         else:
             return HttpResponseRedirect('/error')
 
 
 @login_required
 def addregistration(request, program_id):
-    programe = Program.objects.filter(id=program_id).first()
-    managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
-    manager = managerlist.first()
-    programcheck = bool(programe.type == 'arbaeen')
+    program = Program.objects.filter(id=program_id).first()
+    management = Management.objects.filter(profile=request.user.my_profile).filter(program=program).first()
+    if not management or not management.canAdd:
+        return render(request, 'attack.html', {})
 
-    if request.method == 'GET':
-        return HttpResponseRedirect('/program/panel/' + str(programe.id))
+    codemelli = request.POST.get('mellicode', '')
+    coupled = request.POST.get('coupled', '')
+    prof = Profile.objects.filter(melliCode=codemelli).first()
+    if prof:
+        peopletype = prof.people_type
+        alreadyRegistered = Registration.objects.filter(program=program).filter(profile=prof).exclude(
+            status=Registration.STATUS_REMOVED)
 
-    else:
-        if manager.canAdd:
-
-            codemelli = request.POST.get('mellicode', '')
-            coupled = request.POST.get('coupled', '')
-            a = bool(coupled)
-            prof = Profile.objects.filter(melliCode=codemelli).first()
-            if prof:
-                peopletype = prof.people_type
-                price = Pricing.objects.filter(program=programe).filter(Coupling=bool(coupled)).filter(
-                    people_type=peopletype).first()
-                passportcheck = prof.passport
-                passportcheck1 = bool(prof.passport == 'have')
-                passportcheck2 = bool(prof.passport == 'have 7')
-                alreadyRegistered = Registration.objects.filter(program=programe).filter(profile=prof)
-                if alreadyRegistered:
-                    a = 'a'
-                    registered = Registration.objects.filter(program=programe)
-                    return render(request, 'panel.html', {'all': registered, 'program': programe,
-                                                          'statusChoices': Registration.status_choices,
-                                                          'peopleTypeChoices': Profile.people_type_choices,
-                                                          'label_range': range(9),
-                                                          'manager': manager, 'a': a})
-
-                else:
-                    if price:
-                        if price.price1:
-                            addregister = Registration()
-                            addregister.profile = prof
-                            addregister.program = programe
-                            if programe.hasCoupling:
-                                if prof.coupling:
-                                    if coupled == 'married':
-                                        addregister.coupling = True
-                                        registeredcouple = Registration.objects.filter(program=programe).filter(
-                                            profile=prof.coupling).first()
-                                        if registeredcouple:
-                                            registeredcouple.coupling = True
-                                            registeredcouple.save()
-                                        else:
-                                            addcouple = Registration()
-                                            addcouple.profile = prof.coupling
-                                            addcouple.program = programe
-                                            addcouple.coupling = True
-                                            addcouple.save()
-                                    else:
-                                        addregister.coupling = False
-                                else:
-                                    addregister.coupling = False
-                            else:
-                                addregister.coupling = False
+        if not alreadyRegistered:
+            price = Pricing.objects.filter(program=program).filter(Coupling=bool(coupled)).filter(
+                people_type=peopletype).first()
+            if price:
+                addregister = Registration()
+                addregister.profile = prof
+                addregister.program = program
+                if program.hasCoupling and prof.coupling:
+                    if coupled == 'married':
+                        addregister.coupling = True
+                        registeredCouple = Registration.objects.filter(program=program).filter(
+                            profile=prof.couple).first()
+                        if registeredCouple:
+                            registeredCouple.coupling = True
+                            registeredCouple.save()
+                        else:
+                            registeredCouple = Registration()
+                            registeredCouple.profile = prof.coupling
+                            registeredCouple.program = program
+                            registeredCouple.coupling = True
+                            registeredCouple.save()
+                addregister.save()
+    return HttpResponseRedirect('/program/panel/' + management.id)
 
 
 @login_required
-def editstatus(request, program_id):
-    programe = Program.objects.filter(id=program_id).first()
-    managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
-    registered = Registration.objects.filter(program=programe)
-    manager = managerlist.first()
-    if (request.method == 'GET'):
-        return HttpResponseRedirect('/program/panel/' + str(programe.id))
+def editStatus(request, program_id):
+    program = Program.objects.filter(id=program_id).first()
+    management = Management.objects.filter(profile=request.user.my_profile).filter(program=program).first()
+    if not management or not management.canEditRegistration:
+        return render(request, 'attack.html', {})
 
-    else:
-        if manager.canEditRegistration:
-            checked = request.POST.getlist('tick')
-            editingreg = Registration.objects.filter(id__in=checked).filter(program=programe)
-            action = request.POST.get('editAction', '')
-            if action == 'label1':
-                selectValue = request.POST.get('label1', '')
-                for item in editingreg:
-                    if selectValue == 'lab1-yes':
-                        item.label1 = True
-                    elif selectValue == 'lab1-no':
-                        item.label1 = False
-                    item.save()
-            elif action == 'label2':
-                selectValue = request.POST.get('label2', '')
-                for item in editingreg:
-                    if selectValue == 'lab2-yes':
-                        item.label2 = True
-                    elif selectValue == 'lab2-no':
-                        item.label2 = False
-                    item.save()
-            elif action == 'label3':
-                selectValue = request.POST.get('label3', '')
-                for item in editingreg:
-                    if selectValue:
-                        item.label3 = int(selectValue)
-                        item.save()
-            elif action == 'label4':
-                selectValue = request.POST.get('label4', '')
-                for item in editingreg:
-                    if selectValue:
-                        item.label4 = int(selectValue)
-                        item.save()
-            elif action == 'status_choices':
-                selectValue = request.POST.get('status_choices', '')
-                if selectValue:
-                    for item in editingreg:
-                        item.status = selectValue
-                        item.save()
-            elif action == 'numberOfPayments':
-                selectValue = request.POST.get('numberOfPayments', '')
-                for item in editingreg:
-                    if selectValue == 'numberOfPayments-0':
-                        item.numberOfPayments = 0
-                    elif selectValue == 'numberOfPayments-1':
-                        item.numberOfPayments = 1
-                    elif selectValue == 'numberOfPayments-2':
-                        item.numberOfPayments = 2
-                    elif selectValue == 'numberOfPayments-3':
-                        item.numberOfPayments = 3
-                    item.save()
-            elif action == 'coupled':
-                selectValue = request.POST.get('coupled', '')
-                if programe.hasCoupling:
-                    for item in editingreg:
-                        if selectValue == 'coupled':
-                            if item.profile.couple:
-                                item.coupling = True
-                                registeredcouple = Registration.objects.filter(program=programe).filter(
-                                    profile=item.profile.couple).first()
-                                if registeredcouple:
-                                    registeredcouple.coupling = True
-                                    registeredcouple.save()
-                                else:
-                                    addcouple = Registration()
-                                    addcouple.profile = item.profile.couple
-                                    addcouple.program = programe
-                                    addcouple.coupling = True
-                                    addcouple.save()
-                        elif selectValue == 'single':
-                            if item.profile.couple:
-                                item.coupling = False
-                                registeredcouple = Registration.objects.filter(program=programe).filter(
-                                    profile=item.profile.couple).first()
-                                if registeredcouple:
-                                    registeredcouple.coupling = False
-                                    registeredcouple.save()
-
-                            else:
-                                item.coupling = False
-                        item.save()
-        if manager.canMessage:
-            checked = request.POST.getlist('tick')
-            sendingreg = Registration.objects.filter(id__in=checked).filter(program=programe)
-            action = request.POST.get('editAction', '')
-
-            if action == 'message':
+    editingRegs = Registration.objects.filter(id__in=request.POST.getlist('tick')).filter(program=program)
+    action = request.POST.get('editAction', '')
+    if action == 'label1':
+        selectValue = request.POST.get('label1', '')
+        if selectValue == 'lab1-yes':
+            editingRegs.update(label1=True)
+        elif selectValue == 'lab1-no':
+            editingRegs.update(label1=False)
+    elif action == 'label2':
+        selectValue = request.POST.get('label2', '')
+        if selectValue == 'lab2-yes':
+            editingRegs.update(label2=True)
+        elif selectValue == 'lab2-no':
+            editingRegs.update(label2=False)
+    elif action == 'label3':
+        editingRegs.update(label3=int(request.POST.get('label3', '')))
+    elif action == 'label4':
+        editingRegs.update(label4=int(request.POST.get('label4', '')))
+    elif action == 'status_choices':
+        editingRegs.update(status=int(request.POST.get('status_choices', '')))
+    elif action == 'numberOfPayments':
+        editingRegs.update(numberOfPayments=int(request.POST.get('numberOfPayments', '')))
+    elif action == 'coupled':
+        selectValue = request.POST.get('coupled', '')
+        if program.hasCoupling:
+            for item in editingRegs:
+                if selectValue == 'coupled':
+                    if item.profile.couple:
+                        item.coupling = True
+                        registeredCouple = Registration.objects.filter(program=program).filter(
+                            profile=item.profile.couple).first()
+                        if registeredCouple:
+                            registeredCouple.coupling = True
+                            registeredCouple.save()
+                        else:
+                            registeredCouple = Registration()
+                            registeredCouple.profile = item.profile.couple
+                            registeredCouple.program = program
+                            registeredCouple.coupling = True
+                            registeredCouple.save()
+                elif selectValue == 'single':
+                    item.coupling = False
+                    if item.profile.couple:
+                        registeredCouple = Registration.objects.filter(program=program).filter(
+                            profile=item.profile.couple).first()
+                        if registeredCouple:
+                            registeredCouple.coupling = False
+                            registeredCouple.save()
+                item.save()
+    elif action == 'message':
+        if management.canMessage:
+                title = request.POST.get('title', '')
+                textcontent = request.POST.get('message text', '')
+                message = Message()
+                message.subject = title
+                message.content = textcontent
+                message.sender = management
+                message.save()
+                for item in editingRegs:
+                    message_reciving = Message_reciving()
+                    message_reciving.message_id = message.id
+                    message_reciving.registration_id = item.id
+                    message_reciving.save()
                 inbox_filter = request.POST.get('inbox', 'false')
                 if inbox_filter == 'inbox':
-                    title = request.POST.get('title', '')
-                    textcontent = request.POST.get('message text', '')
-                    nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
-                    # manager = request.user.id
-                    managerlist = Management.objects.filter(profile=request.user.my_profile).filter(program=programe)
-                    manager = managerlist.first()
-                    post = Message()
-                    post.subject = title
-                    post.content = textcontent
-                    post.messageSendDate = nowtime
-                    post.sender = manager
-                    post.save()
-                    for item in registered:
-                        post2 = Message_reciving()
-                        post2.message_id = post.id
-                        post2.registration_id = item.id
-                        post2.save()
+                    message.sendInbox=True
+                    message.save()
 
                 inbox_filter = request.POST.get('email', 'false')
                 if inbox_filter == 'email':
-                    subject = request.POST.get('messageTitle', '')
-                    message = request.POST.get('message text', '')
-                    to_email = Registration.objects.filter(id__in=checked).filter(program=programe).values_list(
+                    message.sendEmail=True
+                    message.save()
+                    to_email = editingRegs.filter(program=program).values_list(
                         'profile__user__email', flat=True)
-                    if subject and message:
+                    if title and textcontent:
                         try:
                             from .utils import send_email
 
-                            send_email(programe.email, programe.emailPassword, to_email, subject, message)
+                            send_email(program.email, program.emailPassword, to_email, title, textcontent)
                         except BadHeaderError:
                             return HttpResponse('Invalid header found.')
                     else:
-
                         return HttpResponse('Make sure all fields are entered and valid.')
 
-            inbox_filter = request.POST.get('sms', 'false')
-            if inbox_filter == 'sms':
-                pass
-                # sms_methode = send()
+                inbox_filter = request.POST.get('sms', 'false')
+                if inbox_filter == 'sms':
+                    message.sendEmail=True
+                    message.save()
+                    # todo: send sms
 
-    return HttpResponseRedirect('/program/panel/' + str(programe.id))
+    return HttpResponseRedirect('/program/panel/' + str(program.id))
 
 
 @login_required

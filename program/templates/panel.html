@@ -166,7 +166,7 @@
                 </label>
             </div>
 
-            {% if mymanagement.program.type == 'etekaf' %}
+            {% if mymanagement.program.type == mymanagement.program.TYPE_ETEKAF %}
                 <div style="direction:rtl ">
                     <label id="age">
                         سن مجاز:
@@ -176,7 +176,7 @@
                                              {% if 'cannot' in filterAll.age %}checked="checked"{% endif %}>
                     </label>
                 </div>
-            {% elif mymanagement.program.type == 'mashhad' %}
+            {% elif mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
                 <div style="direction:rtl ">
                     <label id="entrance_year">
                         سال ورود:
@@ -551,10 +551,10 @@
                                 پرداخت
                             </button>
                             <select class="form-control" name="numberOfPayments">
-                                <option value="numberOfPayments-0" id="numberOfPayments-0">بدون پرداخت</option>
-                                <option value="numberOfPayments-1" id="numberOfPayments-1">فقط قسط اول</option>
-                                <option value="numberOfPayments-2" id="numberOfPayments-2">دو قسط</option>
-                                <option value="numberOfPayments-3" id="numberOfPayments-3">هر سه قسط</option>
+                                <option value="0" id="numberOfPayments-0">بدون پرداخت</option>
+                                <option value="1" id="numberOfPayments-1">فقط قسط اول</option>
+                                <option value="2" id="numberOfPayments-2">دو قسط</option>
+                                <option value="3" id="numberOfPayments-3">هر سه قسط</option>
                             </select>
                         </td>
                     </tr>
