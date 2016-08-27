@@ -60,6 +60,9 @@ def FAQ(request):
     if request.method == 'GET':
         return render(request, 'FAQ.html', {'allTypes': Profile.people_type_choices})
 
+def error(request):
+    if request.method == 'GET':
+        return render(request, 'attack.html', {})
 
 def charity(request):
     if request.method == 'GET':
