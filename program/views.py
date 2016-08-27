@@ -596,6 +596,18 @@ def my_programs(request):
     lastprogrambool = bool(lastprogram)
     lastpricing = Pricing.objects.filter(program=lastprogram)
     profile = Profile.objects.filter(user=user).first()
+    # passport error About atlest passportexpatitondata must be 6 month after creationdata
+    passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار ندارد'
+
+    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 2:
+        passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+
+    if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 1:
+        if lastprogram.creationDate.month <= 6:
+            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
+    if profile.passport_dateofexpiry.year == lastprogram.creationDate.year:
+        if lastprogram.creationDate.month >= profile.passport_dateofexpiry.month + 6:
+            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
     passportcheck = bool(profile.passport != None)
     mytype = profile.people_type
     typecheck = bool(lastpricing.filter(people_type=mytype))
@@ -626,7 +638,8 @@ def my_programs(request):
                            'lastprogram': lastprogram,
                            'programregistered': programregistered,
                            'allStatus': Registration.status_choices,
-                           'peopletype': Pricing.people_type_choices}
+                           'peopletype': Pricing.people_type_choices,
+                           'comment': passportexparitonalert,}
                           )
         else:
             return render(request, 'registrationlist.html', {'registered': registered,
@@ -635,7 +648,8 @@ def my_programs(request):
                                                              'programregistered': programregistered,
                                                              'programregisteredbool': bool(programregistered),
                                                              'allStatus': Registration.status_choices,
-                                                             'peopletype': Pricing.people_type_choices})
+                                                             'peopletype': Pricing.people_type_choices,
+                                                             'comment': passportexparitonalert})
     if request.method == "POST":
         hascoupling = request.POST.get("hascoupling", '')
         boolhascoupling = bool(hascoupling)
@@ -749,7 +763,8 @@ def my_programs(request):
                                                     'lastprogram': lastprogram,
                                                     'programregistered': programregistered,
                                                     'allStatus': Registration.status_choices,
-                                                    'peopletype': Pricing.people_type_choices
+                                                    'peopletype': Pricing.people_type_choices,
+                                                    'comment': comment
                                                     })
 
 
