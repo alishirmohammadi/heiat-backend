@@ -69,7 +69,7 @@ admin.site.register(Payment, Payment_Admin)
 
 
 class Pricing_Admin(admin.ModelAdmin):
-    list_display = ['id', 'program', 'Coupling', 'people_type']
+    list_display = ['id', 'program', 'coupling', 'people_type']
 
 
 admin.site.register(Pricing, Pricing_Admin)

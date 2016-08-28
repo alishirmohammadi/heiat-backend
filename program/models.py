@@ -22,6 +22,7 @@ class Program(models.Model):
     notes = models.CharField(max_length=200)
     email = models.EmailField(max_length=200, null=True, blank=True)
     emailPassword = models.CharField(max_length=200, null=True, blank=True)
+    startDate=models.DateField(default=datetime.now)
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
@@ -53,6 +54,10 @@ class Program(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+    def pricings(self):
+        return Pricing.objects.filter(program=self)
+
 
 
 class Registration(models.Model):
@@ -230,7 +235,7 @@ class Pricing(models.Model):
     price1 = models.IntegerField(null=True, blank=True)
     price2 = models.IntegerField(null=True, blank=True)
     price3 = models.IntegerField(null=True, blank=True)
-    Coupling = models.BooleanField(default=False)
+    coupling = models.BooleanField(default=False)
     additionalObject = models.BooleanField(default=False)
     PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
     PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'

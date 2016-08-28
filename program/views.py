@@ -251,202 +251,24 @@ def editStatus(request, program_id):
                 if inbox_filter == 'sms':
                     message.sendEmail=True
                     message.save()
-                    # todo: send sms
+                    to = editingRegs.filter(program=program).values_list(
+                        'profile__cellPhone', flat=True)
+                    from .utils import sendSMS
+                    sendSMS(to,title)
 
     return HttpResponseRedirect('/program/panel/' + str(program.id))
-
-
-@login_required
-def my_programs(request):
-    user = request.user
-    programregistered = Registration.objects.filter(profile__user__exact=user)
-    programregisteredbool = bool(programregistered)
-    lastprogram = Program.objects.filter(isPublic=True).last()
-    lastprogrambool = bool(lastprogram)
-    lastpricing = Pricing.objects.filter(program=lastprogram)
-    profile = Profile.objects.filter(user=user).first()
-    # passport error About atlest passportexpatitondata must be 6 month after creationdata
-    passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار ندارد'
-    passportcheck = bool(profile.passport != None)
-    if passportcheck:
-        if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 2:
-            passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
-
-        if profile.passport_dateofexpiry.year >= lastprogram.creationDate.year + 1:
-            if lastprogram.creationDate.month <= 6:
-                passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
-        if profile.passport_dateofexpiry.year == lastprogram.creationDate.year:
-            if lastprogram.creationDate.month >= profile.passport_dateofexpiry.month + 6:
-                passportexparitonalert = 'شماره تاریخ شما تا زمان سفر اعتبار دارد'
-    else:
-        return HttpResponseRedirect('/accounts/signin/')
-    mytype = profile.people_type
-    typecheck = bool(lastpricing.filter(people_type=mytype))
-    mycoupling = profile.couple
-    mycouplingb = bool(mycoupling)
-    mypricing = lastpricing.filter(people_type=mytype).filter(Coupling=mycouplingb).first()
-    bmypricing = lastpricing.filter(people_type=mytype).filter(additionalObject=True).first()
-    fmypricing = lastpricing.filter(people_type=mytype).filter(Coupling=mycouplingb).first()
-    boolmypricing = bool(bmypricing)
-    type_pricing = lastpricing.filter(people_type=mytype).first()
-    registered = Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
-        status='removed').first()
-    if request.method == "GET":
-        if lastprogrambool:
-            additionalboolean = bool(lastprogram.additionalObject)
-            additional = lastprogram.additionalObject
-            return render(request, 'program.html',
-                          {'registered': registered,
-                           'fmypricing': fmypricing,
-                           'boolmypricing': boolmypricing,
-                           'mycoupling': mycoupling,
-                           'additionalboolean': additionalboolean,
-                           'additional': additional,
-                           'type_pricing': type_pricing,
-                           'mypricing': mypricing,
-                           'lastpricing': lastpricing,
-                           'profile': profile,
-                           'lastprogram': lastprogram,
-                           'programregistered': programregistered,
-                           'allStatus': Registration.status_choices,
-                           'peopletype': Pricing.people_type_choices,
-                           'comment': passportexparitonalert, }
-                          )
-        else:
-            return render(request, 'registrationlist.html', {'registered': registered,
-                                                             'profile': profile,
-                                                             'lastprogram': lastprogram,
-                                                             'programregistered': programregistered,
-                                                             'programregisteredbool': bool(programregistered),
-                                                             'allStatus': Registration.status_choices,
-                                                             'peopletype': Pricing.people_type_choices,
-                                                             'comment': passportexparitonalert})
-    if request.method == "POST":
-        hascoupling = request.POST.get("hascoupling", '')
-        boolhascoupling = bool(hascoupling)
-        additonaltick = request.POST.get("additonaltick", '')
-        booladditonaltick = bool(additonaltick)
-        pricecheck = Pricing.objects.filter(people_type=mytype).filter(program=lastprogram).filter(
-            Coupling=boolhascoupling).filter(
-            additionalObject=booladditonaltick).first()
-        if pricecheck:
-            programcheck = bool(lastprogram.type == Program.TYPE_ARBAEEN)
-            if programcheck:
-                if passportcheck:
-                    if typecheck:
-                        if Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
-                                status='removed').first():
-                            pass
-                        else:
-                            if profile.couple:
-                                hascoupling = request.POST.get("hascoupling", '')
-                                additonaltick = request.POST.get("additonaltick", '')
-                                registration = Registration()
-                                registration.profile = profile
-                                registration.program = lastprogram
-                                registration.coupling = hascoupling
-                                registration.additionalObject = additonaltick
-                                registration.save()
-                                if hascoupling:
-                                    couplepasscheck = bool(mycoupling.passport != None)
-                                    if couplepasscheck:
-                                        coupleregistration = Registration()
-                                        coupleregistration.profile = profile.coupling
-                                        coupleregistration.program = lastprogram
-                                        coupleregistration.coupling = hascoupling
-                                        coupleregistration.additionalObject = additonaltick
-                                        coupleregistration.save()
-                                    else:
-                                        return render(request, 'attack.html', {})
-                            else:
-                                hascoupling = False
-                                additonaltick = request.POST.get("additonaltick", '')
-                                registration = Registration()
-                                registration.profile = profile
-                                registration.program = lastprogram
-                                registration.coupling = hascoupling
-                                registration.additionalObject = additonaltick
-                                registration.save()
-                    else:
-                        return render(request, 'attack.html', {})
-                else:
-                    return render(request, 'attack.html', {})
-            else:
-                if typecheck:
-                    if Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
-                            status='removed').first():
-                        pass
-                    else:
-                        if profile.coupling:
-                            hascoupling = request.POST.get("hascoupling", '')
-                            additonaltick = request.POST.get("additonaltick", '')
-                            registration = Registration()
-                            registration.profile = profile
-                            registration.program = lastprogram
-                            registration.coupling = hascoupling
-                            registration.additionalObject = additonaltick
-                            registration.save()
-                            if hascoupling:
-                                coupleregistration = Registration()
-                                coupleregistration.profile = profile.coupling
-                                coupleregistration.program = lastprogram
-                                coupleregistration.coupling = hascoupling
-                                coupleregistration.additionalObject = additonaltick
-                                coupleregistration.save()
-                        else:
-                            registered = Registration.objects.filter(profile=profile).filter(
-                                program=lastprogram).exclude(
-                                status='removed').first()
-                            hascoupling = False
-                            additonaltick = request.POST.get("additonaltick", '')
-                            registration = Registration()
-                            registration.profile = profile
-                            registration.program = lastprogram
-                            registration.coupling = hascoupling
-                            registration.additionalObject = additonaltick
-                            registration.save()
-                else:
-                    return render(request, 'attack.html', {})
-
-            registered = Registration.objects.filter(profile=profile).filter(program=lastprogram).exclude(
-                status='removed').first()
-            programregistered = Registration.objects.filter(profile__user__exact=user)
-            return render(request, 'program.html',
-                          {'registered': registered, 'lastpricing': lastpricing, 'lastprogram': lastprogram,
-                           'programregistered': programregistered,
-                           'allStatus': Registration.status_choices
-                              , 'peopletype': Pricing.people_type_choices})
-        else:
-            additionalboolean = bool(lastprogram.additionalObject)
-            additional = lastprogram.additionalObject
-            error = True
-            return render(request, 'program.html', {'error': error,
-                                                    'registered': registered,
-                                                    'fmypricing': fmypricing,
-                                                    'boolmypricing': boolmypricing,
-                                                    'mycoupling': mycoupling,
-                                                    'additionalboolean': additionalboolean,
-                                                    'additional': additional,
-                                                    'type_pricing': type_pricing,
-                                                    'mypricing': mypricing,
-                                                    'lastpricing': lastpricing,
-                                                    'profile': profile,
-                                                    'lastprogram': lastprogram,
-                                                    'programregistered': programregistered,
-                                                    'allStatus': Registration.status_choices,
-                                                    'peopletype': Pricing.people_type_choices,
-                                                    'comment': comment
-                                                    })
 
 
 @login_required
 def my_management(request):
     user = request.user
     programmanaged = Management.objects.filter(profile__user__exact=user)
-    return render(request, 'management.html',
+    return render(request, 'my_managements.html',
                   {'programmanaged': programmanaged,
                    'programmanagedbool': bool(programmanaged),
                    'role_choices': Management.role_choices})
+
+
 
 
 @login_required
@@ -497,7 +319,7 @@ def manage(request, management_id):
                             program=mymanagement.program).first()
                         obj = {'pe': p, 'c': True, 'pri': pr}
                         pricelist.append(obj)
-                return render(request, 'reg.html',
+                return render(request, 'manage.html',
                               {'canFilter': canFilter,
                                'mymanagement': mymanagement,
                                'list': pricelist, 'pri': pri,
@@ -642,7 +464,7 @@ def addInstallment(request):
                 pricing.price3 = price
     pricing.save()
     # print(pricing)
-    # return render(request, 'reg.html', {'pricing': pricing})
+    # return render(request, 'manage.html', {'pricing': pricing})
     pid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     # rid = Registration.objects.filter(program=program).filter(profile=request.user.profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(pid))

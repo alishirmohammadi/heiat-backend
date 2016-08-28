@@ -155,12 +155,22 @@ def filter_to_registrations(filter, program):
 
 
 def sendSMS(list,text):
-    # client = SoapClient(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl', trace=False)
-    for i in range(0, (len(list) // 100) + 1):
+    client = SoapClient(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl', trace=False)
+    if len(list) // 100 == len(list) / 100:
+        t = (len(list) // 100)
+    else:
+        t = (len(list) // 100) + 1
+    for i in range(0, t):
         b = ""
         for j in range(0, 100):
             if (j + (i * 100)) == len(list):
                 break
-            b = b + str(list[j + (i * 100)]) + ","
-        print('b:'+b)
-    # client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
+            if j == 0:
+                b = b + str(list[j + (i * 100)])
+            else:
+                b = b + "," + str(list[j + (i * 100)])
+    client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
+
+def getLastProgram(cls):
+    from .models import Program
+    return Program.objects.filter(isPublic=True).last()
