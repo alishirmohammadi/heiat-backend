@@ -33,6 +33,16 @@ def merged_dict(dict_a, dict_b):
 
 
 urlpatterns = [
+
+    # View profiles
+    url(r'^accounts/(?P<username>(?!(signout|signup|signin)/)[\@\.\w-]+)/$',
+        'accounts.views.error', ),
+    url(r'accounts/^(?P<username>[\@\.\w-]+)/edit/$',
+        'accounts.views.error', ),
+    url(r'^accounts/page/(?P<page>[0-9]+)/$',
+        'accounts.views.error', ),
+    url(r'^accounts$',
+        'accounts.views.error', ),
     # url(r'^signin/', 'accounts.views.signin'),
     # url(r'^signup/', 'accounts.views.signup'),
     url(r'^profile/', 'accounts.views.edit'),

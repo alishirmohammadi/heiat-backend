@@ -60,7 +60,7 @@ def FAQ(request):
     if request.method == 'GET':
         return render(request, 'FAQ.html', {'allTypes': Profile.people_type_choices})
 
-def error(request):
+def error(request,username=None,page=None):
     if request.method == 'GET':
         return render(request, 'attack.html', {})
 
@@ -196,11 +196,12 @@ def activate(request, activation_key,
                     messages.success(request, _('Your account has been activated and you have been signed in.'),
                                      fail_silently=True)
 
-                if success_url:
-                    redirect_to = success_url % {'username': user.username}
-                else:
-                    redirect_to = reverse('userena_profile_detail',
-                                          kwargs={'username': user.username})
+                # if success_url:
+                #     redirect_to = success_url % {'username': user.username}
+                # else:
+                #     redirect_to = reverse('userena_profile_detail',
+                #                           kwargs={'username': user.username})
+                redirect_to='/profile/'
                 return redirect(redirect_to)
             else:
                 if not extra_context: extra_context = dict()

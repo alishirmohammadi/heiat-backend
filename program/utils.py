@@ -5,6 +5,7 @@ from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.models import Registration
+from pysimplesoap.client import SoapClient
 
 
 def export_users_xls(status_list):
@@ -151,3 +152,15 @@ def filter_to_registrations(filter, program):
                                                                         []))  # It should be completed, with rectify model, profile
 
     return registerations
+
+
+def sendSMS(list,text):
+    # client = SoapClient(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl', trace=False)
+    for i in range(0, (len(list) // 100) + 1):
+        b = ""
+        for j in range(0, 100):
+            if (j + (i * 100)) == len(list):
+                break
+            b = b + str(list[j + (i * 100)]) + ","
+        print('b:'+b)
+    # client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)

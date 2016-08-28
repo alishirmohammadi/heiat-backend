@@ -40,7 +40,7 @@ def panel(request, management_id):
     if not management or management.profile != request.user.my_profile:
         return render(request, 'attack.html', {})
     if not management.canFilter:
-        return HttpResponseRedirect('/program/documents/')
+        return HttpResponseRedirect('/program/documents/'+str(management.id))
 
     if request.method == 'GET':
         filter_all = request.session.get('filter',
@@ -57,13 +57,8 @@ def panel(request, management_id):
             studentRange.append(management.program.year - item)
 
         return render(request, 'panel.html', {'all': registrations,
-                                              # 'program': management.program,
                                               'mymanagement': management,
-                                              # 'canEditProgram': canEditProgram,
                                               'statusChoices': Registration.status_choices,
-                                              'peopleTypeChoices': Profile.people_type_choices,
-                                              'conscriptionChoices': Profile.conscription_choices,
-                                              # 'passportChoices': Profile.passport_choices,
                                               'filterAll': filter_all,
                                               'student_range': studentRange,
                                               'label_range': range(11),
