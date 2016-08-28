@@ -13,7 +13,7 @@ class Program(models.Model):
     title = models.CharField(max_length=100, default='نام برنامه')
     year = models.IntegerField(null=True, blank=True)
     isOpen = models.BooleanField(default=False)
-    additionalObject = models.CharField(max_length=30, null=True, blank=True)
+    additionalOption = models.CharField(max_length=30, null=True, blank=True)
     hasCoupling = models.BooleanField(default=False)
     isPublic = models.BooleanField(default=False)
     programInterval = models.CharField(default='زمان برنامه', max_length=80)
@@ -98,6 +98,18 @@ class Registration(models.Model):
         (STATUS_FIRST_STAGE, 'مرحله اول'),
     )
     status = models.CharField(max_length=200, choices=status_choices, default=STATUS_DEFAULT)
+    def get_pricing(self):
+        return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(coupling=self.coupling).filter(
+            additionalOption=self.additionalOption).first()
+    def get_num_of_installments(self):
+        p=self.get_pricing()
+        if p.price3:
+            return 3
+        if p.price2:
+            return 2
+        if p.price1:
+            return 1
+        return 0
 
     def __str__(self):
         return self.program.title + ' ' + self.profile.user.get_full_name()
@@ -236,7 +248,7 @@ class Pricing(models.Model):
     price2 = models.IntegerField(null=True, blank=True)
     price3 = models.IntegerField(null=True, blank=True)
     coupling = models.BooleanField(default=False)
-    additionalObject = models.BooleanField(default=False)
+    additionalOption = models.BooleanField(default=False)
     PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
     PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'
     PEOPLE_TYPE_SHARIF_GRADUATED_TALABE = 'sharif graduated talabe'

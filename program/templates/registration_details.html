@@ -26,55 +26,87 @@
                     <tbody>
                     <tr>
                         <td>نوع سفر</td>
-                        <td> {{ peopletype|get_tuple_item:myregister.profile.people_type }} </td>
+                        <td> {{ myregister.profile.people_type_choices|get_tuple_item:myregister.profile.people_type }} </td>
                     </tr>
                     <tr>
-                        <td><h4><b>وضعیت</b></h4></td>
-                        <td><h4><b> {{ allStatus|get_tuple_item:myregister.status }} </b></h4></td>
+                        <td>به صورت</td>
+                        <td>{% if myregister.coupling %}
+                            متاهلی
+                        {% else %}
+                            مجردی
+                        {% endif %}
+                        </td>
                     </tr>
-                    {% if myregister.status == 'certain' %}
+                    {% if myregister.program.additionalOption %}
+                        <tr>
+                            <td>اطلاعات مضاف</td>
+                            <td>{% if myregister.additionalOption %}
+                                {{ myregister.program.additionalOption }}
+                            {% else %}
+                                غیر
+                                {{ myregister.program.additionalOption }}
+                            {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                    <tr>
+                        <td><h4><b>وضعیت</b></h4></td>
+                        <td><h4><b> {{ myregister.status_choices|get_tuple_item:myregister.status }} </b></h4></td>
+                    </tr>
+                    {% if myregister.status == myregister.STATUS_CERTAIN %}
                         <tr>
                             <td>وضعیت پرداخت</td>
-                            <td>
-                                {% if myregister.numberOfPayments == 0 %}
-                                    بدون پرداخت
-                                {% elif myregister.numberOfPayments == 1 %}
-                                    یک پرداخت موفق
-                                {% elif myregister.numberOfPayments == 2 %}
-                                    دو پرداخت موفق
-                                {% endif %}
+                            {% if myregister.numberOfPayments == myregister.get_num_of_installments %}
+                                <td>
+                                    پرداخت کامل
+                                </td>
+                            {% else %}
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>مبلغ قابل پرداخت</td>
-                            <td>
-                                {% if myregister.numberOfPayments == 0 %}
-                                    {{ pricerow.price1 }}
-                                {% elif myregister.numberOfPayments == 1 %}
-                                    {{ pricerow.price2 }}
-                                {% elif myregister.numberOfPayments == 2 %}
-                                    {{ pricerow.price3 }}
-                                {% endif %}
+                                <td>
+                                    {% if myregister.numberOfPayments == 0 %}
+                                        بدون پرداخت
+                                    {% elif myregister.numberOfPayments == 1 %}
+                                        یک پرداخت موفق
+                                    {% elif myregister.numberOfPayments == 2 %}
+                                        دو پرداخت موفق
+                                    {% endif %}
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a id="pay" onclick=""
-                                   href="/pay/start/{{ myregister.id }}/"
-                                   class="btn btn-success"
-                                   data-toggle="popover"
-                                   title=""
-                                   data-content="">
-                                    پرداخت</a>
-                            </td>
-                            <td></td>
-                        </tr>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td>مبلغ قابل پرداخت</td>
+                                    <td>
+                                        {% if myregister.numberOfPayments == 0 %}
+                                            {{ myregister.get_pricing.price1 }}
+                                        {% elif myregister.numberOfPayments == 1 %}
+                                            {{ myregister.get_pricing.price2 }}
+                                        {% elif myregister.numberOfPayments == 2 %}
+                                            {{ myregister.get_pricing.price3 }}
+                                        {% endif %}
+                                        تومان
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                <td>
+                                    <a id="pay"
+                                       href="/pay/start/{{ myregister.id }}/"
+                                       class="btn btn-success"
+                                       data-toggle="popover"
+                                       title=""
+                                       data-content="">
+                                        پرداخت</a>
+                                </td>
+                                <td></td>
+
+
+                            {% endif %}
+                            </tr>
 
                     {% endif %}
                     <tr>
-                        {% if myregister.status == 'came' or myregister.status == 'given up' or myregister.status == 'removed' %}
+                        {% if myregister.status == myregister.STATUS_CAME or myregister.status == myregister.STATUS_GIVEN_UP or myregister.status == myregister.STATUS_REMOVED %}
                         {% else %}
                             <td>
                                 <form method="post">
@@ -208,7 +240,7 @@
                     <tr>
                         <td>باز برای ثبت نام</td>
                         <td>
-                            {% if myregister.program.isPublic %}
+                            {% if myregister.program.isOpen %}
                                 دارد
                             {% else %}
                                 ندارد
@@ -224,6 +256,7 @@
             </div>
             <div class="well" dir="rtl">
                 <h3><b> تذکرات {{ myregister.program.title }} </b></h3>
+
                 <P>{{ myregister.program.notes|safe }}</P>
 
             </div>
@@ -242,13 +275,13 @@
                     </thead>
                     <tbody>
 
-                    {% for m in registerprogram %}
+                    {% for m in pricings %}
                         {% if m.price1 == None %}
                         {% else %}
                             <tr>
                                 <td><b>
 
-                                    {{ peopletype|get_tuple_item:m.people_type }}
+                                    {{ myregister.profile.people_type_choices|get_tuple_item:m.people_type }}
                                     {% if m.Coupling %}
                                         متاهلی
                                     {% else %}

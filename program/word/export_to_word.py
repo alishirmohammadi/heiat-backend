@@ -124,7 +124,7 @@ def registrations_to_print(registerations):
         else:
             a = 'مجردی'
         p.add_run(' ' + str(a) + ' ').bold = True
-        if item.additionalObject:
+        if item.additionalOption:
             b1 = 'هوایی'
         else:
             b1 = 'زمینی'

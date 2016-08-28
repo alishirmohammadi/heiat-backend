@@ -12,10 +12,10 @@ def start_pay(request, registration_id):
     progid = reg.program.id
     profid = reg.profile.id
     cou = reg.coupling
-    add = reg.additionalObject
+    add = reg.additionalOption
     peotyp = reg.profile.people_type
     price = Pricing.objects.filter(program_id__exact=progid).filter(program__pricing__Coupling=cou).filter(
-        people_type__exact=peotyp).filter(program__pricing__additionalObject=add).first()
+        people_type__exact=peotyp).filter(program__pricing__additionalOption=add).first()
     if numofpay == 0:
         numberOfInstallment = 1
         amount = price.price1

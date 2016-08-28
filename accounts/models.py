@@ -86,3 +86,7 @@ class Profile(UserenaBaseProfile):
         if self.couple==None:
             return False
         return True
+    def registered_on_last(self):
+        from program.models import Registration
+        from program.utils import getLastProgram
+        return Registration.objects.filter(profile=self).filter(program=getLastProgram()).exclude(status=Registration.STATUS_REMOVED).first()

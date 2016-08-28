@@ -40,7 +40,7 @@ def panel(request, management_id):
     if not management or management.profile != request.user.my_profile:
         return render(request, 'attack.html', {})
     if not management.canFilter:
-        return HttpResponseRedirect('/program/documents/'+str(management.id))
+        return HttpResponseRedirect('/program/documents/' + str(management.id))
 
     if request.method == 'GET':
         filter_all = request.session.get('filter',
@@ -182,7 +182,7 @@ def editStatus(request, program_id):
     elif action == 'label4':
         editingRegs.update(label4=int(request.POST.get('label4', '')))
     elif action == 'status_choices':
-        editingRegs.update(status=int(request.POST.get('status_choices', '')))
+        editingRegs.update(status=request.POST.get('status_choices', ''))
     elif action == 'numberOfPayments':
         editingRegs.update(numberOfPayments=int(request.POST.get('numberOfPayments', '')))
     elif action == 'coupled':
@@ -214,47 +214,48 @@ def editStatus(request, program_id):
                 item.save()
     elif action == 'message':
         if management.canMessage:
-                title = request.POST.get('title', '')
-                textcontent = request.POST.get('message text', '')
-                message = Message()
-                message.subject = title
-                message.content = textcontent
-                message.sender = management
+            title = request.POST.get('title', '')
+            textcontent = request.POST.get('message text', '')
+            message = Message()
+            message.subject = title
+            message.content = textcontent
+            message.sender = management
+            message.save()
+            for item in editingRegs:
+                message_reciving = Message_reciving()
+                message_reciving.message_id = message.id
+                message_reciving.registration_id = item.id
+                message_reciving.save()
+            inbox_filter = request.POST.get('inbox', 'false')
+            if inbox_filter == 'inbox':
+                message.sendInbox = True
                 message.save()
-                for item in editingRegs:
-                    message_reciving = Message_reciving()
-                    message_reciving.message_id = message.id
-                    message_reciving.registration_id = item.id
-                    message_reciving.save()
-                inbox_filter = request.POST.get('inbox', 'false')
-                if inbox_filter == 'inbox':
-                    message.sendInbox=True
-                    message.save()
 
-                inbox_filter = request.POST.get('email', 'false')
-                if inbox_filter == 'email':
-                    message.sendEmail=True
-                    message.save()
-                    to_email = editingRegs.filter(program=program).values_list(
-                        'profile__user__email', flat=True)
-                    if title and textcontent:
-                        try:
-                            from .utils import send_email
+            inbox_filter = request.POST.get('email', 'false')
+            if inbox_filter == 'email':
+                message.sendEmail = True
+                message.save()
+                to_email = editingRegs.filter(program=program).values_list(
+                    'profile__user__email', flat=True)
+                if title and textcontent:
+                    try:
+                        from .utils import send_email
 
-                            send_email(program.email, program.emailPassword, to_email, title, textcontent)
-                        except BadHeaderError:
-                            return HttpResponse('Invalid header found.')
-                    else:
-                        return HttpResponse('Make sure all fields are entered and valid.')
+                        send_email(program.email, program.emailPassword, to_email, title, textcontent)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                else:
+                    return HttpResponse('Make sure all fields are entered and valid.')
 
-                inbox_filter = request.POST.get('sms', 'false')
-                if inbox_filter == 'sms':
-                    message.sendEmail=True
-                    message.save()
-                    to = editingRegs.filter(program=program).values_list(
-                        'profile__cellPhone', flat=True)
-                    from .utils import sendSMS
-                    sendSMS(to,title)
+            inbox_filter = request.POST.get('sms', 'false')
+            if inbox_filter == 'sms':
+                message.sendEmail = True
+                message.save()
+                to = editingRegs.filter(program=program).values_list(
+                    'profile__cellPhone', flat=True)
+                from .utils import sendSMS
+
+                sendSMS(to, title)
 
     return HttpResponseRedirect('/program/panel/' + str(program.id))
 
@@ -269,8 +270,6 @@ def my_management(request):
                    'role_choices': Management.role_choices})
 
 
-
-
 @login_required
 def manage(request, management_id):
     user = request.user
@@ -280,8 +279,8 @@ def manage(request, management_id):
     canFilter = Management.objects.filter(id=management_id).filter().first().canFilter
     mymanagement = Management.objects.filter(id=management_id).first()
     h = mymanagement.pk
-    kk = mymanagement.program.additionalObject
-    additonal = bool(mymanagement.program.additionalObject)
+    kk = mymanagement.program.additionalOption
+    additonal = bool(mymanagement.program.additionalOption)
     muser = mymanagement.profile.user
     if user == muser:
         if mymanagement.canEditProgram:
@@ -289,33 +288,33 @@ def manage(request, management_id):
                 pricelist = []
                 if additonal:
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=False).filter(
-                            program=mymanagement.program).filter(additionalObject=True).first()
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
+                            program=mymanagement.program).filter(additionalOption=True).first()
                         obj = {'pe': p, 'c': False, 'pri': pr, 'add': True}
                         pricelist.append(obj)
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=True).filter(
-                            program=mymanagement.program).filter(additionalObject=True).first()
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
+                            program=mymanagement.program).filter(additionalOption=True).first()
                         obj = {'pe': p, 'c': True, 'pri': pr, 'add': True}
                         pricelist.append(obj)
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=False).filter(
-                            program=mymanagement.program).filter(additionalObject=False).first()
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
+                            program=mymanagement.program).filter(additionalOption=False).first()
                         obj = {'pe': p, 'c': False, 'pri': pr, 'add': False}
                         pricelist.append(obj)
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=True).filter(
-                            program=mymanagement.program).filter(additionalObject=False).first()
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
+                            program=mymanagement.program).filter(additionalOption=False).first()
                         obj = {'pe': p, 'c': True, 'pri': pr, 'add': False}
                         pricelist.append(obj)
                 else:
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=False).filter(
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
                             program=mymanagement.program).first()
                         obj = {'pe': p, 'c': False, 'pri': pr}
                         pricelist.append(obj)
                     for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(Coupling=True).filter(
+                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
                             program=mymanagement.program).first()
                         obj = {'pe': p, 'c': True, 'pri': pr}
                         pricelist.append(obj)
@@ -362,80 +361,52 @@ def manage(request, management_id):
 
 
 @login_required
-def myform(request, registration_id):
-    user = request.user
+def registration(request, registration_id):
     myregister = Registration.objects.filter(id=registration_id).first()
-    pro = myregister.program
-    payment = Payment.objects.filter(registration=myregister)
-    dpayment = Payment.objects.filter(registration=myregister).first()
-    date_list = []
-    for t in payment:
-        print(t)
-        dat = str(t.takingDate)[0:10]
-        shamsidate = jalali.Gregorian(dat).persian_string()
-        time = str(t.takingDate)[11:19]
-        amount = t.amount
-        refId = t.refId
-        saleRefId = t.saleRefId
-        success = t.success
-        obj = {'taking_date': shamsidate,
-               'taking_time': time,
-               'amount': amount,
-               'refId': refId,
-               'saleRefId': saleRefId,
-               'success': success, }
-        date_list.append(obj)
-
-    massageinbox = Message_reciving.objects.filter(registration_id=registration_id)
-    add = myregister.additionalObject
-    us = myregister.profile.user
-    pr = myregister.program
-    usco = myregister.coupling
-    mycoupleregister = Registration.objects.filter(program=pro).filter(profile=usco).first()
-    usercoupling = bool(usco)
-    pt = myregister.profile.people_type
-    pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).filter(
-        additionalObject=add).first()
-    # pricerow = Pricing.objects.filter(program=pr).filter(people_type=pt).filter(Coupling=usercoupling).first()
-    lastprogram = Program.objects.filter(isPublic=True).last()
-    registerprogram = Pricing.objects.filter(program=pr)
-    lastprogramprice = Pricing.objects.filter(program=lastprogram)
+    if not myregister or request.user != myregister.profile.user:
+        return HttpResponseRedirect('/error')
     if request.method == 'GET':
+        date_list = []
+        for t in Payment.objects.filter(registration=myregister):
+            dat = str(t.takingDate)[0:10]
+            shamsidate = jalali.Gregorian(dat).persian_string()
+            time = str(t.takingDate)[11:19]
+            amount = t.amount
+            refId = t.refId
+            saleRefId = t.saleRefId
+            success = t.success
+            obj = {'taking_date': shamsidate,
+                   'taking_time': time,
+                   'amount': amount,
+                   'refId': refId,
+                   'saleRefId': saleRefId,
+                   'success': success, }
+            date_list.append(obj)
 
-        if (user == us):
-            return render(request, 'myform.html',
-                          {'massageinbox': massageinbox,
-                           'payment': payment,
-                           'date_list': date_list,
-                           'myregister': myregister,
-                           'pricerow': pricerow,
-                           'registerprogram': registerprogram,
-                           'pricing': lastprogramprice,
-                           'allStatus': Registration.status_choices,
-                           'peopletype': Profile.people_type_choices})
-        else:
-            return render(request, 'attack.html', {})
+        massageinbox = Message_reciving.objects.filter(registration_id=registration_id)
+        pricings = Pricing.objects.filter(program=myregister.program)
+        return render(request, 'registration_details.html',
+                      {'massageinbox': massageinbox,
+                       'date_list': date_list,
+                       'myregister': myregister,
+                       'pricings': pricings
+                       })
+
+
     else:
         if 'givenup_btn' in request.POST:
-            myregister.status = 'given up'
-            if myregister.coupling:
-                mycoupleregister.status = 'given up'
-                mycoupleregister.save()
+            myregister.status = Registration.STATUS_GIVEN_UP
             myregister.save()
+            if myregister.coupling:
+                couple_registerarion = Registration.objects.filter(program=myregister.program).filter(
+                    profile=myregister.profile.couple).first()
+                couple_registerarion.status = Registration.STATUS_GIVEN_UP
+                couple_registerarion.save()
         if 'feedback_btn' in request.POST:
             registration_feedback = request.POST.get("feedback", '')
             myregister.feedBack = registration_feedback
             myregister.save()
-        return render(request, 'myform.html',
-                      {'massageinbox': massageinbox,
-                       'payment': payment,
-                       'date_list': date_list,
-                       'myregister': myregister,
-                       'pricerow': pricerow,
-                       'registerprogram': registerprogram,
-                       'pricing': lastprogramprice,
-                       'allStatus': Registration.status_choices,
-                       'peopletype': Profile.people_type_choices})
+        return HttpResponseRedirect('/program/registration/' + str(registration_id))
 
 
 @login_required
@@ -443,15 +414,15 @@ def addInstallment(request):
     programid = request.POST.get("programId", '')
     program = Program.objects.filter(id=int(programid)).first()
     peopletype = request.POST.get("peopleType", '')
-    additionalobject = request.POST.get("additionalobject", '')
+    additionalOption = request.POST.get("additionalobject", '')
     coupling = request.POST.get("coupling", '')
     price = request.POST.get("price", '')
     c = (coupling == 'True')
-    add = (additionalobject == 'True')
+    add = (additionalOption == 'True')
     pricing, created = Pricing.objects.get_or_create(
         people_type=peopletype,
         Coupling=c,
-        additionalObject=add,
+        additionalOption=add,
         program=program,
     )
     if pricing.price1 is None:
@@ -495,8 +466,49 @@ def removeInstallment(request, pricing_id, price_num):
     rid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(rid))
 
+
 def my_programs(request):
-    if request.method=='GET':
-        profile=request.user.my_profile
+    profile = request.user.my_profile
+    from .utils import getLastProgram
+
+    last_program = getLastProgram()
+    if request.method == 'GET':
         my_registrations = Registration.objects.filter(profile=profile).exclude(status=Registration.STATUS_REMOVED)
-        return render(request,'my_programs.html',{'regs':my_registrations})
+        lastpricing = Pricing.objects.filter(program=last_program)
+        fmypricing = lastpricing.filter(people_type=profile.people_type).filter(coupling=profile.coupling()).first()
+        type_pricing = lastpricing.filter(people_type=profile.people_type).first()
+        passportCheck = True
+        if last_program.type == Program.TYPE_ARBAEEN:
+            if not profile.passport or profile.passport == Profile.PASSPORT_NOT_HAVE or not profile.passport_dateofexpiry:
+                passportCheck = False
+            else:
+                import datetime
+
+                if profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
+                    passportCheck = False
+        return render(request, 'my_programs.html',
+                      {'regs': my_registrations, 'last_program': last_program, 'fmypricing': fmypricing,
+                       'lastpricing': lastpricing,
+                       'type_pricing': type_pricing, 'passportCheck': passportCheck})
+    else:
+        wants_coupling = bool(request.POST.get("hascoupling", '')) and last_program.hasCoupling
+        additional = bool(request.POST.get("additonaltick", ''))
+        if Pricing.objects.filter(people_type=profile.people_type).filter(program=last_program).filter(
+                coupling=wants_coupling).filter(
+            additionalOption=additional).first() and not profile.registered_on_last():
+            reg = Registration()
+            reg.program = last_program
+            reg.profile = profile
+            reg.coupling = wants_coupling
+            reg.additionalOption = additional
+            reg.save()
+            if wants_coupling and profile.coupling():
+                couple_reg = profile.couple.registered_on_last()
+                if not couple_reg:
+                    couple_reg = Registration()
+                    couple_reg.profile = profile.couple
+                    couple_reg.program = last_program
+                couple_reg.coupling = True
+                couple_reg.additionalOption = additional
+                couple_reg.save()
+        return HttpResponseRedirect('/program/')

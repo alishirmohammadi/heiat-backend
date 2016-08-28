@@ -171,6 +171,6 @@ def sendSMS(list,text):
                 b = b + "," + str(list[j + (i * 100)])
     client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
 
-def getLastProgram(cls):
+def getLastProgram():
     from .models import Program
     return Program.objects.filter(isPublic=True).last()

@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^$', 'program.views.my_programs'),
     url(r'^manage/$', 'program.views.my_management'),
     url(r'^manage/(?P<management_id>\d+)/', 'program.views.manage'),
-    url(r'^myform/(?P<registration_id>\d+)/', 'program.views.myform'),
+    url(r'^registration/(?P<registration_id>\d+)/', 'program.views.registration'),
     url(r'^add$', 'program.views.addInstallment'),
     url(r'^remove/(?P<pricing_id>\d+)/(?P<price_num>\d+)', 'program.views.removeInstallment'),
     url(r'^documents/(?P<management_id>\d+)', 'program.views.documentation'),
