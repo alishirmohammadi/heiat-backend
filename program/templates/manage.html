@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
-    {% include '_navbar.html' with active_link='management' %}
+    {% include '_navbar.html' with active_link='management1' %}
 {% endblock %}
 
 {% block second_navbar %}
-{% include '_second_navbar.html' with active_link='manage' %}
+    {% include '_second_navbar.html' with active_link='manage' %}
 {% endblock %}
 
 
@@ -54,7 +54,7 @@
                                         {% if mymanagement.program.isOpen %}
                                        checked
                                         {% endif %}
-                                >
+                                        >
                         </tr>
                         <tr>
                             <td>ایمیل</td>
@@ -90,71 +90,58 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for  didi in list %}
+                    {% for  pricing in pricelist %}
                         <tr>
                             <td>
                                     <span>
-                                        {% if additonal %}
-                                            {{ regType|get_tuple_item:didi.pe }}
-                                            {% if didi.add == False %}
-                                                {% if didi.c %}
-                                                    متاهلی
-                                                {% else %}
-                                                    مجردی
-                                                {% endif %}
-                                            {% else %}
-                                                {% if didi.c %}
-                                                    متاهلی {{ mymanagement.program.additionalOption }}
-                                                {% else %}
-                                                    مجردی {{ mymanagement.program.additionalOption }}
-                                                {% endif %}
-                                            {% endif %}
+                                            {{ mymanagement.profile.people_type_choices|get_tuple_item:pricing.people_type }}
+                                        {% if pricing.coupling %}
+                                            متاهلی
                                         {% else %}
-                                            {{ regType|get_tuple_item:didi.pe }}
-                                            {% if didi.c %}
-                                                متاهلی
-                                            {% else %}
-                                                مجردی
-                                            {% endif %}
+                                            مجردی
                                         {% endif %}
+                                        {% if mymanagement.program.additionalOption and pricing.additional %}
+                                            {{ mymanagement.program.additionalOption }}
+                                        {% endif %}
+
                                     </span>
                             </td>
 
                             <form action="/program/add" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="peopleType" value="{{ didi.pe }}">
-                                <input type="hidden" name="coupling" value="{{ didi.c }}">
-                                <input type="hidden" name="additionalobject" value="{{ didi.add }}">
+                                <input type="hidden" name="peopleType" value="{{ pricing.people_type }}">
+                                <input type="hidden" name="coupling" value="{{ pricing.coupling }}">
+                                <input type="hidden" name="additionalobject" value="{{ pricing.additional }}">
                                 <input type="hidden" name="programId" value="{{ mymanagement.program.id }}">
                                 <td><input class="form-control" data-toggle="popover"
                                            title="افزودن قسط"
                                            data-content="برای افزودن قسط مقدار آن را اینجا وارد کنید سپس دکمه Enter را بزنید"
                                            type="text" name="price" style="width: 90%"></td>
                                 <td>
-                                    {% if didi.pri.price1 == None %}
+                                    {% if pricing.obj.price1 == None %}
                                     {% else %}
-                                        <span><a href="/program/remove/{{ didi.pri.id }}/1" data-toggle="popover"
+                                        <span><a href="/program/remove/{{ pricing.obj.id }}/1" data-toggle="popover"
                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
                                                  class="btn btn-danger"
-                                                 style="width: 70px ; margin-bottom: auto">{{ didi.pri.price1 }}</a></span>
+                                                 style="width: 70px ; margin-bottom: auto">{{ pricing.obj.price1 }}</a></span>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if didi.pri.price2 == None %}
+                                    {% if pricing.obj.price2 == None %}
                                     {% else %}
-                                        <span><a href="/program/remove/{{ didi.pri.id }}/2" data-toggle="popover"
+                                        <span><a href="/program/remove/{{ pricing.obj.id }}/2" data-toggle="popover"
                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
                                                  class="btn btn-danger"
-                                                 style="width: 70px">{{ didi.pri.price2 }}</a></span>
+                                                 style="width: 70px">{{ pricing.obj.price2 }}</a></span>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if didi.pri.price3 == None %}
+                                    {% if pricing.obj.price3 == None %}
                                     {% else %}
-                                        <span><a href="/program/remove/{{ didi.pri.id }}/3" data-toggle="popover"
+                                        <span><a href="/program/remove/{{ pricing.obj.id }}/3" data-toggle="popover"
                                                  title="حذف قسط" data-content="برای حذف قسط روی آن کلیک کنید تا حذف شود"
                                                  class="btn btn-danger"
-                                                 style="width: 70px">{{ didi.pri.price3 }}</a></span>
+                                                 style="width: 70px">{{ pricing.obj.price3 }}</a></span>
                                     {% endif %}
                                 </td>
                             </form>

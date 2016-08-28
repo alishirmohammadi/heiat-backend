@@ -7,7 +7,7 @@
 
     <div class="row" style="width: 100%" dir="rtl">
             <div class="well">
-            {% if programmanagedbool %}
+            {% if managements %}
                 <table class="table">
                     <thead style="text-align: right">
                     <tr>
@@ -19,7 +19,7 @@
                         </th>
                     </tr>
                     </thead>
-                    {% for my in programmanaged %}
+                    {% for my in managements %}
 
                         <tbody>
                         <tr>
@@ -27,7 +27,7 @@
                                 <a href="/program/manage/{{ my.pk }}">{{ my.program.title }}</a>
                             </td>
                             <th>
-                                {{ role_choices|get_tuple_item:my.role }}
+                                {{ my.role_choices|get_tuple_item:my.role }}
                             </th>
                         </tr>
                         </tbody>

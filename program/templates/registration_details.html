@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% load tags %}
+
+{% block navbar %}
+    {% include '_navbar.html' with active_link='ref_detail' %}
+{% endblock %}
 {% block content %}
     <script type="text/javascript">
         $(document).ready(function () {
@@ -312,7 +316,7 @@
             <div dir="rtl">
                 <form method="post">
                     {% csrf_token %}
-                    <h3><b>حرفی؟ حدیثی؟</b></h3>
+                    <h3><b>انقادات و پیشنهادات</b></h3>
                     <textarea name="feedback">{{ myregister.feedBack }}</textarea>
                     <br>
                     <input type="submit" class="btn btn-warning" name="feedback_btn" value="ثبت">

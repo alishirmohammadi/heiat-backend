@@ -4,7 +4,7 @@ from django.contrib import admin
 urlpatterns = [
 
     url(r'^$', 'program.views.my_programs'),
-    url(r'^manage/$', 'program.views.my_management'),
+    url(r'^manage/$', 'program.views.my_managements'),
     url(r'^manage/(?P<management_id>\d+)/', 'program.views.manage'),
     url(r'^registration/(?P<registration_id>\d+)/', 'program.views.registration'),
     url(r'^add$', 'program.views.addInstallment'),

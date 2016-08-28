@@ -132,7 +132,7 @@ def addregistration(request, program_id):
             status=Registration.STATUS_REMOVED)
 
         if not alreadyRegistered:
-            price = Pricing.objects.filter(program=program).filter(Coupling=bool(coupled)).filter(
+            price = Pricing.objects.filter(program=program).filter(coupling=bool(coupled)).filter(
                 people_type=peopletype).first()
             if price:
                 addregister = Registration()
@@ -261,103 +261,62 @@ def editStatus(request, program_id):
 
 
 @login_required
-def my_management(request):
-    user = request.user
-    programmanaged = Management.objects.filter(profile__user__exact=user)
-    return render(request, 'my_managements.html',
-                  {'programmanaged': programmanaged,
-                   'programmanagedbool': bool(programmanaged),
-                   'role_choices': Management.role_choices})
+def my_managements(request):
+    managements = Management.objects.filter(profile__user__exact=request.user)
+    return render(request, 'my_managements.html', {'managements': managements})
 
 
 @login_required
 def manage(request, management_id):
-    user = request.user
-    pric = Pricing.people_type_choices
-    regType = dict(Profile.people_type_choices).keys()
-    pri = Pricing.objects.all()
-    canFilter = Management.objects.filter(id=management_id).filter().first().canFilter
-    mymanagement = Management.objects.filter(id=management_id).first()
-    h = mymanagement.pk
-    kk = mymanagement.program.additionalOption
-    additonal = bool(mymanagement.program.additionalOption)
-    muser = mymanagement.profile.user
-    if user == muser:
-        if mymanagement.canEditProgram:
-            if request.method == 'GET':
-                pricelist = []
-                if additonal:
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
-                            program=mymanagement.program).filter(additionalOption=True).first()
-                        obj = {'pe': p, 'c': False, 'pri': pr, 'add': True}
-                        pricelist.append(obj)
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
-                            program=mymanagement.program).filter(additionalOption=True).first()
-                        obj = {'pe': p, 'c': True, 'pri': pr, 'add': True}
-                        pricelist.append(obj)
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
-                            program=mymanagement.program).filter(additionalOption=False).first()
-                        obj = {'pe': p, 'c': False, 'pri': pr, 'add': False}
-                        pricelist.append(obj)
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
-                            program=mymanagement.program).filter(additionalOption=False).first()
-                        obj = {'pe': p, 'c': True, 'pri': pr, 'add': False}
-                        pricelist.append(obj)
-                else:
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
-                            program=mymanagement.program).first()
-                        obj = {'pe': p, 'c': False, 'pri': pr}
-                        pricelist.append(obj)
-                    for p in regType:
-                        pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
-                            program=mymanagement.program).first()
-                        obj = {'pe': p, 'c': True, 'pri': pr}
-                        pricelist.append(obj)
-                return render(request, 'manage.html',
-                              {'canFilter': canFilter,
-                               'mymanagement': mymanagement,
-                               'list': pricelist, 'pri': pri,
-                               'regType': Profile.people_type_choices,
-                               'additonal': additonal,
-                               'allStatus': Registration.status_choices})
-            title = request.POST.get("title", '')
-            programinterval = request.POST.get("programinterval", '')
-            registerinterval = request.POST.get("registrinterval", '')
-            hascoupling = request.POST.get("hascoupling", '')
-            isopen = request.POST.get("isopen", '')
-            email = request.POST.get("email", '')
-            emailPassword = request.POST.get("emailPassword", '')
-            note = request.POST.get("note", '')
-            program = mymanagement.program
-            program.title = title
-            program.programInterval = programinterval
-            program.registerInterval = registerinterval
-            program.hasCoupling = hascoupling
-            program.isOpen = isopen
-            program.emailPassword = emailPassword
-            program.email = email
-            program.notes = note
-            program.save()
-            proman = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first()
-            pm = proman.id
-            return HttpResponseRedirect('/program/manage/' + str(pm))
-        elif mymanagement.canFilter:
-            program = mymanagement.program
-            proman = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first()
-            pm = proman.id
-            return HttpResponseRedirect('/program/panel/' + str(pm))
-        else:
-            program = mymanagement.program
-            proman = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first()
-            pm = proman.id
-            return HttpResponseRedirect('/program/documents/' + str(pm))
-    else:
+    management = Management.objects.filter(id=management_id).first()
+    if not management or management.profile != request.user.my_profile:
         return render(request, 'attack.html', {})
+    if not management.canEditProgram:
+        return HttpResponseRedirect('/program/panel/' + str(management.id))
+    if request.method == 'GET':
+        pricelist = []
+        for p,q in Profile.people_type_choices:
+            pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(additionalOption=False).filter(
+                program=management.program).first()
+            obj = {'people_type': p, 'coupling': False, 'obj': pr}
+            pricelist.append(obj)
+        for p,q  in Profile.people_type_choices:
+            pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(additionalOption=False).filter(
+                program=management.program).first()
+            obj = {'people_type': p, 'coupling': True, 'obj': pr}
+            pricelist.append(obj)
+        if management.program.additionalOption:
+            for p,q  in Profile.people_type_choices:
+                pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
+                    program=management.program).filter(additionalOption=True).first()
+                obj = {'people_type': p, 'coupling': False, 'obj': pr, 'additional': True}
+                pricelist.append(obj)
+            for p,q  in Profile.people_type_choices:
+                pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
+                    program=management.program).filter(additionalOption=True).first()
+                obj = {'people_type': p, 'coupling': True, 'obj': pr, 'additional': True}
+                pricelist.append(obj)
+
+        return render(request, 'manage.html', {'mymanagement': management, 'pricelist': pricelist})
+    title = request.POST.get("title", '')
+    programinterval = request.POST.get("programinterval", '')
+    registerinterval = request.POST.get("registrinterval", '')
+    hascoupling = request.POST.get("hascoupling", '')
+    isopen = request.POST.get("isopen", '')
+    email = request.POST.get("email", '')
+    emailPassword = request.POST.get("emailPassword", '')
+    note = request.POST.get("note", '')
+    program = management.program
+    program.title = title
+    program.programInterval = programinterval
+    program.registerInterval = registerinterval
+    program.hasCoupling = hascoupling
+    program.isOpen = isopen
+    program.emailPassword = emailPassword
+    program.email = email
+    program.notes = note
+    program.save()
+    return HttpResponseRedirect('/program/manage/' + str(management_id))
 
 
 @login_required
@@ -421,7 +380,7 @@ def addInstallment(request):
     add = (additionalOption == 'True')
     pricing, created = Pricing.objects.get_or_create(
         people_type=peopletype,
-        Coupling=c,
+        coupling=c,
         additionalOption=add,
         program=program,
     )
