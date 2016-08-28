@@ -64,7 +64,7 @@ class Registration(models.Model):
     profile = models.ForeignKey(Profile)
     program = models.ForeignKey(Program)
     registrationDate = models.DateTimeField(default=datetime.now)
-    additionalObject = models.BooleanField(default=False)
+    additionalOption = models.BooleanField(default=False)
     label1 = models.BooleanField(default=False)
     label2 = models.BooleanField(default=False)
     label3 = models.IntegerField(default=0)

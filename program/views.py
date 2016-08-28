@@ -494,3 +494,9 @@ def removeInstallment(request, pricing_id, price_num):
 
     rid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(rid))
+
+def my_programs(request):
+    if request.method=='GET':
+        profile=request.user.my_profile
+        my_registrations = Registration.objects.filter(profile=profile).exclude(status=Registration.STATUS_REMOVED)
+        return render(request,'my_programs.html',{'regs':my_registrations})

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#noteCheck").click(function () {
+                if (this.checked) {
+                    document.getElementById("mysubmit").disabled = false;
+                } else {
+                    document.getElementById("mysubmit").disabled = true;
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('form').submit(function () {
+            $(this).find("button[type='submit']").prop('disabled', true);
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div style="width: 100%">
+        <div class="well">
+            <table class="table">
+                <thead>
+                <th style="text-align: right">
+                    نام برنامه
+                </th>
+                <th style="text-align: right">
+                    زمان
+                </th>
+                <th style="text-align: right">
+                    زمان ثبت نام
+                </th>
+                <th style="text-align: right">
+                    سفر به صورت متاهلی
+                </th>
+                <th>
+
+                </th>
+                <th style="text-align: right">
+                    وضعیت
+                </th>
+                </thead>
+                <tbody>
+                {% for my in regs %}
+                    <tr>
+                        <td style="text-align: right">
+                            <a href="/program/myform/{{ my.pk }}">{{ my.program.title }}</a>
+                        </td>
+                        <td style="text-align: right">
+                            {{ my.program.programInterval }}
+                        </td>
+                        <td style="text-align: right">
+                            {{ my.program.registerInterval }}
+                        </td>
+                        <td style="text-align: right">
+                            {% if my.coupling %}
+                                متاهلی
+                            {% else %}
+                                مجردی
+                            {% endif %}
+                        </td>
+                    <td>
+                        {% if my.program.additionalObject %}
+                        {%  %}
+                    </td>
+                        <td style="text-align: right">
+                            {{ my.status_choices|get_tuple_item:my.status }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
