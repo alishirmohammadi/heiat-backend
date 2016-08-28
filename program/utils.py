@@ -174,3 +174,51 @@ def sendSMS(list,text):
 def getLastProgram():
     from .models import Program
     return Program.objects.filter(isPublic=True).last()
+
+
+def validateEmail(email):
+    from django.core.validators import validate_email
+    from django.core.exceptions import ValidationError
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
+def farsiNumber(Num):
+    Num1 = str(Num)
+    Num1.replace('1', '1')
+    Num1.replace('1', '2')
+    Num1.replace('1', '3')
+    Num1.replace('1', '4')
+    Num1.replace('1', '5')
+    Num1.replace('1', '6')
+    Num1.replace('1', '7')
+    Num1.replace('1', '8')
+    Num1.replace('1', '9')
+
+
+def checkMelliCode(mellicode):
+    a = mellicode
+    if (len(a) == 8):
+        a = '00' + a
+    if (len(a) == 9):
+        a = '0' + a
+    print(a)
+    if (len(a) == 10):
+        r = 0
+        for i in range(0, 9):
+            r1 = int(a[i]) * (10 - i)
+            r = r1 + r
+        c = r % 11
+        if (int(a[9]) == 1) and (c == 1):
+            return True
+        elif (int(a[9]) == 0) and (c == 0):
+            return True
+        elif (int(a[9]) == 11 - c):
+            return True
+        else:
+            return False
+    else:
+        return False

@@ -1,64 +1,21 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, logout, login
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
-from .models import Profile
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
 from userena.decorators import secure_required
-from guardian.decorators import permission_required_or_403
+
+from .models import Profile
+
+
+
 
 
 # Create your views here.
-def validateEmail(email):
-    from django.core.validators import validate_email
-    from django.core.exceptions import ValidationError
-    try:
-        validate_email(email)
-        return True
-    except ValidationError:
-        return False
-
-
-def farsiNumber(Num):
-    Num1 = str(Num)
-    Num1.replace('1', '1')
-    Num1.replace('1', '2')
-    Num1.replace('1', '3')
-    Num1.replace('1', '4')
-    Num1.replace('1', '5')
-    Num1.replace('1', '6')
-    Num1.replace('1', '7')
-    Num1.replace('1', '8')
-    Num1.replace('1', '9')
-
-
-def checkMelliCode(mellicode):
-    a = mellicode
-    if (len(a) == 8):
-        a = '00' + a
-    if (len(a) == 9):
-        a = '0' + a
-    print(a)
-    if (len(a) == 10):
-        r = 0
-        for i in range(0, 9):
-            r1 = int(a[i]) * (10 - i)
-            r = r1 + r
-        c = r % 11
-        if (int(a[9]) == 1) and (c == 1):
-            return True
-        elif (int(a[9]) == 0) and (c == 0):
-            return True
-        elif (int(a[9]) == 11 - c):
-            return True
-        else:
-            return False
-    else:
-        return False
+from program.utils import checkMelliCode
 
 
 def FAQ(request):
     if request.method == 'GET':
-        return render(request, 'FAQ.html', {'allTypes': Profile.people_type_choices})
+        return render(request, 'FAQ.html', {})
 
 def error(request,username=None,page=None):
     if request.method == 'GET':
@@ -66,21 +23,20 @@ def error(request,username=None,page=None):
 
 def charity(request):
     if request.method == 'GET':
-        return render(request, 'Charity.html', {'allTypes': Profile.people_type_choices})
+        return render(request, 'Charity.html', {})
 
 
 def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
 
-        return render(request, 'profile.html', {'pro': a, 'days': range(1, 32), 'allTypes': a.people_type_choices,
-                                                'pas_type': a.passport_choices, 'vazife': a.conscription_choices})
+        return render(request, 'profile.html', {})
     else:
         a.address = request.POST.get('adress', '')
         a.shenasname = request.POST.get('she_number', '')
         a.people_type = request.POST.get('education', '')
         if (
-                    a.people_type == 'sharif student' or a.people_type == 'sharif graduated' or a.people_type == 'sharif graduated talabe'):
+                    a.people_type == Profile.PEOPLE_TYPE_SHARIF_STUDENT or a.people_type == Profile.PEOPLE_TYPE_SHARIF_GRADUATED or a.people_type == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT or a.people_type==Profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE):
             k = request.POST.get('student_number', '')
             try:
                 val = int(k)
@@ -118,18 +74,6 @@ def edit(request):
         a.save()
         return HttpResponseRedirect('/')
 
-
-def manage_nav(request):
-    if request.user.is_anonymous:
-        manage = False
-        return render(request, 'base.html', {'manage': manage})
-    else:
-        a = request.user.my_profile
-        from program.models import Management
-        manage = Management.objects.filter(profile=a).first()
-
-        if request.method == 'GET':
-            return render(request, 'base.html', {'profile': a, 'manage': manage})
 
 
 @secure_required
@@ -177,7 +121,6 @@ def activate(request, activation_key,
     from userena.models import UserenaSignup
     from userena import settings as userena_settings
     from django.contrib import messages
-    from django.core.urlresolvers import reverse
     from django.shortcuts import redirect
     from userena.views import ExtraContextTemplateView
     from django.utils.translation import ugettext as _

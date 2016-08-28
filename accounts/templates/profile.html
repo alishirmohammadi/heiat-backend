@@ -205,7 +205,7 @@
                                     شماره شناسنامه:
                                 </td>
                                 <td>
-                                    <input value="{{ pro.shenasname }}" type="text" name="she_number"
+                                    <input value="{{ profile.shenasname }}" type="text" name="she_number"
                                            class="form-control">
                                 </td>
 
@@ -216,7 +216,7 @@
                                     نام پدر:
                                 </td>
                                 <td>
-                                    <input value="{{ pro.fatherName }}" type="text" name="father_name"
+                                    <input value="{{ user.my_profile.fatherName }}" type="text" name="father_name"
                                            class="form-control">
 
                                 </td>
@@ -231,9 +231,9 @@
                                 </td>
                                 <td>
                                     <select id="education" name="education" class="form-control">
-                                        {% for type in allTypes|get_keys %}
-                                            <option{% if pro.people_type == type %} selected="selected"{% endif %}
-                                                                                    value="{{ type }}">{{ allTypes|get_tuple_item:type }}</option>
+                                        {% for type,persian in user.my_profile.people_type_choices %}
+                                            <option{% if user.my_profile.people_type == type %} selected="selected"{% endif %}
+                                                                                    value="{{ type }}">{{ persian }}</option>
                                         {% endfor %}
                                     </select>
 
@@ -247,7 +247,7 @@
                                     شماره دانشجویی:
                                 </td>
                                 <td>
-                                    <input value="{{ pro.studentNumber }}" type="text" name="student_number"
+                                    <input value="{{ user.my_profile.studentNumber }}" type="text" name="student_number"
                                            placeholder="********"
                                            class="form-control">
                                 </td>
@@ -258,7 +258,7 @@
                                     سال تولد:
                                 </td>
                                 <td>
-                                <p>13 <input value="{{ pro.birthYear }}" type="text" name="birthyear"
+                                <p>13 <input value="{{ user.my_profile.birthYear }}" type="text" name="birthyear"
                                                  style="width: 20%" class="form-control" maxlength="2"></p>
                                 </td>
                             <tr>
@@ -268,7 +268,7 @@
                                 <td>
                                     <select name="birthmonth" class="form-control">
                                         {% for type in month %}
-                                            <option  {% if pro.birthMonth == type %}
+                                            <option  {% if user.my_profile.birthMonth == type %}
                                                 selected="selected"{% endif %}value="{{ type }}">{{ month|get_tuple_item:type }}</option>
                                         {% endfor %}
                                     </select>
@@ -280,7 +280,7 @@
                                 <td>
                                     <select name="birthday" class="form-control">
                                         {% for type in days %}
-                                            <option  {% if pro.birthDay == type %}
+                                            <option  {% if user.my_profile.birthDay == type %}
                                                 selected="selected"{% endif %}value="{{ type }}">{{ type }}</option>
                                         {% endfor %}
                                     </select>
@@ -294,7 +294,7 @@
 
                                 </td>
                                 <td>
-                                    <input value="{{ pro.address }}" type="text" name="adress" class="form-control">
+                                    <input value="{{ user.my_profile.address }}" type="text" name="adress" class="form-control">
                                 </td>
 
 
@@ -325,9 +325,9 @@
 
                                 <td>
                                     <select name="vazife-type" class="form-control">
-                                        {% for type in vazife|get_keys %}
-                                            <option{% if pro.conscription == type %} selected="selected"{% endif %}
-                                                                                     value="{{ type }}">{{ vazife|get_tuple_item:type }}</option>
+                                        {% for type,persian in user.my_profile.conscription_choices %}
+                                            <option{% if user.my_profile.conscription == type %} selected="selected"{% endif %}
+                                                                                     value="{{ type }}">{{ persian }}</option>
                                         {% endfor %}
                                     </select>
                                 </td>
@@ -340,9 +340,9 @@
 
                                 <td>
                                     <select id="passsport" name="pas_type" class="form-control">
-                                        {% for type in pas_type|get_keys %}
-                                            <option {% if pro.passport == type %}
-                                                selected="selected"{% endif %}value="{{ type }}">{{ pas_type|get_tuple_item:type }}</option>
+                                        {% for type,persian in user.my_profile.passport_choices %}
+                                            <option {% if user.my_profile.passport == type %}
+                                                selected="selected"{% endif %}value="{{ type }}">{{ persian }}</option>
                                         {% endfor %}
                                     </select>
 
@@ -358,7 +358,7 @@
                                     سریال پاسپورت:
                                 </td>
                                 <td>
-                                    <input value="{{ pro.passport_serial }}" type="text" name="serial_pas"
+                                    <input value="{{ user.my_profile.passport_serial }}" type="text" name="serial_pas"
                                            class="form-control">
                                 </td>
 
@@ -369,7 +369,7 @@
                                 </td>
 
                                 <td>
-                                    <input value="{{ pro.passport_release }}" id="sodour" type="text" name="pas_release"
+                                    <input value="{{ user.my_profile.passport_release }}" id="sodour" type="text" name="pas_release"
                                            class="form-control">
                                 </td>
 
@@ -380,7 +380,7 @@
                                 </td>
 
                                 <td>
-                                    <input value="{{ pro.passport_dateofexpiry.unique_for_month }}"+ id="engheza" type="text"
+                                    <input value="{{ user.my_profile.passport_dateofexpiry.unique_for_month }}"+ id="engheza" type="text"
                                            name="pas_exprition" class="form-control">
                                 </td>
 
@@ -417,28 +417,28 @@
                                 style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                 شماره ملی همسر اول:
                             </td>
-                            <td><input value="{{ pro.couple.melliCode }}" class="form-control" maxlength="10"
+                            <td><input value="{{ user.my_profile.couple.melliCode }}" class="form-control" maxlength="10"
                                        name="wife_mellicode"></td>
                             </tr>
                             <tr id="couple_melli2">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     شماره ملی همسر دوم:
                                 </td>
-                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                <td><input value="{{ user.my_profile.couple_id }}" class="form-control" maxlength="10"
                                            name="wife_mellicode2"></td>
                             </tr>
                             <tr id="couple_melli3">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     شماره ملی همسر سوم:
                                 </td>
-                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                <td><input value="{{ user.my_profile.couple_id }}" class="form-control" maxlength="10"
                                            name="wife_mellicode3"></td>
                             </tr>
                             <tr id="couple_melli4">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     شماره ملی همسر چهارم:
                                 </td>
-                                <td><input value="{{ pro.couple_id }}" class="form-control" maxlength="10"
+                                <td><input value="{{ user.my_profile.couple_id }}" class="form-control" maxlength="10"
                                            name="wife_mellicode4"></td>
                             </tr>
 

@@ -2,27 +2,23 @@ from django.shortcuts import render
 from  program.models import Registration, Program, Pricing, Profile
 from django.views.decorators.csrf import csrf_exempt
 from .models import Payment
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
 def start_pay(request, registration_id):
-    user = request.user
     reg = Registration.objects.filter(id=registration_id).first()
-    numofpay = reg.numberOfPayments
-    progid = reg.program.id
-    profid = reg.profile.id
-    cou = reg.coupling
-    add = reg.additionalOption
-    peotyp = reg.profile.people_type
-    price = Pricing.objects.filter(program_id__exact=progid).filter(program__pricing__Coupling=cou).filter(
-        people_type__exact=peotyp).filter(program__pricing__additionalOption=add).first()
-    if numofpay == 0:
+    if not reg or request.user != reg.profile.user:
+        return HttpResponseRedirect('/error')
+    price = Pricing.objects.filter(program=reg.program).filter(coupling=reg.coupling).filter(
+        people_type=reg.profile.people_type).filter(additionalOption=reg.additionalOption).first()
+    if reg.numberOfPayments == 0:
         numberOfInstallment = 1
         amount = price.price1
-    elif numofpay == 1:
+    elif reg.numberOfPayments == 1:
         amount = price.price2
         numberOfInstallment = 2
-    elif numofpay == 2:
+    elif reg.numberOfPayments == 2:
         amount = price.price3
         numberOfInstallment = 3
     payment = Payment.create(registration=reg, amount=amount, numberOfInstallment=numberOfInstallment)
