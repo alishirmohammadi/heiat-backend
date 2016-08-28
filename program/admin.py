@@ -11,15 +11,18 @@ class ManagementInline(admin.TabularInline):
     # def show_firm_url(self, obj):
     #     return format_html("<a href='{url}'>{http://google.com}</a>", url=obj.firm_url)
 
-        # show_firm_url.short_description = "Firm URL"
+    # show_firm_url.short_description = "Firm URL"
 
-    def show_firm_url(self,obj):
-        return u'<a href="/admin/program/management/{}">{}</a>'.format(obj.id,obj.profile)
-    show_firm_url.allow_tags = True
+    def manager_url(self, obj):
+        return u'<a href="/admin/program/management/{}">{}</a>'.format(obj.id, obj.profile)
 
-    readonly_fields = ('show_firm_url' , 'role')
-    exclude = ('profile','canEditProgram', 'canFilter', 'canSelect', 'canEditRegistration', 'canDocument', 'canMassage', 'canAdd',
-               'documentation')
+    manager_url.allow_tags = True
+
+    readonly_fields = ('manager_url', 'role', 'comment')
+    exclude = (
+        'profile', 'canEditProgram', 'canFilter', 'canSelect', 'canEditRegistration', 'canDocument', 'canMassage',
+        'canAdd',
+        'documentation')
     # list_display_links = ('provider',)/\
     can_delete = False
 
@@ -27,6 +30,8 @@ class ManagementInline(admin.TabularInline):
 class Program_Admin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'year', 'Master', 'number_of_register', 'certain_or_came', 'sum_of_money']
     inlines = [ManagementInline]
+
+
 admin.site.register(Program, Program_Admin)
 
 
@@ -37,9 +42,8 @@ class Registration_Admin(admin.ModelAdmin):
 admin.site.register(Registration, Registration_Admin)
 
 
-
 class Management_Admin(admin.ModelAdmin):
-    list_display = ['id', 'program', 'profile','role']
+    list_display = ['id', 'program', 'profile', 'role']
     # form = BookForm
 
 
