@@ -87,9 +87,6 @@
 
                     $('.controls').change(function () {
                         if ($('input[name=gender]:checked').val() == 'true' && $('input[name=coupling]:checked').val() == 'true') {
-                            console.log($('input[name=gender]:checked').val());
-                            console.log($('input[name=coupling]:checked').val());
-                            console.log(1);
                             $("#conscription").fadeIn("slow");
                             $("#couple_melli").fadeIn("slow");
                             $("#couple_melli2").fadeIn("slow");
@@ -97,9 +94,6 @@
                             $("#couple_melli4").fadeIn("slow");
                         }
                         else if ($('input[name=gender]:checked').val()  == 'true' && $('input[name=coupling]:checked').val() == 'false') {
-                            console.log($('input[name=gender]:checked').val());
-                            console.log($('input[name=coupling]:checked').val());
-                            console.log(2);
                             $("#conscription").fadeIn("slow");
                             $("#couple_melli").fadeOut("slow");
                             $("#couple_melli2").fadeOut("slow");
@@ -107,9 +101,6 @@
                             $("#couple_melli4").fadeOut("slow");
                         }
                         else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'true') {
-                            console.log($('input[name=gender]:checked').val());
-                            console.log($('input[name=coupling]:checked').val());
-                            console.log(3);
                             $("#conscription").fadeOut("slow");
                             $("#couple_melli").fadeIn("slow");
                             $("#couple_melli2").fadeOut("slow");
@@ -117,9 +108,6 @@
                             $("#couple_melli4").fadeOut("slow");
                         }
                         else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'false') {
-                            console.log($('input[name=gender]:checked').val());
-                            console.log($('input[name=coupling]:checked').val());
-                            console.log(4);
                             $("#conscription").fadeOut("slow");
                             $("#couple_melli").fadeOut("slow");
                             $("#couple_melli2").fadeOut("slow");
@@ -129,10 +117,10 @@
                     });
 
 
-                    $('#birthdate').datepicker({
-                        changeMonth: true,
-                        changeYear: true
-                    });
+{#                    $('#birthdate').datepicker({#}
+{#                        changeMonth: true,#}
+{#                        changeYear: true#}
+{#                    });#}
                 }
         )
 

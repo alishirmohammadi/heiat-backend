@@ -100,11 +100,29 @@
 
 {% block  content %}
     <div>
-        <div class="well" style="text-align: right">
+        <div class="well" style="text-align: right; direction: rtl">
 
             <form method="post" id="form0">
                 {% csrf_token %}
-                <div style="direction:rtl ">
+{#                <table>#}
+{#                    <tr>#}
+{#                        <td id="status_choices" class="label label-primary" style="font-size: 15px">#}
+{#                            وضعیت ثبت نام:#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>#}
+{#{% for item in statusChoices|get_keys %}#}
+{#                                <b style="margin-right: 2%">{{ statusChoices|get_tuple_item:item }}</b>#}
+{#                                <input class="checkbox-inline" type="checkbox" name="status_choices" value="{{ item }}"#}
+{#                                       {% if item in filterAll.status %}checked="checked"{% endif %}#}
+{#                                >#}
+{#                            {% endfor %}#}
+{#                        </td>#}
+{#                    </tr>#}
+{##}
+{#                </table>#}
+                <div>
                     <label id="status_choices">
                         وضعیت ثبت نام:
                         <br>
@@ -119,22 +137,27 @@
 
                 </div>
 
-                <div style="direction:rtl ">
+                <div>
                     <label id="people_type_choices">
                         به عنوان:
                         <br>
                         {% for item,perisan in mymanagement.profile.people_type_choices %}
-                            <b>{{perisan}}</b>
-                            <input class="checkbox-inline" type="checkbox" name="people_type_choices" value="{{ item }}"
+                            <b>{{ perisan }}</b>
+                            <input class="checkbox-inline" type="checkbox" name="people_type_choices" value="{{ item }}" id="{{ item }}"
                                    {% if item in filterAll.people_type %}checked="checked"{% endif %}>
                         {% endfor %}
-
+<input type="text" class="form-control" placeholder="سال ورود">
+                    <select class="form-control" name="maghta" id="maghta">
+                                    <option value="karshenasi" id="karshenasi">کارشناسی</option>
+                                    <option value="arshad" id="arshad">ارشد</option>
+                        <option value="doktora" id="doktora">دکترا</option>
+                                </select>
                     </label>
 
                 </div>
 
 
-                <div style="direction:rtl ">
+                <div>
                     <label id="payment">
                         وضعیت پرداخت:
                         <br>
@@ -149,7 +172,7 @@
                     </label>
                 </div>
 
-                <div style="direction:rtl ">
+                <div>
                     <label id="gender">
                         جنسیت:
                         <b>مرد</b><input class="checkbox-inline" type="checkbox" name="gender" value="male"
@@ -221,7 +244,7 @@
                             وضعیت نظام وظیفه:
                             {% for item,persian in mymanagement.profile.conscription_choices %}
 
-                                <b>{{ persian}}</b>
+                                <b>{{ persian }}</b>
                                 <input class="checkbox-inline" type="checkbox" name="conscription_choices"
                                        value="{{ item }}"
                                        {% if item in filterAll.conscription %}checked="checked"{% endif %}>
