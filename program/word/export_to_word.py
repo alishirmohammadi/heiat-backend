@@ -452,15 +452,14 @@ def registrations_to_manifest(registerations):
         styling(row_cells[4], str(u1), 12)
         styling(row_cells[3], str(t1), 12)
         p1 = row_cells[0].add_paragraph('')
-        # open('./program/word/2.jpg', 'rb')
-        # open('./'+item.profile.mugshot, 'rb')
-        # r1='./' + str(item.profile.mugshot)
-        picture = open('./' + str(item.profile.mugshot), 'rb')
-        run = p1.add_run('')
-        # picture = item.profile.mugshot
-        add_picture_to_run(run, picture, width=Cm(2), height=Cm(3))
         if item.profile.mugshot:
-            styling(row_cells[1], '1', 12)
+          picture = open('./' + str(item.profile.mugshot), 'rb')
+          run = p1.add_run('')
+          add_picture_to_run(run, picture, width=Cm(2), height=Cm(3))
+        else:
+            picture = open('./program/word/4.jpg', 'rb')
+            run = p1.add_run('')
+            add_picture_to_run(run, picture, width=Cm(2), height=Cm(3))
     f = BytesIO()
     document.save(f)
     length = f.tell()
