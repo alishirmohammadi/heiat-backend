@@ -22,7 +22,7 @@ class Program(models.Model):
     notes = models.CharField(max_length=200)
     email = models.EmailField(max_length=200, null=True, blank=True)
     emailPassword = models.CharField(max_length=200, null=True, blank=True)
-    startDate=models.DateField(default=datetime.now)
+    startDate = models.DateField(default=datetime.now)
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
@@ -40,6 +40,7 @@ class Program(models.Model):
 
     def sum_of_money(self):
         from pay.models import Payment
+
         total = Payment.objects.filter(registration__program=self).filter(success=True).aggregate(Sum('amount'))
         return (total['amount__sum'])
 
@@ -57,7 +58,6 @@ class Program(models.Model):
 
     def pricings(self):
         return Pricing.objects.filter(program=self)
-
 
 
 class Registration(models.Model):
@@ -98,11 +98,14 @@ class Registration(models.Model):
         (STATUS_FIRST_STAGE, 'مرحله اول'),
     )
     status = models.CharField(max_length=200, choices=status_choices, default=STATUS_DEFAULT)
+
     def get_pricing(self):
-        return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(coupling=self.coupling).filter(
+        return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
+            coupling=self.coupling).filter(
             additionalOption=self.additionalOption).first()
+
     def get_num_of_installments(self):
-        p=self.get_pricing()
+        p = self.get_pricing()
         if p.price3:
             return 3
         if p.price2:
@@ -132,6 +135,7 @@ class Registration(models.Model):
                     return True
         else:
             pass
+
 
 class Management(models.Model):
     program = models.ForeignKey(Program)
@@ -183,8 +187,7 @@ class Management(models.Model):
         (ROLE_KITCHEN_CREW, 'کادر سلف'),
     )
     role = models.CharField(max_length=200, choices=role_choices, default=ROLE_MASTER_MANAGER)
-
-
+    comment = models.CharField(max_length=800, null=True, blank=True)
 
     def seedocument(self):
         return {

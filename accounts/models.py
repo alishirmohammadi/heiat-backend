@@ -66,10 +66,9 @@ class Profile(UserenaBaseProfile):
 
     PASSPORT_NOT_HAVE = 'not have'
     PASSPORT_HAVE = 'have'
-    PASSPORT_HAVE_7 = 'have 7'
+    PASSPORT_EXPIRE = 'Less_6_month'
     passport_choices = (
         (PASSPORT_HAVE, 'دارم'),
-        (PASSPORT_HAVE_7, 'دارم ولی کمتر از 7 ماه انقضا دارد '),
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
     passport = models.CharField(max_length=200, choices=passport_choices, null=True)

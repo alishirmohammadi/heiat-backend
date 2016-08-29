@@ -49,7 +49,7 @@ def panel(request, management_id):
                                           'couple': [], 'age': [], 'entrance_year': [], 'level': [],
                                           'conscription': [], 'passport': [], 'label1': [], 'label2': [],
                                           'label3': [],
-                                          'label4': []})
+                                          'label4': [],'additionalOption':[]})
 
         registrations = filter_to_registrations(filter_all, management.program)
         studentRange = []
@@ -80,6 +80,7 @@ def panel(request, management_id):
             'label2': request.POST.getlist('label2'),
             'label3': request.POST.getlist('label3'),
             'label4': request.POST.getlist('label4'),
+            'additionalOption':request.POST.getlist('additionalOption'),
         }
         request.session['filter'] = all_filter
 
