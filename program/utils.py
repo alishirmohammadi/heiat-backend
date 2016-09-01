@@ -208,7 +208,7 @@ def sendSMS(list,text):
                 b = b + str(list[j + (i * 100)])
             else:
                 b = b + "," + str(list[j + (i * 100)])
-    client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
+        client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
 
 def getLastProgram():
     from .models import Program
