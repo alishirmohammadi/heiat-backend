@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from userena.decorators import secure_required
+from accounts.templatetags.tags import get_tuple
 
 from .models import Profile
 
@@ -30,7 +31,8 @@ def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
 
-        return render(request, 'profile.html', {})
+        return render(request, 'profile.html', {'pro': a, 'days': range(1, 32), 'month':get_tuple() ,'allTypes': a.people_type_choices,
+                                                 'vazife': a.conscription_choices})
     else:
         a.address = request.POST.get('adress', '')
         a.shenasname = request.POST.get('she_number', '')
