@@ -4,7 +4,7 @@ from .models import Registration
 from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
-from program.models import Registration
+from program.models import Registration , Management
 from pysimplesoap.client import SoapClient
 
 
@@ -17,7 +17,7 @@ def export_users_xls(status_list):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone']
+    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone','profile_mellicode','Registration_feedback','Registration_additionalOption']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Sheet body, remaining rows
@@ -50,13 +50,23 @@ def registrations_to_excel(registrations):
         profile__user__last_name = j.profile.user.last_name
         profile__user__email = j.profile.user.email
         profile__cellPhone = j.profile.cellPhone
+        profile_mellicode=j.profile.melliCode
+        Registration_feedback = j.feedBack
+        if j.additionalOption:
+            Registration_additionalOption=j.additionalOption
+        else:
+            Registration_additionalOption='not have'
         object = (numberOfPayment,
                   coupling,
                   status,
                   profile__user__first_name,
                   profile__user__last_name,
                   profile__user__email,
-                  profile__cellPhone)
+                  profile__cellPhone,
+                  profile_mellicode,
+                  Registration_feedback,
+                  Registration_additionalOption
+                  )
         status_list.append(object)
     return export_users_xls(status_list)
 
@@ -84,7 +94,36 @@ def filter_to_registrations(filter, program):
 
     if filter.get('payment', []):
         registerations = registerations.filter(numberOfPayments__in=filter.get('payment', []))
-
+    if filter.get('passportCheck', []):
+        registerations = registerations.filter(numberOfPayments__in=filter.get('passportCheck', []))
+    if filter.get('entrance_year', []):
+         c = program.year
+         if len(str(c)) == 4:
+             c = str(c)[2:4]
+         c = int(c)
+         if str(c-4) in filter.get('entrance_year', []):
+            filter.get('entrance_year', []).remove(str(c-4))
+            for i in range(c-3, c+1):
+                if str(i) not in filter.get('entrance_year', []):
+                    registerations = registerations.exclude(profile__studentNumber__startswith=str(i))
+         else :
+             for i in range(c - 10, c + 1):
+                 if str(i) not in filter.get('entrance_year', []):
+                     registerations = registerations.exclude(profile__studentNumber__startswith = str(i))
+    if filter.get('level', []):
+         if 'bs' not in filter.get('level', []):
+           registerations = registerations.exclude(profile__studentNumber__iregex=r'^(\d)(\d)[1](\d)(\d)(\d)(\d)(\d)$')
+         if 'ms' not in filter.get('level', []):
+           registerations = registerations.exclude(Q(profile__studentNumber__iregex=r'^(\d)(\d)[2](\d)(\d)(\d)(\d)(\d)$')|Q(profile__studentNumber__iregex=r'^(\d)(\d)[7](\d)(\d)(\d)(\d)(\d)$'))
+         if 'phd' not in filter.get('level', []):
+           registerations = registerations.exclude(profile__studentNumber__iregex=r'^(\d)(\d)[3](\d)(\d)(\d)(\d)(\d)$')
+         if 'other' not in filter.get('level', []):
+                 registerations = registerations.filter(
+                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[2](\d)(\d)(\d)(\d)(\d)$')|
+                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[7](\d)(\d)(\d)(\d)(\d)$')|
+                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[1](\d)(\d)(\d)(\d)(\d)$')|
+                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[3](\d)(\d)(\d)(\d)(\d)$')
+             )
     gender_filter = filter.get('gender', [])
     if gender_filter:
         if len(gender_filter) == 1:
@@ -222,3 +261,16 @@ def checkMelliCode(mellicode):
             return False
     else:
         return False
+def student_enterance(studentnumber):
+    return studentnumber[0:2]
+def student_type(studentnumber):
+    a=studentnumber[2]
+    if a==1:
+        type='bs'
+    elif a==2 or a==7:
+        type='ms'
+    elif a==3:
+        type='phd'
+    else:
+        type='unkhown'
+    return type

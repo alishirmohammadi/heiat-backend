@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.mail import BadHeaderError
-
 from pay.models import Payment
 from program import jalali
 from .models import Program, Registration, Profile, Management, Pricing, Message, Message_reciving
@@ -53,8 +52,12 @@ def panel(request, management_id):
 
         registrations = filter_to_registrations(filter_all, management.program)
         studentRange = []
+        c = management.program.year
+        if len(str(c)) == 4:
+            c = str(c)[2:4]
+        c = int(c)
         for item in range(5):
-            studentRange.append(management.program.year - item)
+            studentRange.append(c - item)
 
         return render(request, 'panel.html', {'all': registrations,
                                               'mymanagement': management,
