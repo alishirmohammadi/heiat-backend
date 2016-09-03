@@ -88,6 +88,8 @@ def filter_to_registrations(filter, program):
 
     if filter.get('status', []):
         registerations = registerations.filter(status__in=filter.get('status', []))
+    if filter.get('additionalOption', []):
+        registerations = registerations.filter(additionalOption=True)
 
     if filter.get('people_type', []):
         registerations = registerations.filter(profile__people_type__in=filter.get('people_type', []))

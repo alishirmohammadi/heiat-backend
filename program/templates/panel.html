@@ -229,6 +229,18 @@
                         </label>
                     </div>
                 {% elif mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
+                                        <div style="direction:rtl ">
+                        <label id="additionalOption">
+                            وضعیت گذرنامه:
+                                                        <b>{{ mymanagement.program.additionalOption }}</b> <input class="checkbox-inline" type="checkbox" name="additionalOption"
+                                                   {% if 'additionalOption' in filterAll.level %}checked="checked"{% endif %}>
+                            {#                        {% for item in passportChoices|get_keys %}#}
+                            {#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
+                            {#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
+                            {#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
+                            {#                        {% endfor %}#}
+                        </label>
+                    </div>
                     <div style="direction:rtl ">
                         <label id="passport">
                             وضعیت گذرنامه:
