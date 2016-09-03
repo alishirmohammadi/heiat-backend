@@ -160,6 +160,7 @@ SITE_ID=1
 from .local import MEDIA_ROOT_LOCAL
 
 MEDIA_ROOT=MEDIA_ROOT_LOCAL
+USERENA_HTML_EMAIL=True
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',
@@ -167,5 +168,8 @@ USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
 USERENA_SIGNIN_REDIRECT_URL = getattr(settings,
                                       'USERENA_SIGNIN_REDIRECT_URL',
                                       '/program')
+USERENA_MUGSHOT_PATH = getattr(settings,
+                               'USERENA_MUGSHOT_PATH',
+                               'mugshots/')
 
 LOGIN_URL='/accounts/signin/'

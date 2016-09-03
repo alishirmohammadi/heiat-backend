@@ -72,7 +72,8 @@ def edit(request):
                         a.couple = type
             else:
                 erorr2 = 1
-
+        a.mugshot=request.POST.get('mugshot', )
+        a.mugshot.empty_values=request.POST.get('mugshot-clear', )
         a.save()
         return HttpResponseRedirect('/')
 

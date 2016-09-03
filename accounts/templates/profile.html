@@ -288,7 +288,38 @@
 
 
                             </tr>
+                            <div class="col-md-4 col-lg-3">
+                                <div class="row">
+                               <div class="col-md-5">
 
+                            <tr>
+                                <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">عکس:
+
+                                </td>
+                                <td>
+{#                                    <input type="file" name="mugshot" id="id_mugshot">#}
+{#                                    <img src="{{ post.moderator.get_profile.get_mugshot_url }}" alt="" />#}
+{#                                    <img src="{{ user.my_profile.mugshots }}" >#}
+
+
+
+                        <label for="id_mugshot">Mugshot:</label>
+{#                                    {{  picture = open('./program/word/4.jpg', 'rb')#}
+{#            run = p1.add_run('')#}
+{#            add_picture_to_run(run, picture, width=Cm(2), height=Cm(3)) }}#}
+
+                            <p class="file-upload">در حال حاضر: <a href="mugshots/{{ user.my_profile.mugshot }}">{{ user.my_profile.mugshot }}</a> <span class="clearable-file-input"><input type="checkbox" name="mugshot-clear" id="mugshot-clear_id"> <label for="mugshot-clear_id">پاک کردن</label></span><br>تغییر: <input type="file" name="mugshot" id="id_mugshot"> <img src="./{{user.my_profile.mugshot}}" width="99%" /></p>
+
+
+
+
+
+                </div>                </div> </div>
+
+                                </td>
+
+
+                            </tr>
 
                         </table>
 

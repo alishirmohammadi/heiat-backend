@@ -1,1 +1,1 @@
-MEDIA_ROOT_LOCAL='C:/Users/digital/'
+MEDIA_ROOT_LOCAL='C:/Users/hossein/Pictures'
