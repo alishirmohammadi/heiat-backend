@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from userena.decorators import secure_required
 from accounts.templatetags.tags import get_tuple
+# from  userena.tests.tests_models import UserenaSignupModelTests
 
 from .models import Profile
 
@@ -73,6 +74,7 @@ def edit(request):
             else:
                 erorr2 = 1
         a.mugshot=request.POST.get('mugshot', )
+        # a.mugshot.storage = UserenaSignupModelTests.test_upload_mugshot()
         a.mugshot.empty_values=request.POST.get('mugshot-clear', )
         a.save()
         return HttpResponseRedirect('/')

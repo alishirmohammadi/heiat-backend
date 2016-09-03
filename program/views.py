@@ -475,3 +475,8 @@ def my_programs(request):
                 couple_reg.additionalOption = additional
                 couple_reg.save()
         return HttpResponseRedirect('/program/')
+def only_print (request, management_id, profile_id):
+    management = Management.objects.filter(id=management_id).first()
+    registerations = Registration.objects.filter(program=management.program)
+    registerations = registerations.filter(profile__user_id=profile_id)
+    return registrations_to_print(registerations)
