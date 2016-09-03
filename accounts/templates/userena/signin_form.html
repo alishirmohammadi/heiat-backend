@@ -3,91 +3,105 @@
 {% load tags %}
 {% block title %}{% trans "Signin" %}{% endblock %}
 {% block navbar %}
-   {% include '_navbar.html' with active_link='signin' %}
+    {% include '_navbar.html' with active_link='signin' %}
 {% endblock %}
 {% block content %}
     <div style="width: 100%">
-    <div style="padding-top: 60px;">
-        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0">
-            <ul class="list-group ">
-                {% get_lastProg as p %}
-                <li class="list-group-item" style="font-family: 'B Mitra';font-size: 18px" ><span class="badge" >{{ p.title }}  </span>جدید ترین برنامه</li>
-                <li class="list-group-item" style="font-family: 'B Mitra';font-size: 18px"><span class="badge" >{{ p.programInterval }}</span>زمان برنامه </li>
-                <li class="list-group-item" style="font-family: 'B Mitra';font-size: 18px"> <span class="badge" >{{ p.registerInterval }}</span>زمان ثبت نام</li>
-            </ul>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
-
-        <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12" style="background-color: #dfdfdf; border-radius: 10px;">
-
-            <form action="" method="post" class="form-signin" style=" padding-top: 15px; padding-bottom: 10px;">
-                {% csrf_token %}
-                <fieldset>
-                    <div class="field-error" style="color: red">{{ form.non_field_errors }}</div>
+        <div style="padding-top: 60px">
 
 
-                    <div class="row" style="padding-bottom:10px; margin:0 auto;">
-                        <div class="row input-group" style="border:2px solid #58b6d2;background-color: #ffffff;">
-                            <div class="input-group-btn">
-                                <i class="fa fa-envelope-o"
-                                   style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
-                            </div>
-                            <div style="padding:5px 25px">
-                                <input class="required form-control" id="id_identification" maxlength="75"
-                                       name="identification" type="text" placeholder="Email"
-                                       style="border:0px;margin-bottom: 5px;">
-                            </div>
-                        </div><!-- /input-group -->
-                    </div>
+            <div class="col-lg-3 col-md-6">
+                <ul class="list-group" >
+                    {% get_lastProg as p %}
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
+                            class="badge">{{ p.title }}  </span>جدید ترین برنامه:
+                    </li>
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
+                            class="badge">{{ p.programInterval }}</span>زمان برنامه:
+                    </li>
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
+                            class="badge">{{ p.registerInterval }}</span>زمان ثبت نام:
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4 hidden-md hidden-xs hidden-sm" style="margin-left: 3%;margin-right: 3%"><img class="center-block" src="/static/hossein.jpg" style="width:350px"></div>
+{#        <div class="col-lg-4 hidden-xs" style="margin-left: 3%;margin-right: 3%"><img class="center-block" src="/static/logo-heiaat.jpg" style="width:350px"></div>#}
+{#        <div class="col-lg-4 hidden-xs" style="margin-left: 3%;margin-right: 3%"><img class="center-block" src="/static/azzhra.jpg" style="width:350px"></div>#}
+            {#            <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>#}
+            <div class="col-lg-4 col-md-6" style="background-color: #e6e6e6; border-radius: 80px">
 
-                    <div class="row" style="padding-bottom:10px; margin:0 auto;">
-                        <div class="row input-group" style="border:2px solid #58b6d2;background-color: #FFFFFF">
-                            <div class="input-group-btn">
-                                <i class="fa fa-lock" style="font-size:25px;color:#58b6d2;padding:0 0px 0 20px;"></i>
-                            </div>
-                            <div style="padding:5px 25px">
-                                <input class="required form-control" id="id_password" name="password" type="password"
-                                       placeholder="Password" style="border:0px; margin-bottom: 5px !important;">
-                            </div>
-                        </div><!-- /input-group -->
-                    </div>
+                <form action="" method="post" class="form-signin" style=" padding-top: 15px; padding-bottom: 10px;">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="field-error" style="color: #d42027;font-family: 'B Titr';font-size: 15px; margin-left: 5%">{{ form.non_field_errors }}</div>
 
-                    <label class="pull-right" for="id_remember_me" style="direction: rtl;width: 100%;">
-                        <div class="pull-right" style="width: 100%;">
-                            <div class="col-lg-1 pull-right" style="padding: 0px;">
-                                <input id="id_remember_me" name="remember_me" type="checkbox"/>
-                            </div>
-                            <div class="col-lg-10 pull-right" style="padding: 0px;">
-                                <span style="font-family: 'B Mitra'">من را بخاطر بسپار</span>
-                            </div>
+
+                        <div class="row" style="padding-bottom:10px; margin-left: 20%;margin-right: 20%;">
+                            <div class="row input-group" style="border:2px solid #58b6d2;background-color: #ffffff;border-radius: 10px;">
+                                <div class="input-group-btn">
+                                    <i class="fa fa-envelope-o"
+                                       style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
+                                </div>
+                                <div style="padding:5px 25px">
+                                    <input class="required form-control" id="id_identification" maxlength="75"
+                                           name="identification" type="text" placeholder="Email"
+                                           style="border:0px;margin-bottom: 5px;">
+                                </div>
+                            </div><!-- /input-group -->
                         </div>
-                    </label>
 
-                </fieldset>
+                        <div class="row" style="padding-bottom:10px; margin-left: 20%;margin-right: 20%;">
+                            <div class="row input-group" style="border:2px solid #58b6d2;background-color: #FFFFFF;border-radius: 10px;">
+                                <div class="input-group-btn">
+                                    <i class="fa fa-lock"
+                                       style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
+                                </div>
+                                <div style="padding:5px 25px">
+                                    <input class="required form-control" id="id_password" name="password"
+                                           type="password"
+                                           placeholder="Password" style="border:0px; margin-bottom: 5px !important;">
+                                </div>
+                            </div><!-- /input-group -->
+                        </div>
 
-                <div class="row" style="padding-bottom:10px;">
-                    <button id="btnRegister" style="border-radius: 0;" type="submit"
-                            class="btn btn-lg btn-primary btn-block">
-                        <span style="color:#58B6D2;font-family: 'B Mitra';font-size: 30px">ورود</span>
-                    </button>
-                </div>
+                        <label for="id_remember_me" style="direction: rtl;width: 100%;">
+                            <div class="" style="width: 100%; text-align: center">
+{#                                <div class="col-md-7 " style="padding: 0px;">#}
+                                    <span style="font-family: 'B Nazanin'; font-size: 15px">من را بخاطر بسپار</span>
+{#                                </div>#}
+{#                                <div class="col-lg-1 " style="padding: 0px;">#}
+                                    <input id="id_remember_me" name="remember_me" type="checkbox"/>
+{#                                </div>#}
 
-                <div style="text-align:center">
+                            </div>
+                        </label>
+
+                    </fieldset>
+
+                    <div class="row" style="padding-bottom:10px;">
+                        <button id="btnRegister" style="border-radius: 10px; font-family: 'B Mitra';font-size: 15px; font-weight: bold" type="submit"
+                                class="btn btn-primary center-block">ورود
+{#                            <span style="color:#58B6D2;font-family: 'B Mitra';font-size: 30px">ورود</span>#}
+                        </button>
+                    </div>
+
+                    <div style="text-align:center">
                     <span style="padding-bottom:10px;text-align:center;font-family: 'B Mitra'">
                    <a href="/accounts/password/reset/" class="btn btn-default"
-                           style="font-size:12px;border-color:#58b6d2;color:#58b6d2;font-family: 'B Mitra';font-size: 20px">رمز عبور خود را فراموش کرده اید؟</a>
+                      style="font-size:12px;border-color:#58b6d2;color:#58b6d2;font-family: 'B Nazanin';font-size: 15px;border-radius: 10px; font-weight: bold">رمز عبور خود را فراموش کرده اید؟</a>
                 </span>
                     <span style="padding-right:5px">
                         <a href="/accounts/signup/" class="btn btn-default"
-                           style="font-size:12px;border-color:#58b6d2;color:#58b6d2;font-family: 'B Mitra';font-size: 20px">ثبت نام</a>
+                           style="font-size:12px;border-color:#58b6d2;color:#58b6d2;font-family: 'B Nazanin';font-size: 15px;border-radius: 10px; font-weight: bold">ثبت نام</a>
                     </span>
-                </div>
+                    </div>
 
-                {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
-            </form>
+                    {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
+                </form>
+            </div>
+
+
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
-    </div>
     </div>
     <script type="text/javascript">
         $(document).ready(function () {
