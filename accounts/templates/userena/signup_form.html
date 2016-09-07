@@ -6,20 +6,31 @@
 {% block title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
+    <style>
+        body {
+            background-color: #c8c8c8;
+        }
+    </style>
 
 
-    <div style="padding-top: 60px;">
+        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"><img src="/static/faraj.jpg"
+                                                              style="width: 300px; height: auto; border-radius: 140px; margin-top: 110px">
+        </div>
+
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
-        <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12" style="background-color: #e6e6e6; border-radius: 80px">
+        <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12" style="background-color: #e6e6e6; border-radius: 80px;margin-top: 60px">
             <form action="" method="post" class="form-signin" style="padding-top: 15px;">
                 {% csrf_token %}
                 <fieldset>
-                    <p class="center-block" style="text-align:center;font-size:20px;font-family: 'B Titr';color: #58b6d2;border-radius: 20px;margin-bottom: 3%; margin-left: 25%; margin-right: 25%">ثبت نام</p>
+                    <p class="center-block"
+                       style="text-align:center;font-size:20px;font-family: 'B Titr';color: #58b6d2;border-radius: 20px;margin-bottom: 3%; margin-left: 25%; margin-right: 25%">
+                        ثبت نام</p>
                     <div class="field-error"
                          style="color: #d42027;font-family: 'B Titr';font-size: 12px;">{{ form.non_field_errors }}</div>
 
                     <div class="row" id="messageRegister"
-                         style="color: #d42027;font-family: 'B Titr';font-size: 12px; padding-bottom:12px;display:none; ">لطفا برای ثبت نام از
+                         style="color: #d42027;font-family: 'B Titr';font-size: 12px; padding-bottom:12px;display:none; ">
+                        لطفا برای ثبت نام از
                         ایمیل دانشگاهی خود استفاده کنید
                     </div>
                     {% for field in form %}
@@ -32,11 +43,13 @@
                         {% else %}
                             <span style="color: #d42027;font-family: 'B Titr';font-size: 12px;">{{ field.errors }}</span>
 
-                            <div class="row" style="padding-bottom:10px; width: 60%; margin-left: 20%;margin-right: 20%;">
-                                <div class="row input-group" style="border:2px solid #58b6d2;background-color: #FFFFFF;border-radius: 10px;">
+                            <div class="row"
+                                 style="padding-bottom:10px; width: 60%; margin-left: 20%;margin-right: 20%;">
+                                <div class="row input-group"
+                                     style="border:2px solid #58b6d2;background-color: #FFFFFF;border-radius: 10px;">
                                     <div class="input-group-btn">
                                         <i class="fa fa-envelope-o"
-                                       style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
+                                           style="font-size:25px;color:#58b6d2;padding:0 0 0 20px;"></i>
                                     </div>
                                     <div style="padding:3px 25px">
                                         <p>
@@ -62,15 +75,16 @@
 
                 </fieldset>
                 <div class="row" style="padding-bottom:10px;">
-                    <button id="btnRegister" style="border-radius: 10px; font-family: 'B Mitra';font-size: 15px; font-weight: bold" type="submit"
+                    <button id="btnRegister"
+                            style="border-radius: 10px; font-family: 'B Mitra';font-size: 15px; font-weight: bold"
+                            type="submit"
                             class="btn btn-primary center-block">ساخت پروفایل
-{#                        <span style="color:#58B6D2">ساخت پروفایل</span>#}
+                        {#                        <span style="color:#58B6D2">ساخت پروفایل</span>#}
                     </button>
                 </div>
             </form>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-0"></div>
-    </div>
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -86,12 +100,12 @@
 
         });
     </script>
-{#        <style>#}
-{#            .form-signin {#}
-{#                max-width: 330px;#}
-{#                padding: 15px;#}
-{#                margin: 0 auto;#}
-{#            }#}
+    {#        <style>#}
+    {#            .form-signin {#}
+    {#                max-width: 330px;#}
+    {#                padding: 15px;#}
+    {#                margin: 0 auto;#}
+    {#            }#}
     {##}
     {#        .form-signin .form-signin-heading,#}
     {#        .form-signin .checkbox {#}

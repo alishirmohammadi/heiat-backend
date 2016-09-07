@@ -6,19 +6,34 @@
 {% block content_title %}<h2>{% trans "Signup" %}</h2>{% endblock %}
 
 {% block content %}
-    <div  style="text-align: center;width: 100%">
-<p style="font-size: large;font-family: 'B Mitra';font-size: 6em">با تشکر از ثبت نام شما</p>
-
-{% if userena_activation_required %}
-<p style="font-size: large;font-family: 'B Mitra';font-size: 4em"><br>
-، لینک فعال سازی اکانت شما به ایمیل تان ارسال شد
-    <br>
-   . با مراجعه به ایمیل خود ثبت نام را تکمیل کنید
-   </p>
-    <p style="font-size: large;font-family: 'B Mitra';font-size: 2em"> <br>
-. توجه : اطلاعات ثبت نام اولیه شما تا  {{ userena_activation_days }} روز روی سرور نگهداری می شود</p>
-{% else  %}
-<p style="font-size: large;font-family: 'B Mitra'">شما می توانید با اکانت خود وارد شوید</p>
-{% endif %}
+    <style>
+        body {
+            background-color: #c8c8c8;
+        }
+    </style>
+    <div class="col-lg-4 col-md-4 col-sm-6 hidden-xs"><img src="/static/faraj.jpg"
+                                                           style="width: 300px; height: auto; border-radius: 140px; margin-top: 50px">
     </div>
+    <div class="col-lg-4 col-md-4 hidden-sm hidden-xs"></div>
+    <div class="well col-lg-4 col-md-4 col-sm-6 col-xs-12"
+         style="direction: rtl;background-color: rgba(245, 245, 245, 0.4); border-radius: 50px;height: 225px;margin-top: 100px">
+
+        <p style="text-align: center; font-family: 'B Titr';font-size: 20px;margin-bottom: 5%">
+            با تشکر از ثبت نام شما</p>
+
+        {% if userena_activation_required %}
+            <p>
+            <b>لینک فعال سازی</b>
+                اکانت شما به ایمیلتان ارسال شد، با مراجعه به ایمیل خود ثبت نام را
+            <b>تکمیل کنید.</b>
+            </p>
+            <p>
+                <br>
+                <b>توجه :</b>
+                 اطلاعات ثبت نام اولیه شما تا {{ userena_activation_days }} روز روی سرور نگهداری می شود.</p>
+        {% else %}
+            <p>شما می توانید با اکانت خود وارد شوید</p>
+        {% endif %}
+    </div>
+
 {% endblock %}
