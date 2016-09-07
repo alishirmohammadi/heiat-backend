@@ -7,6 +7,7 @@ from accounts.templatetags.tags import get_tuple
 from django.core.files.base import ContentFile
 # from .forms import ImageUploadForm
 from .models import Profile
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -32,6 +33,7 @@ def handle_uploaded_file(f):
     with open('some/file/name.txt', 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+@login_required
 def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
@@ -64,10 +66,16 @@ def edit(request):
         if (request.POST.get('gender', )):
             a.conscription = request.POST.get('vazife-type', )
         a.passport = request.POST.get('pas_type', )
-        if (request.POST.get('pas_type', ) == 'have' or request.POST.get('pas_type', ) == 'have 7'):
+        if (request.POST.get('pas_type', ) == 'have'):
             a.passport_number = request.POST.get('serial_pas','' )
+            if not(a.passport_number):
+                return HttpResponseRedirect('profile.html')
             a.passport_dateofissue = request.POST.get('pas_release','' )
+            if not (a.passport_dateofissue):
+                return HttpResponseRedirect('profile.html')
             a.passport_dateofexpiry = request.POST.get('pas_exprition','' )
+            if not (a.passport_dateofexpiry):
+                return HttpResponseRedirect('profile.html')
         if (request.POST.get('coupling', )):
             if (request.POST.get('wife_mellicode', ) != None and checkMelliCode(request.POST.get('wife_mellicode', ))):
                 x = request.POST.get('wife_mellicode', )

@@ -429,7 +429,7 @@ def removeInstallment(request, pricing_id, price_num):
     rid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(rid))
 
-
+@login_required
 def my_programs(request):
     profile = request.user.my_profile
     from .utils import getLastProgram

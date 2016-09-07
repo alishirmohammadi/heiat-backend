@@ -379,21 +379,23 @@
                             <tr id="gozar">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     سریال پاسپورت:
-                                </td>
+                               </td>
                                 <td>
+
                                     <input value="{{ user.my_profile.passport_serial }}" type="text" name="serial_pas"
-                                           class="form-control">
+                                           class="form-control" style="text-align: right; font-family:'B Nazanin'" placeholder="پرکردن فرم الزامی است">
                                 </td>
 
                             </tr>
                             <tr id="gozar2">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     تاریخ صدور گذرنامه:
+
                                 </td>
 
                                 <td>
                                     <input value="{{ user.my_profile.passport_release }}" id="sodour" type="text" name="pas_release"
-                                           class="form-control">
+                                           class="form-control"  style="text-align: right; font-family:'B Nazanin'" placeholder="پرکردن فرم الزامی است" >
                                 </td>
 
                             </tr>
@@ -404,7 +406,7 @@
 
                                 <td>
                                     <input value="{{ user.my_profile.passport_dateofexpiry.unique_for_month }}"+ id="engheza" type="text"
-                                           name="pas_exprition" class="form-control">
+                                           name="pas_exprition" class="form-control" style="text-align: right; font-family:'B Nazanin'" placeholder="پرکردن فرم الزامی است">
                                 </td>
 
                             </tr>
