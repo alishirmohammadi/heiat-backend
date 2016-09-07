@@ -93,3 +93,6 @@ class Profile(UserenaBaseProfile):
         from program.models import Registration
         from program.utils import getLastProgram
         return Registration.objects.filter(profile=self).filter(program=getLastProgram()).exclude(status=Registration.STATUS_REMOVED).first()
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name

@@ -1,17 +1,26 @@
 {% load i18n %}{% autoescape off %}
-<html>
-<body>
-    {% if not without_usernames %}<p>{% blocktrans with user.username as username %}عزیز {{ username }},</p>{% endblocktrans %}{% endif %}
-    {% blocktrans with site.name as site %}<p>با تشکر از ثبت نام شما{{ site }}.</p>{% endblocktrans %}
-    <p>
-        {% trans "برای فعال سازی حساب کاربری خود بر روی لینک زیر کلیک نمایید:" %}<br />
-        {{ protocol }}://{{ site.domain }}{% url 'userena_activate' activation_key %}
-    </p>
-    <p>
-        {% trans "باتشکر از شما!" %}<br />
-        {% trans "با آرزوی موفقیت" %},<br />
-        {{ site.name }}
-    </p>
-</body>
-</html>
+    <html>
+    <body>
+    <div style="direction: rtl">
+        {% if not without_usernames %}
+            <p>
+               <b>{{ user.my_profile }}</b> عزیز
+                <br>
+                سلام
+                </p>
+            {% endif %}
+
+        {% blocktrans with site.name as site %}<p><b>مرحله اول</b> ثبت نام شما با موفقیت انجام یافت.</p>{% endblocktrans %}
+        <p>
+            {% trans "لطفا برای تکمیل ثبت نام و فعال سازی حساب کاربری خود، بر روی لینک زیر کلیک نمایید:" %}<br/>
+            {{ protocol }}://{{ site.domain }}{% url 'userena_activate' activation_key %}<br/>
+        </p>
+        <p>
+            {% trans "با تشکر" %}<br/>
+            {% trans "هیئت الزهرای دانشگاه صنعتی شریف" %}<br/>
+        </p>
+{#        <img src="/static/azzhra.jpg" width="35%" style="border-radius: 500px;text-align: right">#}
+    </div>
+    </body>
+    </html>
 {% endautoescape %}

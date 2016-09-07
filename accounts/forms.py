@@ -89,7 +89,7 @@ class SignupFormExtra(SignupForm):
                                                  email,
                                                  password,
                                                  not userena_settings.USERENA_ACTIVATION_REQUIRED,
-                                                 userena_settings.USERENA_ACTIVATION_REQUIRED)
+                                                 False)
 
         # Get the profile, the `save` method above creates a profile for each
         # user because it calls the manager method `create_user`.
@@ -103,6 +103,7 @@ class SignupFormExtra(SignupForm):
         p.cellPhone = self.cleaned_data['cellPhone']
         p.melliCode = self.cleaned_data['username']
         p.save()
+        new_user.userena_signup.send_activation_email()
         return new_user
         # Userena expects to get the new user from this form, so return the new
         # user.
