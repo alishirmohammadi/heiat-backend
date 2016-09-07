@@ -22,6 +22,7 @@ attrs_dict = {'class': 'required'}
 USERNAME_RE = r'^[\.\w]+$'
 from hashlib import sha1
 import random
+from django import forms
 
 class SignupFormExtra(SignupForm):
     """

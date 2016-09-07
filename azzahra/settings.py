@@ -158,7 +158,7 @@ STATICFILES_DIRS = (
 )
 SITE_ID=1
 from .local import MEDIA_ROOT_LOCAL
-
+# MEDIA_ROOT = os.path.join(os.path.abspath(''),'app/static/')
 MEDIA_ROOT=MEDIA_ROOT_LOCAL
 USERENA_HTML_EMAIL=True
 

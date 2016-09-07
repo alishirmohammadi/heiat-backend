@@ -4,7 +4,8 @@ from django.http import HttpResponseRedirect
 from userena.decorators import secure_required
 from accounts.templatetags.tags import get_tuple
 # from  userena.tests.tests_models import UserenaSignupModelTests
-
+from django.core.files.base import ContentFile
+# from .forms import ImageUploadForm
 from .models import Profile
 
 
@@ -27,7 +28,10 @@ def charity(request):
     if request.method == 'GET':
         return render(request, 'Charity.html', {})
 
-
+def handle_uploaded_file(f):
+    with open('some/file/name.txt', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 def edit(request):
     a = request.user.my_profile
     if request.method == 'GET':
@@ -74,7 +78,15 @@ def edit(request):
             else:
                 erorr2 = 1
         a.mugshot=request.POST.get('mugshot', )
+        a.mugshot=request.FILES.get('mugshot', )
         # a.mugshot.storage = UserenaSignupModelTests.test_upload_mugshot()
+        # def upload_pic(request):
+        #     if request.method == 'POST':
+        # form = ImageUploadForm(request.POST, request.FILES)
+        # a.image= form.cleaned_data['image']
+                    # return HttpResponse('image upload success')
+            # return HttpResponseForbidden('allowed only via POST')
+        # a.image=request.POST.get('mugshot',)
         a.mugshot.empty_values=request.POST.get('mugshot-clear', )
         a.save()
         return HttpResponseRedirect('/')

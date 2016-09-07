@@ -5,8 +5,11 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from userena.models import UserenaBaseProfile
 from django.utils.translation import ugettext_lazy as _
-
-
+# from userena.models import upload_to_mugshot
+# from easy_thumbnails.fields import ThumbnailerImageField
+import os
+# def get_image_path(instance, filename):
+#     return os.path.join("user_%d" % instance.owner.id, "profile_%s" % instance.slug, filename)
 # Create your models here.
 class Profile(UserenaBaseProfile):
     user = models.OneToOneField(User,
@@ -26,6 +29,7 @@ class Profile(UserenaBaseProfile):
     emergencyPhone = models.CharField(max_length=20, null=True, blank=True)
     conscriptionDesc = models.CharField(max_length=200, null=True, blank=True)
     deActivated = models.BooleanField(default=False)
+    # image = models.ImageField(upload_to='profile/' )
     birthYear = models.IntegerField(null=True)
     birthMonth = models.IntegerField(null=True)
     birthDay = models.IntegerField(null=True)
