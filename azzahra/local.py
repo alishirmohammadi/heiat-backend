@@ -1,1 +1,1 @@
-MEDIA_ROOT_LOCAL= 'C:/Users/Reza/PycharmProjects/zahra7'
+MEDIA_ROOT_LOCAL= './'
