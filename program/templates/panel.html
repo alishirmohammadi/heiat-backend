@@ -565,10 +565,25 @@
 
             </label>
     </span>
+                <script>
+                    $(document).ready(function() {
+    var text_max = 70;
+    $('#textarea_feedback').html(text_max + ' characters remaining');
+
+    $('#messageTitle').keyup(function() {
+        var text_length = $('#messageTitle').val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#textarea_feedback').html(text_remaining + ' characters remaining');
+    });
+});
+                </script>
                 <span style="display: inline-block;float: left">
-                    <label><input style="margin-left: 6%" class="form-control" type="text" name="messageTitle"
+
+                    <label><input style="margin-left: 6%" class="form-control" type="text" name="messageTitle"  id="messageTitle"
                                   placeholder="موضوع پیام"
                     ></label>
+                    <div id="textarea_feedback"></div>
                 </span>
                 <br>
                 <label><textarea rows="6" class="form-control" name="message text"
