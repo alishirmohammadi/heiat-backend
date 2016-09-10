@@ -4,48 +4,58 @@
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 
 {% block navbar %}
-                {% include '_navbar.html' with active_link='management' %}
+    {% include '_navbar.html' with active_link='management' %}
 {% endblock %}
 
 {% block second_navbar %}
-{% include '_second_navbar.html' with active_link='documents' %}
+    {% include '_second_navbar.html' with active_link='documents' %}
 {% endblock %}
 
 {% block  content %}
 
-{##}
-{#    {% for item in registered %}#}
-{#        {% if item.program.id in prog %}#}
-{#            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>#}
-{#        {% else %}#}
-{#            {{ item.program.title }}#}
-{#        {% endif %}#}
-{##}
-{##}
-{#        <br>#}
-{##}
-{#    {% endfor %}#}
+    {##}
+    {#    {% for item in registered %}#}
+    {#        {% if item.program.id in prog %}#}
+    {#            <a href="/program/{{ item.program.id }}"> {{ item.program.title }}</a>#}
+    {#        {% else %}#}
+    {#            {{ item.program.title }}#}
+    {#        {% endif %}#}
+    {##}
+    {##}
+    {#        <br>#}
+    {##}
+    {#    {% endfor %}#}
 
-    {% for item in document_managements %}
+    <div class="col-lg-4 col-md-4 hidden-sm hidden-xs" style="margin-left: 3%;margin-right: 3%">
+        {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
+            <img class="center-block" src="/static/hossein.jpg" style="width:350px">
+        {% else %}
+            <img src="/static/faraj.jpg"
+                 style="width: 300px; border-radius: 140px;">
+        {% endif %}
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 col-xs-0"></div>
+    <div class="col-lg-6 col-md-6 col-sm-6">
+        {% for item in document_managements %}
 
-        <div class="well" style="text-align: right">
-            <p>
-                {{ item.profile.user.get_full_name }}
-                در برنامه:
-                {{ item.program.title }}
-                ، بعنوان:
-                {{ item.role_choices|get_tuple_item:item.role }}
-                این نظر را داد
-                <br>
-                :
-            </p>
-
-            <p>{{ item.documentation }}</p>
-
-
-        </div>
-    {% endfor %}
+            <div class="well" style="direction: rtl;text-align: right">
+                <p style="font-family: 'B Mitra';font-size: 18px">
+                    <b>{{ item.profile.user.get_full_name }}</b>
+<br>
+                    در برنامه:
+                    <b>{{ item.program.title }}</b>
+<br>
+                    بعنوان:
+                    <b>{{ item.role_choices|get_tuple_item:item.role }}</b>
+<br>
+                    این نظر را داد:
+                </p>
+                <p style="font-family: 'B Nazanin';font-size: 15px">{{ item.documentation }}</p>
 
 
+            </div>
+        {% endfor %}
+
+    </div>
 
 {% endblock %}
