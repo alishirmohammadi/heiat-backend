@@ -96,8 +96,8 @@ def filter_to_registrations(filter, program):
 
     if filter.get('payment', []):
         registerations = registerations.filter(numberOfPayments__in=filter.get('payment', []))
-    if filter.get('passportCheck', []):
-        registerations = registerations.filter(numberOfPayments__in=filter.get('passportCheck', []))
+    # if filter.get('passportCheck', []):
+    #     registerations = registerations.filter(numberOfPayments__in=filter.get('passportCheck', []))
     if filter.get('entrance_year', []):
          c = program.year
          if len(str(c)) == 4:
@@ -126,6 +126,7 @@ def filter_to_registrations(filter, program):
                  Q(profile__studentNumber__iregex=r'^(\d)(\d)[1](\d)(\d)(\d)(\d)(\d)$')|
                  Q(profile__studentNumber__iregex=r'^(\d)(\d)[3](\d)(\d)(\d)(\d)(\d)$')
              )
+
     gender_filter = filter.get('gender', [])
     if gender_filter:
         if len(gender_filter) == 1:
@@ -188,10 +189,21 @@ def filter_to_registrations(filter, program):
         pass
     if filter.get('conscription', []):
         registerations = registerations.filter(profile__conscription__in=filter.get('conscription', []))
+    from .utils import getLastProgram
+    import datetime
+    last_program = getLastProgram()
     if filter.get('passport', []):
-        registerations = registerations.filter(profile__passport__in=filter.get('passport',
-                                                                        []))  # It should be completed, with rectify model, profile
-
+        if 'NotHave' not in filter.get('passport', []):
+            registerations = registerations.exclude(profile__passport__in='not have')
+        if 'LessThan6' not in filter.get('passport', []):
+            for item in registerations:
+                if item.profile.passport_dateofexpiry - last_program.startDate > datetime.timedelta(183):
+                    registerations = registerations.exclude(profile__user_id=item.profile_id)
+        if 'MoreThan6' not in filter.get('passport', []):
+                for item in registerations:
+                    if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
+                        registerations = registerations.exclude(profile__user_id=item.profile_id)
+                    
     return registerations
 
 

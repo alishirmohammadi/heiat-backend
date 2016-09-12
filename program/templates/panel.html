@@ -236,24 +236,26 @@
                             <b>{{ mymanagement.program.additionalOption }}</b> <input class="checkbox-inline"
                                                                                       type="checkbox"
                                                                                       name="additionalOption"
-                                                                                      {% if 'additionalOption' in filterAll.level %}checked="checked"{% endif %}>
-                            {#                        {% for item in passportChoices|get_keys %}#}
-                            {#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
-                            {#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
-                            {#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
-                            {#                        {% endfor %}#}
+                                                                                      value="additionalOption"
+                                                                                      {% if 'additionalOption' in filterAll.additionalOption %}checked="checked"{% endif %}>
+
                         </label>
                     </div>
-                    <div style="direction:rtl ">
-                        <label id="passport">
-                            وضعیت گذرنامه:
-                            {#                        {% for item in passportChoices|get_keys %}#}
-                            {#                            <b>{{ passportChoices|get_tuple_item:item }}</b>#}
-                            {#                            <input class="checkbox-inline" type="checkbox" name="passport_choices" value="{{ item }}"#}
-                            {#                               {% if item in filterAll.passport %}checked="checked"{% endif %}>#}
-                            {#                        {% endfor %}#}
-                        </label>
-                    </div>
+                                        <div style="direction:rtl ">
+                                            <label id="passport">
+
+                                                وضعیت گذرنامه:
+
+                                                 <b>کمتر از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox" name="passport" value="LessThan6"
+                                                                     {% if 'LessThan6' in filterAll.passport %} checked="checked"{% endif %}>
+                                                <b>بیش از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox" name="passport" value="MoreThan6"
+                                                                          {% if 'MoreThan6' in filterAll.passport %}checked="checked"{% endif %}>
+                                                <b>ندارد</b><input class="checkbox-inline" type="checkbox" name="passport" value="NotHave"
+                                                        {% if 'NotHave' in filterAll.passport %}checked="checked"{% endif %}>
+
+
+                                            </label>
+                                        </div>
                     <div style="direction:rtl ">
                         <label id="conscription">
                             وضعیت نظام وظیفه:
@@ -368,16 +370,6 @@
                         {% endfor %}
 
 
-                        {#                This is a view of last implementation of the above codes:#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="1"><b>پیش فرض</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="2"><b>حالت اول</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="3"><b>حالت دوم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="4"><b>حالت سوم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="5"><b>حالت چهارم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="6"><b>حالت پنجم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="7"><b>حالت ششم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="8"><b>حالت هفتم</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="label4" value="9"><b>حالت هشتم</b>#}
                     </label>
 
 

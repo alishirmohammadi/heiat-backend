@@ -78,12 +78,13 @@ def panel(request, management_id):
             'entrance_year': request.POST.getlist('entrance_year'),
             'level': request.POST.getlist('level'),
             'conscription': request.POST.getlist('conscription_choices'),
-            'passport': request.POST.getlist('passport_choices'),
+            'passport': request.POST.getlist('passport'),
             'label1': request.POST.getlist('label1'),
             'label2': request.POST.getlist('label2'),
             'label3': request.POST.getlist('label3'),
             'label4': request.POST.getlist('label4'),
             'additionalOption':request.POST.getlist('additionalOption'),
+
         }
         request.session['filter'] = all_filter
 

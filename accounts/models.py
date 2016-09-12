@@ -64,7 +64,6 @@ class Profile(UserenaBaseProfile):
 
     PASSPORT_NOT_HAVE = 'not have'
     PASSPORT_HAVE = 'have'
-    PASSPORT_EXPIRE = 'Less_6_month'
     passport_choices = (
         (PASSPORT_HAVE, 'دارم'),
         (PASSPORT_NOT_HAVE, 'ندارم'),
