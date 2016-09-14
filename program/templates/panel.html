@@ -241,21 +241,23 @@
 
                         </label>
                     </div>
-                                        <div style="direction:rtl ">
-                                            <label id="passport">
+                    <div style="direction:rtl ">
+                        <label id="passport">
 
-                                                وضعیت گذرنامه:
+                            وضعیت گذرنامه:
 
-                                                 <b>کمتر از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox" name="passport" value="LessThan6"
-                                                                     {% if 'LessThan6' in filterAll.passport %} checked="checked"{% endif %}>
-                                                <b>بیش از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox" name="passport" value="MoreThan6"
-                                                                          {% if 'MoreThan6' in filterAll.passport %}checked="checked"{% endif %}>
-                                                <b>ندارد</b><input class="checkbox-inline" type="checkbox" name="passport" value="NotHave"
-                                                        {% if 'NotHave' in filterAll.passport %}checked="checked"{% endif %}>
+                            <b>کمتر از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox"
+                                                                            name="passport" value="LessThan6"
+                                {% if 'LessThan6' in filterAll.passport %} checked="checked"{% endif %}>
+                            <b>بیش از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox"
+                                                                           name="passport" value="MoreThan6"
+                                                                           {% if 'MoreThan6' in filterAll.passport %}checked="checked"{% endif %}>
+                            <b>ندارد</b><input class="checkbox-inline" type="checkbox" name="passport" value="NotHave"
+                                               {% if 'NotHave' in filterAll.passport %}checked="checked"{% endif %}>
 
 
-                                            </label>
-                                        </div>
+                        </label>
+                    </div>
                     <div style="direction:rtl ">
                         <label id="conscription">
                             وضعیت نظام وظیفه:
@@ -433,6 +435,13 @@
                                 </td>
                             </tr>
                         </table>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                         {% if programcheck %}
                             {% if passportcheck2 == True or  passportcheck == 'not have' %}
                                 <p dir="rtl"><b>

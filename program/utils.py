@@ -203,7 +203,7 @@ def filter_to_registrations(filter, program):
                 for item in registerations:
                     if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
                         registerations = registerations.exclude(profile__user_id=item.profile_id)
-                    
+
     return registerations
 
 

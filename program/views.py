@@ -1,5 +1,6 @@
 import time
 import random
+from django.contrib import messages
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
@@ -123,6 +124,7 @@ def panel(request, management_id):
 
 @login_required
 def addregistration(request, program_id):
+
     program = Program.objects.filter(id=program_id).first()
     management = Management.objects.filter(profile=request.user.my_profile).filter(program=program).first()
     if not management or not management.canAdd:
@@ -157,8 +159,18 @@ def addregistration(request, program_id):
                             registeredCouple.program = program
                             registeredCouple.coupling = True
                             registeredCouple.save()
-                addregister.save()
-    return HttpResponseRedirect('/program/panel/' + management.id)
+                        addregister.save()
+                        messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
+                else:
+                    messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
+            else:
+                messages.add_message(request, messages.INFO, 'قیمت تعریف نشده')
+        else:
+            messages.add_message(request, messages.INFO, 'این فرد در این برنامه حضور ندارد')
+    else:
+        messages.add_message(request, messages.INFO, 'این فرد وجود ندارد')
+
+    return HttpResponseRedirect('/program/panel/' + str(management.id))
 
 
 @login_required
