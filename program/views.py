@@ -159,14 +159,15 @@ def addregistration(request, program_id):
                             registeredCouple.program = program
                             registeredCouple.coupling = True
                             registeredCouple.save()
-                        addregister.save()
-                        messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
                 else:
-                    messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
+                         messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
+                addregister.save()
+                messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
+
             else:
                 messages.add_message(request, messages.INFO, 'قیمت تعریف نشده')
         else:
-            messages.add_message(request, messages.INFO, 'این فرد در این برنامه حضور ندارد')
+            messages.add_message(request, messages.INFO, 'این فرد در این برنامه حضور دارد')
     else:
         messages.add_message(request, messages.INFO, 'این فرد وجود ندارد')
 
