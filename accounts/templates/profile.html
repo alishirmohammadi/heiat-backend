@@ -16,17 +16,17 @@
                     $('[data-toggle^=pill]').click(function (e) {
 
 
-                        if ($(this).parent().hasClass('active')) {
-                            console.log($(this).parent().removeClass('active'));
-                            console.log($($(this).attr('href')).removeClass('in active'));
+{#                        if ($(this).parent().hasClass('active')) {#}
+{#                            console.log($(this).parent().removeClass('active'));#}
+{#                            console.log($($(this).attr('href')).removeClass('in active'));#}
 
-                        } else {
+{#                        } else {#}
                             $('[data-toggle^=pill]').parent().removeClass('active');
                             $('[class^=tab-pane]').removeClass('in active');
 
                             console.log($(this).parent().addClass('active'));
                             console.log($($(this).attr('href')).addClass('in active'));
-                        }
+{#                        }#}
 
                         e.stopPropagation();
                     });
