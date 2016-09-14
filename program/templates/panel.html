@@ -389,9 +389,13 @@
 
 
                 {% if mymanagement.canSelect %}
-                    <input type="number" name="selectFilter" value="select" id="selectFilter"
-                           style="text-align: center; width: 7%; float: right"
-                           placeholder="تعداد" class="form-control">
+{#                    <input type="number" name="selectFilter" value="select" id="selectFilter"#}
+{#                           style="text-align: center; width: 7%; float: right"#}
+{#                           placeholder="تعداد" class="form-control">#}
+                    <input class="form-control" data-toggle="popover"
+                           title="تذکرات" name="selectFilter" value="select" id="selectFilter"
+                           data-content="1- باید مجردهای پسر و مجردهای دختر و متاهل ها جداگانه قرعه کشی شوند. 2- برای قرعه کشی متاهل ها، باید یکی از زوجین انتخاب و به تعداد زوجها قرعه کشی شود."
+                           type="number" name="price" style="text-align: center; width: 7%; float: right">
                     <button type="submit" id="select" name="select" class="btn btn-default" value="قرعه کشی">قرعه
                         کشی
                     </button>
