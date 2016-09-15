@@ -17,6 +17,9 @@ from .models import Program, Registration, Profile, Management, Pricing, Message
 # Create your views here.
 from program.utils import filter_to_registrations
 from program.word.export_to_word import registrations_to_print, registrations_to_manifest
+from . import jalali
+
+
 
 
 @login_required
@@ -282,11 +285,17 @@ def editStatus(request, program_id):
 
     return HttpResponseRedirect('/program/panel/' + str(program.id))
 
-
+from .models import Program
 @login_required
 def my_managements(request):
     managements = Management.objects.filter(profile__user__exact=request.user)
-    return render(request, 'my_managements.html', {'managements': managements})
+    jalali_date=[]
+    for item in managements:
+        startdate=item.program.startDate
+        jalalii = jalali.Gregorian(startdate).persian_string()
+        jalali_date.append(jalalii)
+
+    return render(request, 'my_managements.html', {'managements': zip(jalali_date,managements)})
 
 
 @login_required

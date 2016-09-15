@@ -17,9 +17,12 @@
                         <th style="text-align: center">
                             مسئولیت
                         </th>
+                        <th style="text-align: center">
+زمان برنامه
+                        </th>
                     </tr>
                     </thead>
-                    {% for my in managements %}
+                    {% for jalali,my in managements %}
 
                         <tbody>
                         <tr>
@@ -28,6 +31,9 @@
                             </td>
                             <td style="text-align: center">
                                 {{ my.role_choices|get_tuple_item:my.role }}
+                            </td>
+                             <td style="text-align: center">
+                                {{ jalali}}
                             </td>
                         </tr>
                         </tbody>
