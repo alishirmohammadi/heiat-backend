@@ -117,6 +117,11 @@ def panel(request, management_id):
                         selected.status = Registration.STATUS_RESERVED
                     selected.save()
                     total = total - 1
+                    if all_filter.get('couple', [])==['couple']:
+                        if len(all_filter.get('gender', []) )==1:
+                            if selected.status == Registration.STATUS_CERTAIN:
+                                Registration.objects.filter(profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
+
             return HttpResponseRedirect('/program/panel/' + str(management.program.id))
         else:
             return HttpResponseRedirect('/error')
