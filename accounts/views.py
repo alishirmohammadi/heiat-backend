@@ -62,8 +62,11 @@ def edit(request):
         a.birthYear = request.POST.get('birthyear', )
         a.birthMonth = request.POST.get('birthmonth', )
         a.birthDay = request.POST.get('birthday', )
-        a.gender = request.POST.get('gender', )
-        if (request.POST.get('gender', )):
+        a.gender =bool(request.POST.get('gender', ))
+        # if (a.gender==True):
+        #     a.gender==bool(a.gender)
+        # a.gender == bool(a.gender)
+        if (request.POST.get('gender', )==True):
             a.conscription = request.POST.get('vazife-type', )
         a.passport = request.POST.get('pas_type', )
         if (request.POST.get('pas_type', ) == 'have'):

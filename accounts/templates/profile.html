@@ -86,28 +86,28 @@
 
 
                     $('.controls').change(function () {
-                        if ($('input[name=gender]:checked').val() == 'true' && $('input[name=coupling]:checked').val() == 'true') {
+                        if ($('input[name=gender]:checked').val() == '1' && $('input[name=coupling]:checked').val() == '1') {
                             $("#conscription").fadeIn("slow");
                             $("#couple_melli").fadeIn("slow");
                             $("#couple_melli2").fadeIn("slow");
                             $("#couple_melli3").fadeIn("slow");
                             $("#couple_melli4").fadeIn("slow");
                         }
-                        else if ($('input[name=gender]:checked').val()  == 'true' && $('input[name=coupling]:checked').val() == 'false') {
+                        else if ($('input[name=gender]:checked').val()  == '1' && $('input[name=coupling]:checked').val() == '') {
                             $("#conscription").fadeIn("slow");
                             $("#couple_melli").fadeOut("slow");
                             $("#couple_melli2").fadeOut("slow");
                             $("#couple_melli3").fadeOut("slow");
                             $("#couple_melli4").fadeOut("slow");
                         }
-                        else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'true') {
+                        else if ($('input[name=gender]:checked').val() == '' && $('input[name=coupling]:checked').val() == '1') {
                             $("#conscription").fadeOut("slow");
                             $("#couple_melli").fadeIn("slow");
                             $("#couple_melli2").fadeOut("slow");
                             $("#couple_melli3").fadeOut("slow");
                             $("#couple_melli4").fadeOut("slow");
                         }
-                        else if ($('input[name=gender]:checked').val() == 'false' && $('input[name=coupling]:checked').val() == 'false') {
+                        else if ($('input[name=gender]:checked').val() == '' && $('input[name=coupling]:checked').val() == '') {
                             $("#conscription").fadeOut("slow");
                             $("#couple_melli").fadeOut("slow");
                             $("#couple_melli2").fadeOut("slow");
@@ -179,11 +179,10 @@
                                     <div>
                                         مرد
 
-                                        <input id="couple_type" checked="checked" name="gender" type="radio"
-                                               value="true" class="controls">
-                                        زن
-
-                                        <input type="radio" value="false" name="gender" class="controls">
+                                        <input id="couple_type"  name="gender" type="radio"
+                                               value="1" class="boolean" checked="checked">
+زن
+                                        <input type="radio" value="" name="gender" class="boolean">
                                     </div>
                                 </td>
 
@@ -193,7 +192,7 @@
                                     شماره شناسنامه:
                                 </td>
                                 <td>
-                                    <input value="{{ profile.shenasname }}" type="text" name="she_number"
+                                    <input value="{{ user.my_profile.shenasname }}" type="text" name="she_number"
                                            class="form-control">
                                 </td>
 
@@ -417,10 +416,10 @@
                                         متاهل
 
                                         <input id="couple_type" checked="checked" name="coupling" type="radio"
-                                               value="true" class="controls">
+                                               value="1" class="controls">
                                         مجرد
 
-                                        <input type="radio" value="false" name="coupling" class="controls">
+                                        <input type="radio" value="" name="coupling" class="controls">
                                     </div>
                                 </td>
                             </tr>
