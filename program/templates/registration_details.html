@@ -200,6 +200,9 @@
                                 <tr>
                                     <td><h3>{{ massage.message.subject }}</h3></td>
                                 </tr>
+                                                    <tr>
+                                    <td><h3>{{ jalali.Gregorian(massage.message.messageSendDate ).persian_string() }}</h3></td>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr>

@@ -104,24 +104,7 @@
 
             <form method="post" id="form0">
                 {% csrf_token %}
-                {#                <table>#}
-                {#                    <tr>#}
-                {#                        <td id="status_choices" class="label label-primary" style="font-size: 15px">#}
-                {#                            وضعیت ثبت نام:#}
-                {#                        </td>#}
-                {#                    </tr>#}
-                {#                    <tr>#}
-                {#                        <td>#}
-                {#{% for item in statusChoices|get_keys %}#}
-                {#                                <b style="margin-right: 2%">{{ statusChoices|get_tuple_item:item }}</b>#}
-                {#                                <input class="checkbox-inline" type="checkbox" name="status_choices" value="{{ item }}"#}
-                {#                                       {% if item in filterAll.status %}checked="checked"{% endif %}#}
-                {#                                >#}
-                {#                            {% endfor %}#}
-                {#                        </td>#}
-                {#                    </tr>#}
-                {##}
-                {#                </table>#}
+
                 <div>
                     <label id="status_choices">
                         وضعیت ثبت نام:
@@ -147,12 +130,7 @@
                                    id="{{ item }}"
                                    {% if item in filterAll.people_type %}checked="checked"{% endif %}>
                         {% endfor %}
-                        {#<input type="text" class="form-control" placeholder="سال ورود">#}
-                        {#                    <select class="form-control" name="maghta" id="maghta">#}
-                        {#                                    <option value="karshenasi" id="karshenasi">کارشناسی</option>#}
-                        {#                                    <option value="arshad" id="arshad">ارشد</option>#}
-                        {#                        <option value="doktora" id="doktora">دکترا</option>#}
-                        {#                                </select>#}
+
                     </label>
 
                 </div>
@@ -276,8 +254,7 @@
                 <div style="direction:rtl ">
                     <label id="additional_options">
                         گزینه دیگر
-                        {#                    <input class="checkbox-inline" type="checkbox" name="car" value="air"><b>هوایی</b>#}
-                        {#                    <input class="checkbox-inline" type="checkbox" name="car" value="road"><b>زمینی</b>#}
+
                     </label>
                 </div>
 
@@ -490,6 +467,7 @@
             <table class="table table-striped table-responsive">
                 <tr>
                     <th style="text-align: center">{{ all.count }}</th>
+                <th style="text-align: center">کدملی همسر</th>
                     <th style="text-align: center">کدملی</th>
                     <th style="text-align: center">نام</th>
                     {% if mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
@@ -511,6 +489,8 @@
 
                         <td style="text-align: center;  {% if item.couple_inconsistency %}
                             background:orange{% endif %}">{{ item.id }}</td>
+                    <td style="text-align: center;  {% if item.couple_inconsistency %}
+                            background:orange{% endif %}">{{ item.profile.couple.melliCode }}</td>
                         <td style="text-align: center">{{ item.profile.melliCode }}</td>
                         <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
