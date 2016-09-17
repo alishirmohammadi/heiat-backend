@@ -240,7 +240,7 @@ def editStatus(request, program_id):
                 item.save()
     elif action == 'message':
         if management.canMessage:
-            title = request.POST.get('title', '')
+            title = request.POST.get('subject', '')
             textcontent = request.POST.get('message text', '')
             message = Message()
             message.subject = title
@@ -289,13 +289,13 @@ from .models import Program
 @login_required
 def my_managements(request):
     managements = Management.objects.filter(profile__user__exact=request.user)
-    jalali_date=[]
-    for item in managements:
-        startdate=item.program.startDate
-        jalalii = jalali.Gregorian(startdate).persian_string()
-        jalali_date.append(jalalii)
+    # jalali_date=[]
+    # for item in managements:
+    #     startdate=item.program.startDate
+    #     jalalii = jalali.Gregorian(startdate).persian_string()
+    #     jalali_date.append(jalalii)
 
-    return render(request, 'my_managements.html', {'managements': zip(jalali_date,managements)})
+    return render(request, 'my_managements.html', {'managements': managements})
 
 
 @login_required
@@ -335,6 +335,7 @@ def manage(request, management_id):
     registerinterval = request.POST.get("registrinterval", '')
     hascoupling = request.POST.get("hascoupling", '')
     isopen = request.POST.get("isopen", '')
+    startDate = request.POST.get("startDate", '')
     email = request.POST.get("email", '')
     emailPassword = request.POST.get("emailPassword", '')
     note = request.POST.get("note", '')
@@ -347,6 +348,7 @@ def manage(request, management_id):
     program.emailPassword = emailPassword
     program.email = email
     program.notes = note
+    program.startDate=startDate
     program.save()
     return HttpResponseRedirect('/program/manage/' + str(management_id))
 

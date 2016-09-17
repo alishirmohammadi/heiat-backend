@@ -198,10 +198,8 @@
                             <table class="table" dir="rtl">
                                 <thead>
                                 <tr>
-                                    <td><h3>{{ massage.message.subject }}</h3></td>
-                                </tr>
-                                                    <tr>
-                                    <td><h3>{{massage.message.messageSendDate|get_tuple2}}</h3></td>
+                                    <h3>{{ massage.message.subject }}</h3>
+                                    <p>{{massage.message.messageSendDate|get_time}}</p>
                                 </tr>
                                 </thead>
                                 <tbody>

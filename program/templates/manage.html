@@ -7,11 +7,21 @@
 {% block second_navbar %}
     {% include '_second_navbar.html' with active_link='manage' %}
 {% endblock %}
+{#<script src="{% static "bootstrap-slider.min.js" %}"></script>#}
+
+
 
 
 {% load tags %}
 
 {% block content %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".example1").pDatepicker({
+                format: "YYYY-MM-DD"
+            });
+        });
+    </script>
     <div class="row" style="width: 100%">
         <div class="col-md-5">
             {#<-----Managers edit programs here!----->#}
@@ -37,6 +47,31 @@
                                        value="{{ mymanagement.program.registerInterval }}">
                             </td>
                         </tr>
+                        {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
+                          <tr>
+                            <th style="text-align: right">تاریخ برنامه به شمسی:</th>
+                            <td><input  class="example1" type="text"  name="startDate"
+                             value=" {{ mymanagement.program.startDate }}">
+
+                            </td>
+                        </tr>
+                        {% endif %}
+{#                           <tr>#}
+{#                            <th style="text-align: right">زمان ثبت نام:</th>#}
+{#                            <td><input class="form-control" type="text" name="registrinterval"#}
+{#                                       value="{{ mymanagement.program.registerInterval }}">#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <th style="text-align: right">امکان ثبت نام متاهلی:</th>#}
+{#                            <td>#}
+{#                                <input type="checkbox" name="hascoupling"#}
+{#                                        {% if mymanagement.program.hasCoupling %}#}
+{#                                       checked#}
+{##}
+{#                                        {% endif %}>#}
+{#                            </td>#}
+{#                        </tr>#}
                         <tr>
                             <th style="text-align: right">امکان ثبت نام متاهلی:</th>
                             <td>

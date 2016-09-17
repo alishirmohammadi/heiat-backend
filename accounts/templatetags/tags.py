@@ -27,7 +27,7 @@ def get_lastProg():
     return lastProg
 
 @register.filter
-def get_tuple2(Message):
+def get_time(Message):
     return jdatetime.date.fromgregorian(day=Message.day,month=Message.month,year=Message.year)
 
         # @register.filter
