@@ -1,5 +1,8 @@
 from django import template
-from program.models import Program
+from program.models import Program,Message
+from program import jalali
+import jdatetime
+
 register = template.Library()
 
 
@@ -23,7 +26,9 @@ def get_lastProg():
     lastProg = Program.objects.filter(isPublic=True).last()
     return lastProg
 
-
+@register.filter
+def get_tuple2(Message):
+    return jdatetime.date.fromgregorian(day=Message.day,month=Message.month,year=Message.year)
 
         # @register.filter
 # def get_metadata_filter(doi):
