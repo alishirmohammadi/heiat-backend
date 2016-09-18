@@ -17,17 +17,10 @@ from django.contrib.auth.decorators import login_required
 from program.utils import checkMelliCode
 
 
-def FAQ(request):
-    if request.method == 'GET':
-        return render(request, 'FAQ.html', {})
-
 def error(request,username=None,page=None):
     if request.method == 'GET':
         return render(request, 'attack.html', {})
 
-def charity(request):
-    if request.method == 'GET':
-        return render(request, 'Charity.html', {})
 
 def handle_uploaded_file(f):
     with open('some/file/name.txt', 'wb+') as destination:
@@ -43,9 +36,14 @@ def edit(request):
     else:
         a.address = request.POST.get('adress', '')
         a.shenasname = request.POST.get('she_number', '')
-        a.people_type = request.POST.get('education', '')
+        a.fatherName = request.POST.get('father_name', )
+        a.gender = request.POST.get('gender', )
+        a.birthYear = request.POST.get('birthyear', )
+        a.birthMonth = request.POST.get('birthmonth', )
+        a.birthDay = request.POST.get('birthday', )
+        c = request.POST.get('education', '')
         if (
-                    a.people_type == Profile.PEOPLE_TYPE_SHARIF_STUDENT or a.people_type == Profile.PEOPLE_TYPE_SHARIF_GRADUATED or a.people_type == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT or a.people_type==Profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE):
+                                c == Profile.PEOPLE_TYPE_SHARIF_STUDENT or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE):
             k = request.POST.get('student_number', '')
             try:
                 val = int(k)
@@ -56,12 +54,7 @@ def edit(request):
                 erorr1 = 1
         else:
             a.studentNumber = None
-
-        a.fatherName = request.POST.get('father_name', )
-        a.gender = request.POST.get('gender', )
-        a.birthYear = request.POST.get('birthyear', )
-        a.birthMonth = request.POST.get('birthmonth', )
-        a.birthDay = request.POST.get('birthday', )
+        a.people_type = c
         a.gender =bool(request.POST.get('gender', ))
         if (request.POST.get('gender', )==True):
             a.conscription = request.POST.get('vazife-type', )
@@ -87,14 +80,8 @@ def edit(request):
                 erorr2 = 1
         a.mugshot=request.POST.get('mugshot', )
         a.mugshot=request.FILES.get('mugshot', )
-        # a.mugshot.storage = UserenaSignupModelTests.test_upload_mugshot()
-        # def upload_pic(request):
-        #     if request.method == 'POST':
-        # form = ImageUploadForm(request.POST, request.FILES)
-        # a.image= form.cleaned_data['image']
-                    # return HttpResponse('image upload success')
-            # return HttpResponseForbidden('allowed only via POST')
-        # a.image=request.POST.get('mugshot',)
+        # if a.mugshot
+
         a.mugshot.empty_values=request.POST.get('mugshot-clear', )
         a.save()
         return HttpResponseRedirect('/')

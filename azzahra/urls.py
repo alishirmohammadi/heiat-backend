@@ -22,6 +22,7 @@ from userena import settings as userena_settings
 from azzahra import settings
 from django.views.generic import RedirectView
 from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import TemplateView
 
 
 def merged_dict(dict_a, dict_b):
@@ -49,9 +50,9 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/program/', permanent=True), name='home'),
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
-    url(r'^FAQ/', 'accounts.views.FAQ'),
+    url(r'^FAQ/$',  TemplateView.as_view(template_name="FAQ.html"), name="FAQ"),
     url(r'^error/', 'accounts.views.error'),
-    url(r'^charity/', 'accounts.views.charity'),
+    url(r'^charity/$',  TemplateView.as_view(template_name="charity.html"), name="charity"),
 
     # url(r'^accounts/edit_profile', 'accounts.views.saveProfile'),
 

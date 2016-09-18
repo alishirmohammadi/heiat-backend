@@ -2,10 +2,10 @@
 
 
 <ul class="nav navbar-nav navbar-left" style="padding-right: 20px">
-            <li {% if active_link == "FAQ" %}class="active"{% endif %}><a href="/FAQ"
+            <li {% if active_link == "FAQ" %}class="active"{% endif %}><a href="{% url "FAQ" %}"
                                                                           style="font-family: 'B Mitra';font-weight: bold">سوالات
                 متداول</a></li>
-            <li {% if active_link == "charity" %}class="active"{% endif %}><a href="/charity"
+            <li {% if active_link == "charity" %}class="active"{% endif %}><a href="{% url "charity" %}"
                                                                           style="font-family: 'B Mitra';font-weight: bold">مشارکت
                 در هزینه های هیئت</a></li>
                 </ul>
