@@ -8,6 +8,8 @@ from django.core.files.base import ContentFile
 # from .forms import ImageUploadForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+
 
 
 
@@ -28,6 +30,7 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 @login_required
 def edit(request):
+    s= Profile.objects.filter(studentNumber__isnull=False)
     a = request.user.my_profile
     if request.method == 'GET':
 
@@ -39,19 +42,40 @@ def edit(request):
         a.fatherName = request.POST.get('father_name', )
         a.gender = request.POST.get('gender', )
         a.birthYear = request.POST.get('birthyear', )
+        checkstudentnum=int(a.birthYear)*1000000+18000000  # for check studentNumber with birthyear
         a.birthMonth = request.POST.get('birthmonth', )
         a.birthDay = request.POST.get('birthday', )
         c = request.POST.get('education', '')
         if (
                                 c == Profile.PEOPLE_TYPE_SHARIF_STUDENT or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT or c == Profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE):
             k = request.POST.get('student_number', '')
-            try:
-                val = int(k)
-            except ValueError:
-                val = None
-            a.studentNumber = val
+            if len(k) == 8 :
+
+                try:
+                    val = int(k)
+                except ValueError:
+                    val = None
+
+                for item in s :
+
+                    if int(item.studentNumber)==val:
+                        if item.id==a.id:
+                            continue
+                        raise ValidationError('شماره دانشجویی تکراری است ')
+                    continue
+                if len(str(val))==8:
+                   if val>checkstudentnum:
+                        a.studentNumber = val
+                   else:
+                       raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+                else:
+                    raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+
+            else:
+                raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+
             if (a.studentNumber == None):
-                erorr1 = 1
+                raise ValidationError('شماره دانشجویی وارد نشده است ')
         else:
             a.studentNumber = None
         a.people_type = c

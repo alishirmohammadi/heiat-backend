@@ -298,7 +298,8 @@ $(function(){
                                 <td>
                                     <input value="{{ user.my_profile.studentNumber }}" type="text" name="student_number"
                                            placeholder="********"
-                                           class="form-control" maxlength="8">
+                                           class="form-control" maxlength="8"
+                                    >
                                 </td>
 
 
@@ -345,21 +346,26 @@ $(function(){
                                 کربلا مورد نیاز است و در موارد دیگر نیازی به تکمیل آن نیست.</b></div>
 
                             <tr>
+                             {% if user.my_profile.gender %}
                             <tr id="conscription">
+
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     وضعیت نظام وظیفه:
                                 </td>
 
                                 <td>
                                     <select name="vazife-type" class="form-control">
+
                                         {% for type,persian in user.my_profile.conscription_choices %}
                                             <option{% if user.my_profile.conscription == type %} selected="selected"{% endif %}
                                                                                      value="{{ type }}">{{ persian }}</option>
                                         {% endfor %}
+
                                     </select>
                                 </td>
 
                             </tr>
+                         {% endif %}
                             <tr>
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     وضعیت گذرنامه:
