@@ -46,6 +46,8 @@ urlpatterns = [
         'accounts.views.error', ),
     # url(r'^signin/', 'accounts.views.signin'),
     # url(r'^signup/', 'accounts.views.signup'),
+    url(r'^ad/', 'accounts.views.add'),
+
     url(r'^profile/', 'accounts.views.edit',name='profile'),
     url(r'^$', RedirectView.as_view(url='/program/', permanent=True), name='home'),
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),

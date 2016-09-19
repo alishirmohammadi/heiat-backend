@@ -5,10 +5,11 @@ from userena.decorators import secure_required
 from accounts.templatetags.tags import get_tuple
 # from  userena.tests.tests_models import UserenaSignupModelTests
 from django.core.files.base import ContentFile
-# from .forms import ImageUploadForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from .forms import ProfileForm
+from django.db.models import Q
 
 
 
@@ -28,6 +29,26 @@ def handle_uploaded_file(f):
     with open('some/file/name.txt', 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
+@login_required()
+def add(request):
+    profile = Profile()
+    # school = School.objects.filter(admin=request.user).first()
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save()
+            # return HttpResponseRedirect('/profile/' + str(Member.objects.filter(field__school=school).last().id))
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, "pro.html", {
+        'form': form,
+    })
+
+
+
+
 @login_required
 def edit(request):
     s= Profile.objects.filter(studentNumber__isnull=False)
@@ -38,10 +59,25 @@ def edit(request):
                                                  'vazife': a.conscription_choices})
     else:
         a.address = request.POST.get('adress', '')
-        a.shenasname = request.POST.get('she_number', '')
+        a.birthYear = request.POST.get('birthyear', )
+        shen = request.POST.get('she_number', '')
+
+        def isNum(data):
+            try:
+                int(data)
+                return True
+            except ValueError:
+                return False
+        if isNum(shen)==False :
+            raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
+        if a.birthYear>'67':
+             if shen!=a.melliCode:
+                raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
+
+        a.shenasname = shen
         a.fatherName = request.POST.get('father_name', )
         a.gender = request.POST.get('gender', )
-        a.birthYear = request.POST.get('birthyear', )
+
         checkstudentnum=int(a.birthYear)*1000000+18000000  # for check studentNumber with birthyear
         a.birthMonth = request.POST.get('birthmonth', )
         a.birthDay = request.POST.get('birthday', )
@@ -93,7 +129,8 @@ def edit(request):
             a.passport_dateofexpiry = request.POST.get('pas_exprition','' )
             if not (a.passport_dateofexpiry):
                 return HttpResponseRedirect('profile.html')
-        if (request.POST.get('coupling', )):
+        coupled=request.POST.get('coupling', )
+        if coupled=='1':
             if (request.POST.get('wife_mellicode', ) != None and checkMelliCode(request.POST.get('wife_mellicode', ))):
                 x = request.POST.get('wife_mellicode', )
                 datebase_object = Profile.objects.all()
@@ -104,8 +141,9 @@ def edit(request):
                 erorr2 = 1
         a.mugshot=request.POST.get('mugshot', )
         a.mugshot=request.FILES.get('mugshot', )
-        # if a.mugshot
-
+        # if a.mugshot. != 'jpg':
+        #     raise ValidationError('فرمت عکس را jpg انتخاب کنید. ')
+        # a.mugshot.attr_class
         a.mugshot.empty_values=request.POST.get('mugshot-clear', )
         a.save()
         return HttpResponseRedirect('/')

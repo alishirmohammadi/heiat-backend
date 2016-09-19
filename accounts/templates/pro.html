@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block content %}
+    <table>
+            <button type="submit" class="btn btn-success">Save</button>
+
+        <form class="" enctype="multipart/form-data">
+            <tbody>
+            {% csrf_token %}
+            {{ form.as_table }}
+
+            </tbody>
+        </form>
+
+    </table>
+
+{% endblock %}

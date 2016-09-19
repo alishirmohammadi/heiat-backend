@@ -167,6 +167,11 @@ class SignupFormExtra(SignupForm):
     #                                                  not userena_settings.USERENA_ACTIVATION_REQUIRED,
     #                                                  userena_settings.USERENA_ACTIVATION_REQUIRED)
     #     return new_user
+from .models import Profile
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = []
 
 class PasswordResetForm(forms.Form):
     username = forms.CharField(label=_("کدملی"), max_length=60)
@@ -209,7 +214,7 @@ class PasswordResetForm(forms.Form):
         Generates a one-use only link for resetting password and sends to the
         user.
         """
-        username = self.cleaned_data["username"]
+        username = self.cleaned_data["us0ername"]
         for user in self.get_users(username):
             if not domain_override:
                 current_site = get_current_site(request)

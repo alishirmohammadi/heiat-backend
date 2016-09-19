@@ -205,9 +205,9 @@ $(function(){
                                         مرد
 
                                         <input id="couple_type"  name="gender" type="radio"
-                                               value="1" class="boolean" checked="checked">
+                                               value="1" class="boolean" {% if user.my_profile.gender == True %}checked="checked"{% endif %}>
 زن
-                                        <input type="radio" value="" name="gender" class="boolean">
+                                        <input type="radio" value="" name="gender" class="boolean" {% if user.my_profile.gender == False %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
 
@@ -218,7 +218,7 @@ $(function(){
                                 </td>
                                 <td>
                                     <input value="{{ user.my_profile.shenasname }}" type="text" name="she_number"
-                                           class="form-control">
+                                           class="form-control" maxlength="10" >
                                 </td>
 
 
@@ -452,11 +452,11 @@ $(function(){
                                     <div>
                                         متاهل
 
-                                        <input id="couple_type" checked="checked" name="coupling" type="radio"
+                                        <input id="couple_type" {% if user.my_profile.couple %}checked="checked"{% endif %} name="coupling" type="radio"
                                                value="1" class="controls">
                                         مجرد
 
-                                        <input type="radio" value="" name="coupling" class="controls">
+                                        <input type="radio" value="" name="coupling" class="controls" {% if user.my_profile.couple == False %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
                             </tr>
