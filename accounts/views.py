@@ -136,7 +136,6 @@ def edit(request):
         else:
            # lol=Profile.objects.filter(couple__couple__id).delete()
          a.couple_id=""
-        if cou
         a.mugshot=request.POST.get('mugshot', )
         a.mugshot=request.FILES.get('mugshot', )
         # if a.mugshot. != 'jpg':
