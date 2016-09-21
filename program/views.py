@@ -335,6 +335,7 @@ def manage(request, management_id):
     registerinterval = request.POST.get("registrinterval", '')
     hascoupling = request.POST.get("hascoupling", '')
     isopen = request.POST.get("isopen", '')
+    AdditionalOption = request.POST.get("AdditionalOption", '')
     startDate = request.POST.get("startDate", '')
     email = request.POST.get("email", '')
     emailPassword = request.POST.get("emailPassword", '')
@@ -345,6 +346,7 @@ def manage(request, management_id):
     program.registerInterval = registerinterval
     program.hasCoupling = hascoupling
     program.isOpen = isopen
+    program.additionalOption = AdditionalOption
     program.emailPassword = emailPassword
     program.email = email
     program.notes = note
