@@ -49,10 +49,12 @@
                         </tr>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
                           <tr>
-                            <th style="text-align: right">تاریخ برنامه به شمسی:</th>
-                            <td><input  class="example1" type="text"  name="startDate"
-                             value=" {{ mymanagement.program.startDate }}">
-
+                            <th style="text-align: right">ثبت تاریخ برنامه: </th>
+                            <td><input  class="example1" type="text"  name="startDate">                            </td> </tr>
+ <tr>
+                                                            <th style="text-align: right">آخرین تاریخ ثبت شده برای برنامه: </th>
+<td style="font-size: 20px">
+                                {{ mymanagement.program.startDate.year }}-{{ mymanagement.program.startDate.month }}-{{ mymanagement.program.startDate.day }}
                             </td>
                         </tr>
                         {% endif %}
