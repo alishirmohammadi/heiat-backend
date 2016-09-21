@@ -11,11 +11,6 @@ from django.core.exceptions import ValidationError
 from .forms import ProfileForm
 from django.db.models import Q
 
-
-
-
-
-
 # Create your views here.
 from program.utils import checkMelliCode
 
@@ -77,7 +72,6 @@ def edit(request):
         a.shenasname = shen
         a.fatherName = request.POST.get('father_name', )
         a.gender = request.POST.get('gender', )
-
         checkstudentnum=int(a.birthYear)*1000000+18000000  # for check studentNumber with birthyear
         a.birthMonth = request.POST.get('birthmonth', )
         a.birthDay = request.POST.get('birthday', )
@@ -129,8 +123,8 @@ def edit(request):
             a.passport_dateofexpiry = request.POST.get('pas_exprition','' )
             if not (a.passport_dateofexpiry):
                 return HttpResponseRedirect('profile.html')
-        coupled=request.POST.get('coupling', )
-        if coupled=='1':
+        couple=request.POST.get('coupling', )
+        if couple:
             if (request.POST.get('wife_mellicode', ) != None and checkMelliCode(request.POST.get('wife_mellicode', ))):
                 x = request.POST.get('wife_mellicode', )
                 datebase_object = Profile.objects.all()
@@ -139,6 +133,10 @@ def edit(request):
                         a.couple = type
             else:
                 erorr2 = 1
+        else:
+           # lol=Profile.objects.filter(couple__couple__id).delete()
+         a.couple_id=""
+        if cou
         a.mugshot=request.POST.get('mugshot', )
         a.mugshot=request.FILES.get('mugshot', )
         # if a.mugshot. != 'jpg':

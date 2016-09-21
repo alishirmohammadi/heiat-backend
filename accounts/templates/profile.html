@@ -452,11 +452,11 @@ $(function(){
                                     <div>
                                         متاهل
 
-                                        <input id="couple_type" {% if user.my_profile.couple %}checked="checked"{% endif %} name="coupling" type="radio"
+                                        <input id="couple_type" {% if user.my_profile.couple.melliCode  %}checked="checked"{% endif %} name="coupling" type="radio"
                                                value="1" class="controls">
                                         مجرد
 
-                                        <input type="radio" value="" name="coupling" class="controls" {% if user.my_profile.couple == False %}checked="checked"{% endif %}>
+                                        <input type="radio" value="" name="coupling" class="controls" {% if not user.my_profile.couple.melliCode %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
                             </tr>
@@ -466,7 +466,7 @@ $(function(){
                                 شماره ملی همسر اول:
                             </td>
                             <td><input value="{{ user.my_profile.couple.melliCode }}" class="form-control" maxlength="10"
-                                       name="wife_mellicode"></td>
+                                       name="wife_mellicode" ></td>
                             </tr>
                             <tr id="couple_melli2">
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
