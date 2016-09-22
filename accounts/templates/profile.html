@@ -108,8 +108,13 @@ $(function(){
                     {#                    $('input:radio').change(function () {#}
                     {#                        console.log('testsets')#}
                     {#                    });#}
-
-
+ {% if  not user.my_profile.couple.melliCode  %}
+                        $("#menu31").click(function () {
+                            console.log('uyuyg');
+                            $("#couple_type1").trigger('click');
+                            $("#couple_type2").trigger('click');
+                        })
+                    {% endif %}
                     $('.controls').change(function () {
                         if ($('input[name=gender]:checked').val() == '1' && $('input[name=coupling]:checked').val() == '1') {
                             $("#conscription").fadeIn("slow");
@@ -166,7 +171,7 @@ $(function(){
 
         <ul class="nav nav-pills" style="margin-left: 20%; margin-right: 15%; margin-bottom: 1px">
             <li style="text-align: right; font-family:'B Titr'; font-weight: bolder; width: 33%"><a data-toggle="pill"
-                                                                                                    href="#menu3">اطلاعات
+                                                                                                    href="#menu3" id="menu31">اطلاعات
                 همسر</a>
             </li>
             <li style="text-align: center; font-family:'B Titr'; font-weight: bolder; width: 33%"><a data-toggle="pill"
@@ -452,11 +457,11 @@ $(function(){
                                     <div>
                                         متاهل
 
-                                        <input id="couple_type" {% if user.my_profile.couple.melliCode  %}checked="checked"{% endif %} name="coupling" type="radio"
+                                        <input id="couple_type1" {% if user.my_profile.couple.melliCode  %}checked="checked"{% endif %} name="coupling" type="radio"
                                                value="1" class="controls">
                                         مجرد
 
-                                        <input type="radio" value="" name="coupling" class="controls" {% if not user.my_profile.couple.melliCode %}checked="checked"{% endif %}>
+                                        <input id="couple_type2" type="radio" value="" name="coupling" class="controls" {% if not user.my_profile.couple.melliCode %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
                             </tr>
