@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     <title>{% block title %}azzahra{% endblock %}</title>
     <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
-    <script>tinymce.init({mode: "specific_textareas", editor_deselector : "mceNoEditor"});</script>
+    <script>tinymce.init({forced_root_block : "",mode: "specific_textareas", editor_deselector : "mceNoEditor"});</script>
     <!— Bootstrap core CSS —>
     <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>

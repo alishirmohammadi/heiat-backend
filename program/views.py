@@ -34,9 +34,16 @@ def documentation(request, management_id):
         return render(request, 'documents.html', {'document_managements': managements, 'mymanagement': management, })
     else:
         # todo: save documentation
-        pass
+        documentation = request.POST.get('documentation', '')
+        management = Management.objects.filter(id=management_id).first()
+        management.documentation=documentation
+        management.save()
+        managements = Management.objects.filter(program__type=management.program.type).filter(
+            role__in=management.seedocument())
+        managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
+        return render(request, 'documents.html', {'document_managements': managements, 'mymanagement': management,})
 
-
+        # pass
 @login_required
 def panel(request, management_id):
     management = Management.objects.filter(id=management_id).first()

@@ -214,7 +214,7 @@ class PasswordResetForm(forms.Form):
         Generates a one-use only link for resetting password and sends to the
         user.
         """
-        username = self.cleaned_data["us0ername"]
+        username = self.cleaned_data["username"]
         for user in self.get_users(username):
             if not domain_override:
                 current_site = get_current_site(request)

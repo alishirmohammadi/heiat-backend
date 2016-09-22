@@ -36,10 +36,23 @@
     </div>
     <div class="col-lg-2 col-md-2 col-sm-6 col-xs-0"></div>
     <div class="col-lg-6 col-md-6 col-sm-6">
-        {% for item in document_managements %}
+         <form method="post">
+                    {% csrf_token %}
+                    <h3><b>ثبت مستندسازی</b></h3>
+                   <textarea name="documentation"  style="width: 500px ;height: 200px" value="{{ mymanagement.documentation }}">{{ mymanagement.documentation }}</textarea>
+                    <br>
+                    <input type="submit" class="btn btn-warning" name="feedback_btn" value="ثبت">
 
-            <div class="well" style="direction: rtl;text-align: right">
-                <p style="font-family: 'B Mitra';font-size: 18px">
+                    <br><br><br>
+                </form>
+        {% for item in document_managements %}
+{% if item.id == mymanagement.id %}
+
+            {% endif %}
+
+
+            <div style="direction: rtl;text-align: right" {% if item.id == mymanagement.id %}class="hide"{% else %} class="well" {% endif %}>
+                <div style="font-family: 'B Mitra';font-size: 18px">
                     <b>{{ item.profile.user.get_full_name }}</b>
 <br>
                     در برنامه:
@@ -49,8 +62,8 @@
                     <b>{{ item.role_choices|get_tuple_item:item.role }}</b>
 <br>
                     این نظر را داد:
-                </p>
-                <p style="font-family: 'B Nazanin';font-size: 15px">{{ item.documentation }}</p>
+                </div>
+                <div style="font-family: 'B Nazanin';font-size: 15px">{{ item.documentation }}</div>
 
 
             </div>
