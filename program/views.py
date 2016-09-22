@@ -336,7 +336,7 @@ def manage(request, management_id):
     hascoupling = request.POST.get("hascoupling", '')
     isopen = request.POST.get("isopen", '')
     AdditionalOption = request.POST.get("AdditionalOption", '')
-    startDate = request.POST.get("startDate", '')
+    startDate = jalali.Persian(request.POST.get("startDate", '')).gregorian_string()
     email = request.POST.get("email", '')
     emailPassword = request.POST.get("emailPassword", '')
     note = request.POST.get("note", '')
