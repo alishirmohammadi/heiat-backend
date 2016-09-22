@@ -110,11 +110,19 @@ $(function(){
                     {#                    });#}
  {% if  not user.my_profile.couple.melliCode  %}
                         $("#menu31").click(function () {
-                            console.log('uyuyg');
                             $("#couple_type1").trigger('click');
                             $("#couple_type2").trigger('click');
                         })
                     {% endif %}
+                            $("#couple_type22").click(function () {
+                                       $("#conscription").fadeOut("slow");
+                                    })
+            $("#couple_type11").click(function () {
+                                    $("#conscription").fadeIn("slow");})
+
+{#                            $("#couple_type1").trigger('click');#}
+{#                            $("#couple_type2").trigger('click');#}
+{#                        })#}
                     $('.controls').change(function () {
                         if ($('input[name=gender]:checked').val() == '1' && $('input[name=coupling]:checked').val() == '1') {
                             $("#conscription").fadeIn("slow");
@@ -175,14 +183,14 @@ $(function(){
                 همسر</a>
             </li>
             <li style="text-align: center; font-family:'B Titr'; font-weight: bolder; width: 33%"><a data-toggle="pill"
-                                                                                                     href="#menu2">اطلاعات
+                                                                                                     href="#menu2" id="menu21">اطلاعات
                 نظام
                 وظیفه و گذر نامه </a>
             </li>
 
             <li id="li1" style="text-align: left; font-family:'B Titr'; font-weight: bolder; width: 33%"><a
                     data-toggle="pill"
-                    href="#menu1">اطلاعات
+                    href="#menu1"  id="menu11">اطلاعات
                 شخصی</a>
             </li>
 
@@ -209,10 +217,10 @@ $(function(){
                                     <div>
                                         مرد
 
-                                        <input id="couple_type"  name="gender" type="radio"
+                                        <input id="couple_type11"  name="gender" type="radio"
                                                value="1" class="boolean" {% if user.my_profile.gender == True %}checked="checked"{% endif %}>
 زن
-                                        <input type="radio" value="" name="gender" class="boolean" {% if user.my_profile.gender == False %}checked="checked"{% endif %}>
+                                        <input  id="couple_type22" type="radio" value="" name="gender" class="boolean" {% if user.my_profile.gender == False %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
 
