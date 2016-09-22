@@ -120,9 +120,6 @@ $(function(){
             $("#couple_type11").click(function () {
                                     $("#conscription").fadeIn("slow");})
 
-{#                            $("#couple_type1").trigger('click');#}
-{#                            $("#couple_type2").trigger('click');#}
-{#                        })#}
                     $('.controls').change(function () {
                         if ($('input[name=gender]:checked').val() == '1' && $('input[name=coupling]:checked').val() == '1') {
                             $("#conscription").fadeIn("slow");
@@ -359,7 +356,7 @@ $(function(){
                                 کربلا مورد نیاز است و در موارد دیگر نیازی به تکمیل آن نیست.</b></div>
 
                             <tr>
-                             {% if user.my_profile.gender %}
+{#                             {% if user.my_profile.gender %}#}
                             <tr id="conscription">
 
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
@@ -378,7 +375,7 @@ $(function(){
                                 </td>
 
                             </tr>
-                         {% endif %}
+{#                         {% endif %}#}
                             <tr>
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     وضعیت گذرنامه:
