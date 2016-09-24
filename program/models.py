@@ -34,6 +34,10 @@ class Program(models.Model):
     )
     type = models.CharField(max_length=200, choices=type_choices)
 
+    class Meta:
+        verbose_name = 'برنامه'
+        verbose_name_plural = 'برنامه ها'
+
     def Master(self):
         rolchoice = Management.objects.filter(role__exact='master manager').first().profile
         return rolchoice
@@ -99,6 +103,9 @@ class Registration(models.Model):
     )
     status = models.CharField(max_length=200, choices=status_choices, default=STATUS_DEFAULT)
 
+    class Meta:
+        verbose_name = 'ثبت نام'
+        verbose_name_plural = 'ثبت نام ها'
     def get_pricing(self):
         return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
             coupling=self.coupling).filter(
@@ -189,6 +196,9 @@ class Management(models.Model):
     role = models.CharField(max_length=200, choices=role_choices, default=ROLE_MASTER_MANAGER)
     comment = models.CharField(max_length=800, null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'مدیریت'
+        verbose_name_plural = 'مدیریت ها'
     def seedocument(self):
         return {
             Management.ROLE_MASTER_MANAGER: [Management.ROLE_MASTER_MANAGER, Management.ROLE_VICAR,
@@ -280,6 +290,9 @@ class Pricing(models.Model):
     def __str__(self):
         return self.people_type + ' ' + ' ' + self.program.title
 
+    class Meta:
+        verbose_name = 'قیمت'
+        verbose_name_plural = 'قیمت ها'
 
 class Message(models.Model):
     sender = models.ForeignKey(Management)
@@ -290,6 +303,9 @@ class Message(models.Model):
     sendInbox = models.BooleanField(default=False)
     messageSendDate = models.DateTimeField(default=datetime.now)
 
+    class Meta:
+        verbose_name = 'پیام'
+        verbose_name_plural = 'پیام ها'
     def __str__(self):
         return str(self.sender)
 
@@ -300,3 +316,7 @@ class Message_reciving(models.Model):
 
     def __str__(self):
         return self.message
+
+    class Meta:
+        verbose_name = 'دریافت پیام'
+        verbose_name_plural = 'دریافت پیام ها'

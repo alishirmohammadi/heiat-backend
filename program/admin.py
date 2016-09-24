@@ -35,6 +35,7 @@ class Program_Admin(admin.ModelAdmin):
 admin.site.register(Program, Program_Admin)
 
 
+
 class Registration_Admin(admin.ModelAdmin):
     list_display = ['id', 'profile', 'program', 'registrationDate', 'coupling', 'status']
 
