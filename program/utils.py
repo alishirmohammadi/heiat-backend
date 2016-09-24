@@ -5,7 +5,7 @@ from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.models import Registration , Management
-from pysimplesoap.client import SoapClient
+from zeep import Client
 
 
 def export_users_xls(status_list):
@@ -207,8 +207,8 @@ def filter_to_registrations(filter, program):
     return registerations
 
 
-def sendSMS(list,text):
-    client = SoapClient(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl', trace=False)
+def sendsms(list,text):
+    client = Client(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl')
     if len(list) // 100 == len(list) / 100:
         t = (len(list) // 100)
     else:
@@ -222,7 +222,7 @@ def sendSMS(list,text):
                 b = b + str(list[j + (i * 100)])
             else:
                 b = b + "," + str(list[j + (i * 100)])
-        client.SendSimpleSMS2('9174486355','3496', b, '50002016008706', text ,False)
+        client.service.SendSimpleSMS2('9174486355', '3496', b, '50002016008706', text, False)
 
 def getLastProgram():
     from .models import Program
