@@ -89,3 +89,7 @@ class Profile(UserenaBaseProfile):
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+    class Meta:
+        verbose_name = 'حساب کاربری'
+        verbose_name_plural = 'حسابهای کاربری'

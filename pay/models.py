@@ -16,6 +16,9 @@ class Payment(models.Model):
     takingDate = models.DateTimeField(default=datetime.now)
     success = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'پرداخت'
+        verbose_name_plural = 'پرداخت ها'
     @classmethod
     def create(cls, amount, registration, numberOfInstallment):
         payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment)
