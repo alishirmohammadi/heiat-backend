@@ -38,12 +38,10 @@
     <div class="col-lg-6 col-md-6 col-sm-6">
          <form method="post">
                     {% csrf_token %}
-                    <h3><b>ثبت مستندسازی</b></h3>
+                    <h3 style="text-align: right"><b>ثبت مستندسازی</b></h3>
                    <textarea name="documentation"  style="width: 500px ;height: 200px" value="{{ mymanagement.documentation }}">{{ mymanagement.documentation }}</textarea>
-                    <br>
-                    <input type="submit" class="btn btn-warning" name="feedback_btn" value="ثبت">
-
-                    <br><br><br>
+                   <input style="margin-top: 2%" type="submit" class="btn btn-warning center-block" name="feedback_btn" value="ثبت">
+             <br><br>
                 </form>
         {% for item in document_managements %}
 {% if item.id == mymanagement.id %}

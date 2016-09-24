@@ -318,9 +318,9 @@
                 <form method="post">
                     {% csrf_token %}
                     <h3><b>انقادات و پیشنهادات</b></h3>
-                   <textarea name="feedback" class="mceNoEditor">{{ myregister.feedBack }}</textarea>
+                   <textarea style="width: 100%" name="feedback" class="mceNoEditor">{{ myregister.feedBack }}</textarea>
                     <br>
-                    <input type="submit" class="btn btn-warning" name="feedback_btn" value="ثبت">
+                    <input type="submit" class="btn btn-warning center-block" name="feedback_btn" value="ثبت">
 
                     <br><br><br>
                 </form>

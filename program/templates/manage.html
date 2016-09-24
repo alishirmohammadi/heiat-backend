@@ -31,7 +31,7 @@
                     <table class="table-responsive" width="100%">
                         <tbody>
                         <tr>
-                            <th style="text-align: right" width="40%">نام برنامه:</th>
+                            <th style="text-align: right" width="50%">نام برنامه:</th>
                             <td width="100%"><input class="form-control" type="text" name="title"
                                                           value="{{ mymanagement.program.title }}"></td>
                         </tr>
@@ -56,10 +56,10 @@
                         {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
                           <tr>
                             <th style="text-align: right">ثبت تاریخ برنامه: </th>
-                            <td><input  class="example1" type="text"  name="startDate">                            </td> </tr>
+                            <td><input  class="example1 form-control" type="text"  name="startDate">                            </td> </tr>
  <tr>
                                                             <th style="text-align: right">آخرین تاریخ ثبت شده برای برنامه: </th>
-<td style="font-size: 20px">
+<td class="form-control" style="font-size: 18px">
                                 {{ mymanagement.program.startDate.year }}-{{ mymanagement.program.startDate.month }}-{{ mymanagement.program.startDate.day }}
                             </td>
                         </tr>
@@ -114,8 +114,7 @@
                     </table>
                     <br><br>
                     <textarea class="form-control" name="note">{{ mymanagement.program.notes }}</textarea>
-                    <br>
-                    <button type="submit" class="btn btn-success center-block" style="font-family: 'B Titr'">ثبت تغییر</button>
+                    <button type="submit" class="btn btn-success center-block" style="font-family: 'B Titr';margin-top: 2% ">ثبت تغییر</button>
                 </form>
             </div>
         </div>
@@ -134,6 +133,7 @@
                     </thead>
                     <tbody>
                     {% for  pricing in pricelist %}
+
                         <tr>
                             <td>
                                     <span>
