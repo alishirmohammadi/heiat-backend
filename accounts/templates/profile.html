@@ -205,6 +205,15 @@ $(function(){
 
 
                         <table class="table" id="table1">
+                        <tr>
+                             {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        </tr>
                             <tr>
                                 <td style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                     جنسیت:

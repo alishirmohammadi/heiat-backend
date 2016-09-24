@@ -9,6 +9,7 @@ from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from .forms import ProfileForm
+from django.contrib import messages
 from django.db.models import Q
 
 # Create your views here.
@@ -64,10 +65,16 @@ def edit(request):
             except ValueError:
                 return False
         if isNum(shen)==False :
-            raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
+            messages.add_message(request, messages.INFO, 'شماره شناسنامه معتبر نمی باشد ')
+            return render(request, 'profile.html',
+                          {'pro': a, 'days': range(1, 32), 'month': get_tuple(), 'allTypes': a.people_type_choices,
+                           'vazife': a.conscription_choices})
+            # raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
         if a.birthYear>'67':
-             if shen!=a.melliCode:
-                raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
+            messages.add_message(request, messages.INFO, 'شماره شناسنامه معتبر نمی باشد ')
+            return render(request, 'profile.html',
+                          {'pro': a, 'days': range(1, 32), 'month': get_tuple(), 'allTypes': a.people_type_choices,
+                           'vazife': a.conscription_choices})
 
         a.shenasname = shen
         a.fatherName = request.POST.get('father_name', )
@@ -91,21 +98,47 @@ def edit(request):
                     if int(item.studentNumber)==val:
                         if item.id==a.id:
                             continue
-                        raise ValidationError('شماره دانشجویی تکراری است ')
+                        # raise ValidationError('شماره دانشجویی تکراری است ')
+                        messages.add_message(request, messages.INFO, 'شماره دانشجویی تکراری است ')
+                        return render(request, 'profile.html',
+                                      {'pro': a, 'days': range(1, 32), 'month': get_tuple(),
+                                       'allTypes': a.people_type_choices,
+                                       'vazife': a.conscription_choices})
+
                     continue
                 if len(str(val))==8:
                    if val>checkstudentnum:
                         a.studentNumber = val
                    else:
-                       raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+                       messages.add_message(request, messages.INFO, 'شماره دانشجویی وارد شده صحیح نیست ')
+                       return render(request, 'profile.html',
+                                     {'pro': a, 'days': range(1, 32), 'month': get_tuple(),
+                                      'allTypes': a.people_type_choices,
+                                      'vazife': a.conscription_choices})
+                       # raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
                 else:
-                    raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+                    messages.add_message(request, messages.INFO, 'شماره دانشجویی وارد شده صحیح نیست ')
+                    return render(request, 'profile.html',
+                                  {'pro': a, 'days': range(1, 32), 'month': get_tuple(),
+                                   'allTypes': a.people_type_choices,
+                                   'vazife': a.conscription_choices})
+                    # raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
 
             else:
-                raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
+                messages.add_message(request, messages.INFO, 'شماره دانشجویی وارد شده صحیح نیست ')
+                return render(request, 'profile.html',
+                              {'pro': a, 'days': range(1, 32), 'month': get_tuple(),
+                               'allTypes': a.people_type_choices,
+                               'vazife': a.conscription_choices})
+                # raise ValidationError('شماره دانشجویی وارد شده صحیح نیست ')
 
             if (a.studentNumber == None):
-                raise ValidationError('شماره دانشجویی وارد نشده است ')
+                messages.add_message(request, messages.INFO, 'شماره دانشجویی وارد شده صحیح نیست ')
+                return render(request, 'profile.html',
+                              {'pro': a, 'days': range(1, 32), 'month': get_tuple(),
+                               'allTypes': a.people_type_choices,
+                               'vazife': a.conscription_choices})
+                # raise ValidationError('شماره دانشجویی وارد نشده است ')
         else:
             a.studentNumber = None
         a.people_type = c
