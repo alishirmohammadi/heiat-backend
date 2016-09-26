@@ -1,7 +1,7 @@
 import time
 import random
 from django.contrib import messages
-
+from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -272,11 +272,8 @@ def editStatus(request, program_id):
                     'profile__user__email', flat=True )
                 if title and textcontent:
                     try:
-                        from .utils import send_email
-                        from azzahra.settings import EMAIL_HOST_USER ,EMAIL_HOST_PASSWORD
-                        from django.core.mail import EmailMessage
-                        send_email(EMAIL_HOST_USER,EMAIL_HOST_PASSWORD , to_email, title, textcontent)
-                        # send_email(EMAIL_HOST_USER,EMAIL_HOST_PASSWORD , to_email, title, textcontent)
+                        message2 = EmailMessage(title, textcontent, bcc=to_email)
+                        message2.send()
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                 else:
@@ -395,8 +392,6 @@ def registration(request, registration_id):
                        'myregister': myregister,
                        'pricings': pricings
                        })
-
-
     else:
         if 'givenup_btn' in request.POST:
             myregister.status = Registration.STATUS_GIVEN_UP

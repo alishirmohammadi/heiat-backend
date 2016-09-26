@@ -70,18 +70,19 @@ def registrations_to_excel(registrations):
         status_list.append(object)
     return export_users_xls(status_list)
 
-def send_email(from_email,from_password,bcc,subject,content):
-    my_use_tls = False
-    connection = get_connection(host='mehr.sharif.ir',
-                                port=587,
-                                username=from_email,
-                                password=from_password,
-                                use_tls=my_use_tls)
-    connection.open()
-    send_mail(subject, content, from_email, bcc, auth_user=from_email,
-              auth_password=from_password, connection=connection)
-    connection.close()
-    
+# def send_email(from_email,from_password,bcc,subject,content):
+#     my_use_tls = False
+#     connection = get_connection(host='mehr.sharif.ir',
+#                                 port=587,
+#                                 username=from_email,
+#                                 password=from_password,
+#                                 use_tls=my_use_tls)
+#     connection.open()
+#     send_mail(subject, content, from_email, bcc, auth_user=from_email,
+#               auth_password=from_password, connection=connection)
+#     connection.close()
+
+
 
 def filter_to_registrations(filter, program):
     registerations = Registration.objects.filter(program=program)
