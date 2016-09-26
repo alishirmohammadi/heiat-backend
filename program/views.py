@@ -269,12 +269,14 @@ def editStatus(request, program_id):
                 message.sendEmail = True
                 message.save()
                 to_email = editingRegs.filter(program=program).values_list(
-                    'profile__user__email', flat=True)
+                    'profile__user__email', flat=True )
                 if title and textcontent:
                     try:
                         from .utils import send_email
                         from azzahra.settings import EMAIL_HOST_USER ,EMAIL_HOST_PASSWORD
+                        from django.core.mail import EmailMessage
                         send_email(EMAIL_HOST_USER,EMAIL_HOST_PASSWORD , to_email, title, textcontent)
+                        # send_email(EMAIL_HOST_USER,EMAIL_HOST_PASSWORD , to_email, title, textcontent)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                 else:

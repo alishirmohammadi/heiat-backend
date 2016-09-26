@@ -70,7 +70,7 @@ def registrations_to_excel(registrations):
         status_list.append(object)
     return export_users_xls(status_list)
 
-def send_email(from_email,from_password,to,subject,content):
+def send_email(from_email,from_password,bcc,subject,content):
     my_use_tls = False
     connection = get_connection(host='mehr.sharif.ir',
                                 port=587,
@@ -78,7 +78,7 @@ def send_email(from_email,from_password,to,subject,content):
                                 password=from_password,
                                 use_tls=my_use_tls)
     connection.open()
-    send_mail(subject, content, from_email, to, auth_user=from_email,
+    send_mail(subject, content, from_email, bcc, auth_user=from_email,
               auth_password=from_password, connection=connection)
     connection.close()
     

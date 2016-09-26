@@ -43,8 +43,12 @@ def add(request):
     })
 
 
-
-
+def isNum(data):
+    try:
+        int(data)
+        return True
+    except ValueError:
+        return False
 @login_required
 def edit(request):
     s= Profile.objects.filter(studentNumber__isnull=False)
@@ -58,12 +62,7 @@ def edit(request):
         a.birthYear = request.POST.get('birthyear', )
         shen = request.POST.get('she_number', '')
 
-        def isNum(data):
-            try:
-                int(data)
-                return True
-            except ValueError:
-                return False
+
         if isNum(shen)==False :
             messages.add_message(request, messages.INFO, 'شماره شناسنامه معتبر نمی باشد ')
             return render(request, 'profile.html',
@@ -71,8 +70,9 @@ def edit(request):
                            'vazife': a.conscription_choices})
             # raise ValidationError('شماره شناسنامه معتبر نمی باشد ')
         if a.birthYear>'67':
-            messages.add_message(request, messages.INFO, 'شماره شناسنامه معتبر نمی باشد ')
-            return render(request, 'profile.html',
+            if shen != a.melliCode:
+                messages.add_message(request, messages.INFO, 'شماره شناسنامه معتبر نمی باشد ')
+                return render(request, 'profile.html',
                           {'pro': a, 'days': range(1, 32), 'month': get_tuple(), 'allTypes': a.people_type_choices,
                            'vazife': a.conscription_choices})
 
