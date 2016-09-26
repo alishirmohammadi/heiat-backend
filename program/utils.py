@@ -5,7 +5,7 @@ from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.models import Registration , Management
-from zeep import Client
+# from zeep import Client
 
 
 def export_users_xls(status_list):
@@ -71,8 +71,8 @@ def registrations_to_excel(registrations):
     return export_users_xls(status_list)
 
 def send_email(from_email,from_password,to,subject,content):
-    my_use_tls = True
-    connection = get_connection(host='smtp.gmail.com',
+    my_use_tls = False
+    connection = get_connection(host='mehr.sharif.ir',
                                 port=587,
                                 username=from_email,
                                 password=from_password,

@@ -247,7 +247,7 @@ def editStatus(request, program_id):
                 item.save()
     elif action == 'message':
         if management.canMessage:
-            title = request.POST.get('subject', '')
+            title = request.POST.get('messageTitle', '')
             textcontent = request.POST.get('message text', '')
             message = Message()
             message.subject = title
@@ -273,8 +273,8 @@ def editStatus(request, program_id):
                 if title and textcontent:
                     try:
                         from .utils import send_email
-
-                        send_email(program.email, program.emailPassword, to_email, title, textcontent)
+                        from azzahra.settings import EMAIL_HOST_USER ,EMAIL_HOST_PASSWORD
+                        send_email(EMAIL_HOST_USER,EMAIL_HOST_PASSWORD , to_email, title, textcontent)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                 else:
