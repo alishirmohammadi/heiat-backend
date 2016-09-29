@@ -14,7 +14,22 @@ from django.db.models import Q
 
 # Create your views here.
 from program.utils import checkMelliCode
+from pay.models import Expense,Charity
 
+
+def charity(request):
+    charity=Expense.objects.filter()
+    if request.method == 'GET':
+        return render(request, 'Charity.html', {'charity':charity})
+    else:
+        if request.POST.get('mokeb1',''):
+            id = "1"
+        else:
+            id = "2"
+        amount = request.POST.get('amount')
+
+        payment = Charity.create2(amount=amount,id=id)
+        return render(request, "post.html", {'payment': payment})
 
 def error(request,username=None,page=None):
     if request.method == 'GET':

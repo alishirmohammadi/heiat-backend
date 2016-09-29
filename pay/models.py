@@ -8,18 +8,66 @@ import traceback
 
 # Create your models here.
 class Payment(models.Model):
-    registration = models.ForeignKey(Registration)
-    numberOfInstallment = models.IntegerField(default=1)
+    registration = models.ForeignKey(Registration,null=True)
+    numberOfInstallment = models.IntegerField(default=1,null=True)
+    amount = models.IntegerField()
+    refId = models.CharField(max_length=40, null=True, blank=True)
+    saleRefId = models.CharField(max_length=40, null=True, blank=True)
+    takingDate = models.DateTimeField(default=datetime.now)
+    success = models.BooleanField(default=False)
+class Meta:
+    verbose_name = 'پرداخت'
+    verbose_name_plural = 'پرداخت ها'
+
+class Expense(models.Model):
+    isopen=models.BooleanField(default=True)
+    PAYMENT_TYPE_HEIAT = 'heiat'
+    PAYMENT_TYPE_MOKEB = 'mokeb'
+    payment_type_choices = (
+        (PAYMENT_TYPE_HEIAT, 'هیئت'),
+        (PAYMENT_TYPE_MOKEB, 'موکب'),
+    )
+    payment_type = models.CharField(max_length=200, choices=payment_type_choices)
+
+
+class Charity(models.Model):
+    expense=models.ForeignKey(Expense)
     amount = models.IntegerField()
     refId = models.CharField(max_length=40, null=True, blank=True)
     saleRefId = models.CharField(max_length=40, null=True, blank=True)
     takingDate = models.DateTimeField(default=datetime.now)
     success = models.BooleanField(default=False)
 
-    class Meta:
-        verbose_name = 'پرداخت'
-        verbose_name_plural = 'پرداخت ها'
+
     @classmethod
+
+    def create2(cls, amount,id):
+        payment = cls(amount=amount,expense_id=id)
+        payment.save()
+        for i in range(1, 6):
+            try:
+                client = SoapClient(wsdl="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl", trace=False)
+                site = Site.objects.get_current()
+                callback = 'http://' + site.domain + '/accounting/payment_callback/'
+                response = client.bpPayRequest(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
+                                               orderId=payment.id, amount=amount * 10, callBackUrl=callback,
+                                               localDate=datetime.now().date().strftime("%Y%m%d"),
+                                               localTime=datetime.now().time().strftime("%H%M%S"), additionalData='hi')
+                response = response['bpPayRequestResult']
+                print(response + ':: response')
+                print('initial response:' + str(response))
+                # try:
+                refId = response.split(',')[1]
+                payment.refId = refId
+                payment.save()
+                return payment
+            except:
+                print(traceback.format_exc())
+
+        return payment
+
+    @classmethod
+
     def create(cls, amount, registration, numberOfInstallment):
         payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment)
         payment.save()

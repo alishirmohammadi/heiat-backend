@@ -7,22 +7,49 @@
 
 
     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4" style="margin-top: 100px"><img src="{% static 'azzhra.jpg' %}" width="90%" style="border-radius: 500px;text-align: center"></div>
-
-    <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8"
+{% for item in charity %}
+        {% if item.isopen == True and item.payment_type == 'mokeb' %}
+             <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8"
          style="background-color: #f5f5f5; border-radius: 30px;margin-top: 90px;height: 150px;text-align: center">
-        <form method="POST" style="direction: rtl;text-align: center">
+        <form method="POST" style="direction: rtl;text-align: center"  >
+{% csrf_token %}
+
+                        <p style="font-weight: bold">کمک به هزینه موکب</p>
 
             <input style="margin-top: 30px;margin-bottom: 10px" type="text" class="form-control show-popover" name="amount" placeholder="مبلغ به تومان" required=""
                    autofocusrel="popover" data-original-title="مبلغ دلخواه" data-content="
                        مبلغ دلخواهی که می خواهید کمک کنید را به صورت عددی وارد کنید.مبلغ باید بیش از صد تومان باشد
-                       ">
+                       " >
+            <input type="hidden" name="mokeb1" value="">
             <button style="width: 50%" class="center-block btn-lg btn btn-success btn-block show-popover" type="submit" rel="popover"
                     data-original-title="پرداخت" data-content="
                         پس از زدن دگمه پرداخت به صفحه پرداخت الکترونیکی بانک ملت تحت سامانه شاپرک هدایت می شوید و با کلیه کارتهای عضو شبکه ملی مانند تجرات،ملی و کشاورزی می توانید پرداخت نمیادد.
                         ">پرداخت
             </button>
         </form>
+        {% endif %}
+{% endfor %}
     </div>
+     <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8"
+         style="background-color: #f5f5f5; border-radius: 30px;margin-top: 90px;height: 150px;text-align: center" >
+        <form method="POST" style="direction: rtl;text-align: center" >
+{% csrf_token %}
+            <p style="font-weight: bold" >کمک به هزینه هیئت</p>
+            <input style="margin-top: 30px;margin-bottom: 10px" type="text" class="form-control show-popover" name="amount" placeholder="مبلغ به تومان" required=""
+                   autofocusrel="popover" data-original-title="مبلغ دلخواه" data-content="
+                       مبلغ دلخواهی که می خواهید کمک کنید را به صورت عددی وارد کنید.مبلغ باید بیش از صد تومان باشد
+                       " >
+                        <input type="hidden" name="mokeb1" value="1">
+
+            <button   style="width: 50%" class="center-block btn-lg btn btn-success btn-block show-popover" type="submit" rel="popover"
+                    data-original-title="پرداخت" data-content="
+                        پس از زدن دگمه پرداخت به صفحه پرداخت الکترونیکی بانک ملت تحت سامانه شاپرک هدایت می شوید و با کلیه کارتهای عضو شبکه ملی مانند تجرات،ملی و کشاورزی می توانید پرداخت نمیادد.
+                        "  >پرداخت
+            </button>
+        </form>
+
+    </div>
+
     <div class="col-lg-7 col-md-7 hidden-sm hidden-xs" style="text-align: center">
         <img src="/static/Chariyt.jpg"
              style="width: 500px; height: auto; border-radius: 50px; margin-top: 20px;margin-bottom: 20px">

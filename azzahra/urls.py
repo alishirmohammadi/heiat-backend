@@ -54,7 +54,7 @@ urlpatterns = [
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
     url(r'^FAQ/$',  TemplateView.as_view(template_name="FAQ.html"), name="FAQ"),
     url(r'^error/', 'accounts.views.error'),
-    url(r'^charity/$',  TemplateView.as_view(template_name="charity.html"), name="charity"),
+    url(r'^charity/', 'accounts.views.charity'),
 
     # url(r'^accounts/edit_profile', 'accounts.views.saveProfile'),
 

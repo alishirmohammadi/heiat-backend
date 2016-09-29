@@ -304,6 +304,7 @@ def my_managements(request):
     return render(request, 'my_managements.html', {'managements': managements})
 
 
+
 @login_required
 def manage(request, management_id):
     management = Management.objects.filter(id=management_id).first()
