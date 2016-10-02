@@ -70,9 +70,9 @@ class Profile(UserenaBaseProfile):
     )
     passport = models.CharField(max_length=200, choices=passport_choices, null=True)
 
-    passport_number = models.IntegerField()
-    passport_dateofissue = models.DateField()
-    passport_dateofexpiry = models.DateField()
+    passport_number = models.IntegerField(null=True,blank=True)
+    passport_dateofissue = models.DateField(null=True,blank=True)
+    passport_dateofexpiry = models.DateField(null=True,blank=True)
 
     def hasManagement(self):
         from program.models import Management

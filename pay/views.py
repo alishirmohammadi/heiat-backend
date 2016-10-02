@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from  program.models import Registration, Program, Pricing, Profile
 from django.views.decorators.csrf import csrf_exempt
-from .models import Payment
+from .models import Payment,Expense
 from django.http import HttpResponseRedirect
 
 
@@ -46,4 +46,14 @@ def payment_callback(request):
     return render(request, 'result.html', {'payment': payment})
 
 
+def charity(request):
 
+    if request.method == 'GET':
+        all_expenses=Expense.objects.filter(is_open=True)
+        return render(request, 'charity.html', {'all_expenses':all_expenses})
+    else:
+        expense=Expense.objects.get(id=request.POST.get('expense',1))
+        amount = int(request.POST.get('amount',10000))
+
+        payment = Payment.create(amount=amount,expense=expense)
+        return render(request, "post.html", {'payment': payment})

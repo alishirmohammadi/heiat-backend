@@ -86,12 +86,6 @@ WSGI_APPLICATION = 'azzahra.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -157,9 +151,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID=1
-from .local import MEDIA_ROOT_LOCAL
+from .local import MEDIA_ROOT_LOCAL,DATABASES_LOCAL
 # MEDIA_ROOT = os.path.join(os.path.abspath(''),'app/static/')
 MEDIA_ROOT=MEDIA_ROOT_LOCAL
+DATABASES=DATABASES_LOCAL
 USERENA_HTML_EMAIL=True
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,

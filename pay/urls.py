@@ -5,4 +5,5 @@ urlpatterns = [
 
     url(r'^payment_callback/$', 'pay.views.payment_callback'),
     url(r'^start/(?P<registration_id>\d+)/$', 'pay.views.start_pay'),
+    url(r'^charity/', 'pay.views.charity'),
 ]

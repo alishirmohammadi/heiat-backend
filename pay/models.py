@@ -7,114 +7,31 @@ import traceback
 from django.db.models import Sum, Q
 
 
+
+class Expense(models.Model):
+    is_open=models.BooleanField(default=True)
+    expense_name=models.CharField(max_length=200)
+    def sum_of_money(self):
+        return Payment.objects.filter(expense=self).filter(success=True).aggregate(Sum('amount'))['amount__sum']
+
 # Create your models here.
 class Payment(models.Model):
     registration = models.ForeignKey(Registration,null=True)
+    expense = models.ForeignKey(Expense,null=True)
     numberOfInstallment = models.IntegerField(default=1,null=True)
     amount = models.IntegerField()
     refId = models.CharField(max_length=40, null=True, blank=True)
     saleRefId = models.CharField(max_length=40, null=True, blank=True)
     takingDate = models.DateTimeField(default=datetime.now)
     success = models.BooleanField(default=False)
-class Meta:
-    verbose_name = 'پرداخت'
-    verbose_name_plural = 'پرداخت ها'
-
-
-@classmethod
-def create(cls, amount, registration, numberOfInstallment):
-    payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment)
-    payment.save()
-    for i in range(1, 6):
-        try:
-            client = SoapClient(wsdl="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl", trace=False)
-            site = Site.objects.get_current()
-            callback = 'http://' + site.domain + '/accounting/payment_callback/'
-            response = client.bpPayRequest(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
-                                           orderId=payment.id, amount=amount * 10, callBackUrl=callback,
-                                           localDate=datetime.now().date().strftime("%Y%m%d"),
-                                           localTime=datetime.now().time().strftime("%H%M%S"), additionalData='hi')
-            response = response['bpPayRequestResult']
-            print(response + ':: response')
-            print('initial response:' + str(response))
-            # try:
-            refId = response.split(',')[1]
-            payment.refId = refId
-            payment.save()
-            return payment
-        except:
-            print(traceback.format_exc())
-
-    return payment
-
-
-def verify(self, saleRefId, original_id):
-    for i in range(1, 6):
-        try:
-            client = SoapClient(wsdl="http://services.yaser.ir/PaymentService/Mellat.svc?wsdl", trace=False)
-            response = client.bpGetOrderId(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
-                                           mapOrderId=original_id)
-            my_id = response['bpGetOrderIdResult']
-            verfiy_response = client.bpVerifyRequest(terminalId=27, userName='scipub',
-                                                     userPassword='M0sci#ew_Tps@s12',
-                                                     orderId=my_id, saleOrderId=my_id, saleReferenceId=saleRefId)
-            ver_rescode = verfiy_response['bpVerifyRequestResult']
-            self.verify_rescode = ver_rescode
-            if ver_rescode == '0':
-                settle_response = client.bpSettleRequest(terminalId=27, userName='scipub',
-                                                         userPassword='M0sci#ew_Tps@s12',
-                                                         orderId=my_id, saleOrderId=my_id,
-                                                         saleReferenceId=saleRefId)
-                settle_rescode = settle_response['bpSettleRequestResult']
-                if settle_rescode == '0':
-                    self.success = True
-                    self.saleRefId = saleRefId
-                    self.save()
-                    return 0
-        except:
-            print(traceback.format_exc())
-
-
-class Expense(models.Model):
-    isopen=models.BooleanField(default=True)
-    PAYMENT_TYPE_HEIAT = 'heiat'
-    PAYMENT_TYPE_MOKEB = 'mokeb'
-    payment_type_choices = (
-        (PAYMENT_TYPE_HEIAT, 'هیئت'),
-        (PAYMENT_TYPE_MOKEB, 'موکب'),
-    )
-    payment_type = models.CharField(max_length=200, choices=payment_type_choices)
-    # amount = models.IntegerField()
-    def sum_of_money(self):
-
-        mok=Charity.objects.filter(expense=self).filter(success=True).aggregate(Sum('amount'))
-        return (mok['amount__sum'])
-
-
-    # def sum_of_money(self):
-    #     total = Expense.objects.filter(success=True).aggregate(Sum('amount'))
-    #     return (total['amount__sum'])
-class Charity(models.Model):
-    expense=models.ForeignKey(Expense)
-    amount = models.IntegerField()
-    refId = models.CharField(max_length=40, null=True, blank=True)
-    saleRefId = models.CharField(max_length=40, null=True, blank=True)
-    takingDate = models.DateTimeField(default=datetime.now)
-    success = models.BooleanField(default=False)
-
     class Meta:
-        verbose_name = 'کمک هزینه'
-        verbose_name_plural = 'کمک هزینه ها'
-
-    def sum_of_money(self):
-        total = Charity.objects.filter(success=True).aggregate(Sum('amount'))
-        return (total['amount__sum'])
+        verbose_name = 'پرداخت'
+        verbose_name_plural = 'پرداخت ها'
 
 
     @classmethod
-
-    def create2(cls, amount,id):
-        payment = cls(amount=amount,expense_id=id)
+    def create(cls, amount, registration=None, numberOfInstallment=None,expense=None):
+        payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment,expense=expense)
         payment.save()
         for i in range(1, 6):
             try:
@@ -130,6 +47,7 @@ class Charity(models.Model):
                 print('initial response:' + str(response))
                 # try:
                 refId = response.split(',')[1]
+
                 payment.refId = refId
                 payment.save()
                 return payment
@@ -138,32 +56,6 @@ class Charity(models.Model):
 
         return payment
 
-    @classmethod
-
-    def create(cls, amount, registration, numberOfInstallment):
-        payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment)
-        payment.save()
-        for i in range(1,6):
-            try:
-                client = SoapClient(wsdl="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl", trace=False)
-                site = Site.objects.get_current()
-                callback = 'http://' + site.domain + '/accounting/payment_callback/'
-                response = client.bpPayRequest(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
-                                               orderId=payment.id, amount=amount * 10, callBackUrl=callback,
-                                               localDate=datetime.now().date().strftime("%Y%m%d"),
-                                               localTime=datetime.now().time().strftime("%H%M%S"), additionalData='hi')
-                response = response['bpPayRequestResult']
-                print(response + ':: response')
-                print('initial response:' + str(response))
-                # try:
-                refId = response.split(',')[1]
-                payment.refId = refId
-                payment.save()
-                return payment
-            except:
-                print(traceback.format_exc())
-
-        return payment
 
     def verify(self, saleRefId, original_id):
         for i in range(1, 6):
@@ -190,3 +82,5 @@ class Charity(models.Model):
                         return 0
             except:
                 print(traceback.format_exc())
+
+
