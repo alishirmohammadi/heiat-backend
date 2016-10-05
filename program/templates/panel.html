@@ -490,8 +490,8 @@
                         <td style="text-align: center;  {% if item.couple_inconsistency %}
                             background:orange{% endif %}">{{ item.id }}</td>
                     <td style="text-align: center;  {% if item.couple_inconsistency %}
-                            background:orange{% endif %}">{{ item.profile.couple.melliCode }}</td>
-                        <td style="text-align: center">{{ item.profile.melliCode }}</td>
+                            background:orange{% endif %}">{{ item.profile.couple.user.username }}</td>
+                        <td style="text-align: center">{{ item.profile.user.username }}</td>
                         <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
                             <td style="text-align: center">{{ item.profile.studentNumber }}</td>

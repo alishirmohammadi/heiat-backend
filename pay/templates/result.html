@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
- 
+ {% block navbar %}
+    {% include '_navbar.html' with active_link='charity' %}
+{% endblock %}
 {% block content %}
     <div class="container">
  

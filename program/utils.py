@@ -50,7 +50,7 @@ def registrations_to_excel(registrations):
         profile__user__last_name = j.profile.user.last_name
         profile__user__email = j.profile.user.email
         profile__cellPhone = j.profile.cellPhone
-        profile_mellicode=j.profile.melliCode
+        profile_mellicode=j.profile.user.username
         Registration_feedback = j.feedBack
         if j.additionalOption:
             Registration_additionalOption=j.additionalOption

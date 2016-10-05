@@ -10,8 +10,6 @@
 {#<script src="{% static "bootstrap-slider.min.js" %}"></script>#}
 
 
-
-
 {% load tags %}
 
 {% block content %}
@@ -33,7 +31,7 @@
                         <tr>
                             <th style="text-align: right" width="50%">نام برنامه:</th>
                             <td width="100%"><input class="form-control" type="text" name="title"
-                                                          value="{{ mymanagement.program.title }}"></td>
+                                                    value="{{ mymanagement.program.title }}"></td>
                         </tr>
                         <tr>
                             <th style="text-align: right"> زمان برنامه:</th>
@@ -47,39 +45,42 @@
                                        value="{{ mymanagement.program.registerInterval }}">
                             </td>
                         </tr>
-                            <tr>
+                        <tr>
                             <th style="text-align: right">AdditionalOption:</th>
                             <td><input class="form-control" type="text" name="AdditionalOption"
                                        placeholder="{{ mymanagement.program.additionalOption }}">
                             </td>
                         </tr>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
-                          <tr>
-                            <th style="text-align: right">ثبت تاریخ برنامه: </th>
-                            <td><input  class="example1 form-control" type="text"  name="startDate">                            </td> </tr>
- <tr>
-                                                            <th style="text-align: right">آخرین تاریخ ثبت شده برای برنامه: </th>
-<td class="form-control" style="font-size: 18px">
-                                {{ mymanagement.program.startDate.year }}-{{ mymanagement.program.startDate.month }}-{{ mymanagement.program.startDate.day }}
-                            </td>
-                        </tr>
+                            <tr>
+                                <th style="text-align: right">
+                                    تاریخ حرکت:
+                                </th>
+                                <td><input class="example1 form-control  datepicker_format" type="text" name="startDate" value="{{ mymanagement.program.startDate.year }}-{{ mymanagement.program.startDate.month }}-{{ mymanagement.program.startDate.day }}"></td>
+                            </tr>
+{#                            <tr>#}
+{#                                <th style="text-align: right">آخرین تاریخ ثبت شده برای برنامه:</th>#}
+{#                                <td class="form-control" style="font-size: 18px">#}
+{#                                    {{ mymanagement.program.startDate.year }}-{{ mymanagement.program.startDate.month }}-{{ mymanagement.program.startDate.day }}#}
+{#                                </td>#}
+{#                            </tr>#}
                         {% endif %}
-{#                           <tr>#}
-{#                            <th style="text-align: right">زمان ثبت نام:</th>#}
-{#                            <td><input class="form-control" type="text" name="registrinterval"#}
-{#                                       value="{{ mymanagement.program.registerInterval }}">#}
-{#                            </td>#}
-{#                        </tr>#}
-{#                        <tr>#}
-{#                            <th style="text-align: right">امکان ثبت نام متاهلی:</th>#}
-{#                            <td>#}
-{#                                <input type="checkbox" name="hascoupling"#}
-{#                                        {% if mymanagement.program.hasCoupling %}#}
-{#                                       checked#}
-{##}
-{#                                        {% endif %}>#}
-{#                            </td>#}
-{#                        </tr>#}
+                        {#                           <tr>#}
+                        {#                            <th style="text-align: right">زمان ثبت نام:</th>#}
+                        {#                            <td><input class="form-control" type="text" name="registrinterval"#}
+                        {#                                       value="{{ mymanagement.program.registerInterval }}">#}
+                        {#                            </td>#}
+                        {#                        </tr>#}
+                        {#                        <tr>#}
+                        {#                            <th style="text-align: right">امکان ثبت نام متاهلی:</th>#}
+                        {#                            <td>#}
+                        {#                                <input type="checkbox" name="hascoupling"#}
+                        {#                                        {% if mymanagement.program.hasCoupling %}#}
+                        {#                                       checked#}
+                        {##}
+                        {#                                        {% endif %}>#}
+                        {#                            </td>#}
+                        {#                        </tr>#}
                         <tr>
                             <th style="text-align: right">امکان ثبت نام متاهلی:</th>
                             <td>
@@ -114,7 +115,9 @@
                     </table>
                     <br><br>
                     <textarea class="form-control" name="note">{{ mymanagement.program.notes }}</textarea>
-                    <button type="submit" class="btn btn-success center-block" style="font-family: 'B Titr';margin-top: 2% ">ثبت تغییر</button>
+                    <button type="submit" class="btn btn-success center-block"
+                            style="font-family: 'B Titr';margin-top: 2% ">ثبت تغییر
+                    </button>
                 </form>
             </div>
         </div>

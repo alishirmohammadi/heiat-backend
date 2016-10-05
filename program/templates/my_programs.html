@@ -157,7 +157,7 @@
                         <td style="text-align: right">
                             {% if last_program.isOpen %}
                                 {% if last_program.type == last_program.TYPE_ARBAEEN %}
-                                    {% if profile.passport != None %}
+                                    {% if user.my_profile.passport %}
 
                                         {% if type_pricing.price1 == None %}
                                             <span data-toggle="popover"
@@ -175,10 +175,11 @@
                                         {% endif %}
 
                                     {% else %}
-                                        <span data-toggle="popover"
+                                        <span data-toggle="tooltip"
                                               title="عدم تکمیل پروفایل"
                                               data-content="برای سفر خارجی ملزم به داشتن و ارائه پاسپورت هستید ابتدا اطلاعات پاسپورت خود را در قسمت پروفایل تکمیل کنید"><b><font
-                                                color="red">عدم امکان ثبت نام</font></b></span>
+                                                color="red">
+                                            عدم امکان ثبت نام</font></b></span>
                                     {% endif %}
                                 {% else %}
                                     {% if type_pricing.price1 == None %}

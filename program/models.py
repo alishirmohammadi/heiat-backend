@@ -1,7 +1,7 @@
 # Encoding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime,date
 from accounts.models import Profile
 from django.db.models import Sum, Q
 
@@ -19,10 +19,10 @@ class Program(models.Model):
     programInterval = models.CharField(default='زمان برنامه', max_length=80)
     registerInterval = models.CharField(default='زمان ثبت نام', max_length=80)
     creationDate = models.DateTimeField(default=datetime.now)
-    notes = models.CharField(max_length=200)
+    notes = models.CharField(max_length=20000)
     email = models.EmailField(max_length=200, null=True, blank=True)
     emailPassword = models.CharField(max_length=200, null=True, blank=True)
-    startDate = models.DateField(default=datetime.now)
+    startDate = models.DateField(default=date.today)
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'

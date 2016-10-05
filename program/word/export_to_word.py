@@ -84,7 +84,7 @@ def registrations_to_print(registerations):
         p_format = p.paragraph_format
         p_format.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
         p = document.add_paragraph('کد ملی')
-        p.add_run(str(item.profile.melliCode) + ':').bold = True
+        p.add_run(str(item.profile.user.username ) + ':').bold = True
         p.add_run(' شماره شناسنامه')
         p.add_run('  ')
         p.add_run(str(item.profile.shenasname) + ':').bold = True

@@ -102,7 +102,7 @@ class SignupFormExtra(SignupForm):
         new_user.save()
         p = new_user.my_profile
         p.cellPhone = self.cleaned_data['cellPhone']
-        p.melliCode = self.cleaned_data['username']
+        # p.melliCode = self.cleaned_data['username']
         p.save()
         new_user.userena_signup.send_activation_email()
         return new_user
@@ -179,6 +179,9 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['people_type', 'studentNumber', 'gender', 'address', 'shenasname',
                   'fatherName', 'emergencyPhone', 'birthYear', 'birthMonth', 'birthDay']
+        fields_required = ['people_type', 'studentNumber', 'gender', 'address', 'shenasname',
+                  'fatherName', 'emergencyPhone', 'birthYear', 'birthMonth', 'birthDay']
+
         widgets = {
             'gender': forms.RadioSelect
         }
@@ -209,7 +212,7 @@ class ProfileForm(forms.ModelForm):
         from .views import isNum
         if not isNum(stu) or len(stu)!=8:
             raise forms.ValidationError(_('فرمت شماره دانشجویی درست نیست'))
-        if other and other.id != self.instance.id:
+        if other and other.id != self.instanse.id:
             raise forms.ValidationError(_('شماره دانشجویی تکراری است'))
         return stu
 

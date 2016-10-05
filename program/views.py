@@ -147,7 +147,7 @@ def addregistration(request, program_id):
 
     codemelli = request.POST.get('mellicode', '')
     coupled = request.POST.get('coupled', '')
-    prof = Profile.objects.filter(melliCode=codemelli).first()
+    prof = Profile.objects.filter(user__username =codemelli).first()
     if prof:
         peopletype = prof.people_type
         alreadyRegistered = Registration.objects.filter(program=program).filter(profile=prof).exclude(
@@ -343,7 +343,7 @@ def manage(request, management_id):
     hascoupling = request.POST.get("hascoupling", '')
     isopen = request.POST.get("isopen", '')
     AdditionalOption = request.POST.get("AdditionalOption", '')
-    startDate = jalali.Persian(request.POST.get("startDate", '')).gregorian_string()
+    startDate = request.POST.get("startDate", None)
     email = request.POST.get("email", '')
     emailPassword = request.POST.get("emailPassword", '')
     note = request.POST.get("note", '')
@@ -357,7 +357,8 @@ def manage(request, management_id):
     program.emailPassword = emailPassword
     program.email = email
     program.notes = note
-    program.startDate=startDate
+    if startDate:
+        program.startDate=startDate
     program.save()
     return HttpResponseRedirect('/program/manage/' + str(management_id))
 

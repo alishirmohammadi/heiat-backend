@@ -32,10 +32,11 @@
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     <script>
         $(document).ready(function () {
+            $(".datepicker_format").datepicker({ dateFormat: 'yy-mm-dd' });
             $(".datepicker").datepicker({
                 changeMonth: true,
                 changeYear: true,
-                yearRange: "1900:2012",
+                yearRange: "1950:2030",
                 // You can put more options here.
 
             });

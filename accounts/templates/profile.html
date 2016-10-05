@@ -108,7 +108,7 @@ $(function(){
                     {#                    $('input:radio').change(function () {#}
                     {#                        console.log('testsets')#}
                     {#                    });#}
- {% if  not user.my_profile.couple.melliCode  %}
+ {% if  not user.my_profile.couple  %}
                         $("#menu31").click(function () {
                             $("#couple_type1").trigger('click');
                             $("#couple_type2").trigger('click');
@@ -471,11 +471,11 @@ $(function(){
                                     <div>
                                         متاهل
 
-                                        <input id="couple_type1" {% if user.my_profile.couple.melliCode  %}checked="checked"{% endif %} name="coupling" type="radio"
+                                        <input id="couple_type1" {% if user.my_profile.couple  %}checked="checked"{% endif %} name="coupling" type="radio"
                                                value="1" class="controls">
                                         مجرد
 
-                                        <input id="couple_type2" type="radio" value="" name="coupling" class="controls" {% if not user.my_profile.couple.melliCode %}checked="checked"{% endif %}>
+                                        <input id="couple_type2" type="radio" value="" name="coupling" class="controls" {% if not user.my_profile.couple %}checked="checked"{% endif %}>
                                     </div>
                                 </td>
                             </tr>
@@ -484,7 +484,7 @@ $(function(){
                                 style="text-align: right; font-family:'B Nazanin'; font-weight: bolder; line-height: 35px">
                                 شماره ملی همسر اول:
                             </td>
-                            <td><input value="{{ user.my_profile.couple.melliCode }}" class="form-control" maxlength="10"
+                            <td><input value="{{ user.my_profile.couple.user.username  }}" class="form-control" maxlength="10"
                                        name="wife_mellicode" ></td>
                             </tr>
                             <tr id="couple_melli2">
