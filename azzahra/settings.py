@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'guardian',
     'easy_thumbnails',
     'pay',
+    'zeep'
 
 
 ]

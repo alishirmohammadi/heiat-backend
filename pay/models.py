@@ -1,7 +1,8 @@
 from django.db import models
 from program.models import Registration
 from datetime import datetime
-from pysimplesoap.client import SoapClient
+# from pysimplesoap.client import SoapClient
+from zeep import Client
 from django.contrib.sites.models import Site
 import traceback
 from django.db.models import Sum, Q
@@ -35,14 +36,14 @@ class Payment(models.Model):
         payment.save()
         for i in range(1, 6):
             try:
-                client = SoapClient(wsdl="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl", trace=False)
+                client = Client("https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl")
                 site = Site.objects.get_current()
                 callback = 'http://' + site.domain + '/accounting/payment_callback/'
-                response = client.bpPayRequest(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
-                                               orderId=payment.id, amount=amount * 10, callBackUrl=callback,
+                response = client.service.bpPayRequest(terminalId=870628, userName='sharifz', userPassword='az41837132',
+                                               orderId=payment.id, amount=int(amount) * 10,
                                                localDate=datetime.now().date().strftime("%Y%m%d"),
-                                               localTime=datetime.now().time().strftime("%H%M%S"), additionalData='hi')
-                response = response['bpPayRequestResult']
+                                               localTime=datetime.now().time().strftime("%H%M%S"), additionalData='zeinab', callBackUrl=callback,payerId=0)
+                # response = response['bpPayRequestResult']
                 print(response + ':: response')
                 print('initial response:' + str(response))
                 # try:
@@ -60,22 +61,17 @@ class Payment(models.Model):
     def verify(self, saleRefId, original_id):
         for i in range(1, 6):
             try:
-                client = SoapClient(wsdl="http://services.yaser.ir/PaymentService/Mellat.svc?wsdl", trace=False)
-                response = client.bpGetOrderId(terminalId=27, userName='scipub', userPassword='M0sci#ew_Tps@s12',
-                                               mapOrderId=original_id)
-                my_id = response['bpGetOrderIdResult']
-                verfiy_response = client.bpVerifyRequest(terminalId=27, userName='scipub',
-                                                         userPassword='M0sci#ew_Tps@s12',
-                                                         orderId=my_id, saleOrderId=my_id, saleReferenceId=saleRefId)
-                ver_rescode = verfiy_response['bpVerifyRequestResult']
-                self.verify_rescode = ver_rescode
-                if ver_rescode == '0':
-                    settle_response = client.bpSettleRequest(terminalId=27, userName='scipub',
-                                                             userPassword='M0sci#ew_Tps@s12',
-                                                             orderId=my_id, saleOrderId=my_id,
+                client = Client("https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl")
+                verfiy_response = client.service.bpVerifyRequest(terminalId=870628, userName='sharifz', userPassword='az41837132',
+                                                         orderId=original_id, saleOrderId=original_id, saleReferenceId=saleRefId)
+                # ver_rescode = verfiy_response['bpVerifyRequestResult']
+                self.verify_rescode = verfiy_response
+                if verfiy_response == '0':
+                    settle_response = client.service.bpSettleRequest(terminalId=870628, userName='sharifz', userPassword='az41837132',
+                                                             orderId=original_id, saleOrderId=original_id,
                                                              saleReferenceId=saleRefId)
-                    settle_rescode = settle_response['bpSettleRequestResult']
-                    if settle_rescode == '0':
+                    # settle_rescode = settle_response['bpSettleRequestResult']
+                    if settle_response == '0':
                         self.success = True
                         self.saleRefId = saleRefId
                         self.save()
