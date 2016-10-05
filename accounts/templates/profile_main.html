@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block navbar %}
+    {% include '_navbar.html' with active_link='profile' %}
+{% endblock %}
+{% block second_navbar %}
+    {% include '_profile_navbar.html' with active_link=tab %}
+{% endblock %}
+
+{% block content %}
+    <script>
+        $(document).ready(function () {
+            handle_stuNum();
+            handle_conscription();
+            handle_passport();
+            $('#id_people_type').change(function () {
+                handle_stuNum();
+            });
+            $('#id_passport').change(function () {
+                handle_passport();
+            });
+            $('#id_conscription').change(function () {
+                handle_conscription();
+            });
+        });
+        function handle_stuNum() {
+            if ($("#id_people_type").val() == '{{ user.my_profile.PEOPLE_TYPE_SHARIF_STUDENT }}' || $("#id_people_type").val() == '{{ user.my_profile.PEOPLE_TYPE_SHARIF_GRADUATED }}' || $("#id_people_type").val() == '{{ user.my_profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE }}' || $("#id_people_type").val() == '{{ user.my_profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT }}') {
+                $("#id_studentNumber").parent().parent().fadeIn()
+            } else {
+                $("#id_studentNumber").parent().parent().fadeOut()
+            }
+        }
+        function handle_conscription() {
+            if ($("#id_conscription").val() == '{{ user.my_profile.CONSCRIPTION_OTHER }}') {
+                $("#id_conscriptionDesc").parent().parent().fadeIn()
+            } else {
+                $("#id_conscriptionDesc").parent().parent().fadeOut()
+            }
+        }
+        function handle_passport() {
+            if ($("#id_passport").val() == '{{ user.my_profile.PASSPORT_HAVE }}') {
+                $("#id_passport_number").parent().parent().fadeIn();
+                $("#id_passport_dateofissue").parent().parent().fadeIn();
+                $("#id_passport_dateofexpiry").parent().parent().fadeIn();
+            } else {
+                $("#id_passport_number").parent().parent().fadeOut();
+                $("#id_passport_dateofissue").parent().parent().fadeOut();
+                $("#id_passport_dateofexpiry").parent().parent().fadeOut();
+            }
+        }
+    </script>
+
+    {% if tab == 'passport' %}
+        <div>
+         <p>
+            این اطلاعات مختص سفر کربلا است و تکمیل آن برای اعتکاف یا پابوس عشق ضروری نیست
+        </p>
+            {% if  user.my_profile.mugshot %}
+                <div>
+                    <img src="/accounts/{{ user.username }}/{{ user.my_profile.mugshot }}"
+                         style="width: 120px;height: 180px;">
+                </div>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+    <div dir="rtl" class="container">
+        <form class="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-success">
+                {% if tab == 'main' %}
+                    ذخیره اطلاعات شخصی
+                {% else %}
+                    ذخیره اطلاعات نظام وظیفه و گذرنامه
+                {% endif %}
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

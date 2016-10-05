@@ -12,21 +12,6 @@ class Profile(UserenaBaseProfile):
                                 unique=True,
                                 verbose_name=_('user'),
                                 related_name='my_profile')
-    entranceDate = models.DateTimeField(max_length=20, default=datetime.now)
-    melliCode = models.CharField(max_length=10,verbose_name='کد ملی')
-    gender = models.BooleanField(default=1)
-    couple = models.ForeignKey('self', null=True, blank=True)
-    address = models.CharField(max_length=400 )
-    shenasname = models.CharField(max_length=11 )
-    studentNumber = models.CharField(max_length=20, null=True, blank=True)
-    fatherName = models.CharField(max_length=200)
-    cellPhone = models.CharField(max_length=11)
-    emergencyPhone = models.CharField(max_length=20, null=True, blank=True)
-    conscriptionDesc = models.CharField(max_length=200, null=True, blank=True)
-    deActivated = models.BooleanField(default=False)
-    birthYear = models.IntegerField(null=True)
-    birthMonth = models.IntegerField(null=True)
-    birthDay = models.IntegerField(null=True)
     PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
     PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'
     PEOPLE_TYPE_SHARIF_GRADUATED_TALABE = 'sharif graduated talabe'
@@ -49,7 +34,36 @@ class Profile(UserenaBaseProfile):
         (PEOPLE_TYPE_SHARIF_EMPLOYED, 'کارمند شریف'),
         (PEOPLE_TYPE_OTHER, 'سایر'),
     )
-    people_type = models.CharField(max_length=200, choices=people_type_choices)
+    people_type = models.CharField(max_length=200, choices=people_type_choices,default=PEOPLE_TYPE_OTHER,verbose_name='وضعیت تحصیل')
+    studentNumber = models.CharField(max_length=20, null=True,blank=True,verbose_name="شماره دانشجویی")
+    GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
+    gender = models.BooleanField(default=True,choices=GENDER_CHOICES,verbose_name="جنسیت")
+    couple = models.ForeignKey('self', null=True,verbose_name="همسر")
+    address = models.CharField(max_length=400,verbose_name="آدرس",null=True)
+    shenasname = models.CharField(max_length=11,verbose_name="شماره شناسنامه",null=True)
+    fatherName = models.CharField(max_length=200,verbose_name="نام پدر",null=True)
+    cellPhone = models.CharField(max_length=11,verbose_name="شماره موبایل",null=True)
+    emergencyPhone = models.CharField(max_length=20, null=True,verbose_name="شماره تلفن ضروری")
+    # deActivated = models.BooleanField(default=False,verbose_name="")
+    birthYear = models.IntegerField(default=1370,verbose_name="سال تولد شمسی")
+    MONTH_CHOICES = (
+    (1, 'فروردین'), (2, 'اردیبهشت'), (3, 'خرداد'), (4, 'تیر'), (5, 'مرداد'), (6, 'شهریور'), (7, 'مهر'), (8, 'آبان'),
+    (9, 'آذر'),
+    (10, 'دی'), (11, 'بهمن'), (12, 'اسفند'))
+    birthMonth = models.IntegerField(null=True,choices=MONTH_CHOICES,verbose_name="ماه تولد")
+    birthDay = models.IntegerField(null=True,verbose_name="روز تولد")
+
+
+    PASSPORT_NOT_HAVE = 'not have'
+    PASSPORT_HAVE = 'have'
+    passport_choices = (
+        (PASSPORT_HAVE, 'دارم'),
+        (PASSPORT_NOT_HAVE, 'ندارم'),
+    )
+    passport = models.CharField(max_length=200, choices=passport_choices, null=True,verbose_name="وضعیت گذرنامه")
+    passport_number = models.IntegerField(null=True, blank=True,verbose_name="شماره گذرنامه")
+    passport_dateofissue = models.DateField(null=True, blank=True,verbose_name="تاریخ صدور گذرنامه به میلادی")
+    passport_dateofexpiry = models.DateField(null=True, blank=True,verbose_name="تاریخ انقضا گذرنامه به میلادی")
     CONSCRIPTION_WENT = 'went'
     CONSCRIPTION_EXEMPT = 'exempt'
     CONSCRIPTION_EDUCATIONAL_EXEMPT = 'educational exempt'
@@ -60,32 +74,26 @@ class Profile(UserenaBaseProfile):
         (CONSCRIPTION_EDUCATIONAL_EXEMPT, 'معافیت تحصیلی'),
         (CONSCRIPTION_OTHER, 'سایر'),
     )
-    conscription = models.CharField(max_length=200, choices=conscription_choices)
-
-    PASSPORT_NOT_HAVE = 'not have'
-    PASSPORT_HAVE = 'have'
-    passport_choices = (
-        (PASSPORT_HAVE, 'دارم'),
-        (PASSPORT_NOT_HAVE, 'ندارم'),
-    )
-    passport = models.CharField(max_length=200, choices=passport_choices, null=True)
-
-    passport_number = models.IntegerField(null=True,blank=True)
-    passport_dateofissue = models.DateField(null=True,blank=True)
-    passport_dateofexpiry = models.DateField(null=True,blank=True)
+    conscription = models.CharField(max_length=200, choices=conscription_choices,verbose_name="وضعیت نظام وظیفه")
+    conscriptionDesc = models.CharField(max_length=200, null=True, blank=True,verbose_name="توضیحات بیشتر نظام وظیفه")
 
     def hasManagement(self):
         from program.models import Management
+
         manage = Management.objects.filter(profile=self).first()
         return manage
+
     def coupling(self):
-        if self.couple==None:
+        if self.couple == None:
             return False
         return True
+
     def registered_on_last(self):
         from program.models import Registration
         from program.utils import getLastProgram
-        return Registration.objects.filter(profile=self).filter(program=getLastProgram()).exclude(status=Registration.STATUS_REMOVED).first()
+
+        return Registration.objects.filter(profile=self).filter(program=getLastProgram()).exclude(
+            status=Registration.STATUS_REMOVED).first()
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name

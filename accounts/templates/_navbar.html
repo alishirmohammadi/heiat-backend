@@ -32,7 +32,7 @@
                                 <li {% if active_link == "management" %}class="active"{% endif %}><a href="/program/manage/" style="font-family: 'B Mitra';font-weight: bold">مسئولیت های من</a></li>
                             {% endif %}
 
-                        <li class="dropdown">
+                        <li class="dropdown {% if active_link == "profile" %}active{% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" style="font-family: 'B Mitra';font-weight: bold">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">

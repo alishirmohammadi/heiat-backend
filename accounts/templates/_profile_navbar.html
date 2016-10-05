@@ -1,0 +1,15 @@
+{% load staticfiles %}
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
+        <div class="container-fluid">
+        <div class="navbar-header" style="padding-left: 40px"></div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav second-nav navbar-right" style="margin-right: 40%">
+
+            <li {% if active_link == 'main' %} class="active"{% endif %}><a href="/profile" style="font-family: 'B Mitra';font-weight: bold">اطلاعات شخصی</a></li>
+            <li {% if active_link == 'passport' %} class="active"{% endif %}><a href="/profile/passport" style="font-family: 'B Mitra';font-weight: bold">اطلاعات گذرنامه و نظام وظیفه</a></li>
+            <li {% if active_link == 'couple' %} class="active"{% endif %}><a href="/profile/couple" style="font-family: 'B Mitra';font-weight: bold">اطلاعات همسر</a></li>
+
+            </ul>
+        </div>
+        </div>
+</nav>

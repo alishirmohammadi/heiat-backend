@@ -1,4 +1,4 @@
-#encoding:utf-8
+# encoding:utf-8
 from __future__ import unicode_literals
 
 from userena.forms import (SignupForm, SignupFormOnlyEmail, AuthenticationForm,
@@ -18,11 +18,13 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
 attrs_dict = {'class': 'required'}
 USERNAME_RE = r'^[\.\w]+$'
 from hashlib import sha1
 import random
 from django import forms
+
 
 class SignupFormExtra(SignupForm):
     """
@@ -46,19 +48,18 @@ class SignupFormExtra(SignupForm):
                                 max_length=30,
                                 required=False)
     cellPhone = forms.CharField(label=_(u'تلفن همراه '),
-                                 max_length=30,
-                                 required=False)
+                                max_length=30,
+                                required=False)
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
                              label=_("ایمیل "))
 
-
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict,
-                                                       render_value=False),
-                            label=_("رمز عبور "))
+                                                           render_value=False),
+                                label=_("رمز عبور "))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict,
-                                                       render_value=False),
-                            label=_("تکرار رمز "))
+                                                           render_value=False),
+                                label=_("تکرار رمز "))
 
     def __init__(self, *args, **kw):
         """
@@ -86,10 +87,10 @@ class SignupFormExtra(SignupForm):
                                      self.cleaned_data['password1'])
 
         new_user = UserenaSignup.objects.create_user(username,
-                                                 email,
-                                                 password,
-                                                 not userena_settings.USERENA_ACTIVATION_REQUIRED,
-                                                 False)
+                                                     email,
+                                                     password,
+                                                     not userena_settings.USERENA_ACTIVATION_REQUIRED,
+                                                     False)
 
         # Get the profile, the `save` method above creates a profile for each
         # user because it calls the manager method `create_user`.
@@ -107,6 +108,7 @@ class SignupFormExtra(SignupForm):
         return new_user
         # Userena expects to get the new user from this form, so return the new
         # user.
+
     def clean_username(self):
         """
         Validate that the username is alphanumeric and is not already in use.
@@ -121,7 +123,7 @@ class SignupFormExtra(SignupForm):
         else:
             if userena_settings.USERENA_ACTIVATION_REQUIRED and UserenaSignup.objects.filter(
                     user__username__iexact=self.cleaned_data['username']).exclude(
-                    activation_key=userena_settings.USERENA_ACTIVATED):
+                activation_key=userena_settings.USERENA_ACTIVATED):
                 raise forms.ValidationError(_(
                     'این کدملی پیش تر در سیستم ثبت شده ولی فعال نشده است. لطفا برای فعال سازی ایمیل خود را چک نمایید'))
             raise forms.ValidationError(_('این کدملی پیش تر ثبت شده است'))
@@ -134,9 +136,9 @@ class SignupFormExtra(SignupForm):
         if get_user_model().objects.filter(email__iexact=self.cleaned_data['email']):
             if userena_settings.USERENA_ACTIVATION_REQUIRED and UserenaSignup.objects.filter(
                     user__email__iexact=self.cleaned_data['email']).exclude(
-                    activation_key=userena_settings.USERENA_ACTIVATED):
+                activation_key=userena_settings.USERENA_ACTIVATED):
                 raise forms.ValidationError(_(
-'این ایمیل پیش تر در سیستم ثبت شده ولی فعال نگردیده است. لطفا ایمیل خود را برای فعال سازی چک نمایید'))
+                    'این ایمیل پیش تر در سیستم ثبت شده ولی فعال نگردیده است. لطفا ایمیل خود را برای فعال سازی چک نمایید'))
         return self.cleaned_data['email']
 
     def clean_cellPhone(self):
@@ -153,25 +155,90 @@ class SignupFormExtra(SignupForm):
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_("گذرواژه های وارد شده یکسان نیستند"))
         return self.cleaned_data
-    #
-    # def save(self):
-    #     """ Creates a new user and account. Returns the newly created user. """
-    #
-    #     username, email, password = (self.cleaned_data['username'],
-    #                                  self.cleaned_data['email'],
-    #                                  self.cleaned_data['password1'])
-    #
-    #     new_user = UserenaSignup.objects.create_user(username,
-    #                                                  email,
-    #                                                  password,
-    #                                                  not userena_settings.USERENA_ACTIVATION_REQUIRED,
-    #                                                  userena_settings.USERENA_ACTIVATION_REQUIRED)
-    #     return new_user
+        #
+        # def save(self):
+        #     """ Creates a new user and account. Returns the newly created user. """
+        #
+        #     username, email, password = (self.cleaned_data['username'],
+        #                                  self.cleaned_data['email'],
+        #                                  self.cleaned_data['password1'])
+        #
+        #     new_user = UserenaSignup.objects.create_user(username,
+        #                                                  email,
+        #                                                  password,
+        #                                                  not userena_settings.USERENA_ACTIVATION_REQUIRED,
+        #                                                  userena_settings.USERENA_ACTIVATION_REQUIRED)
+        #     return new_user
+
+
 from .models import Profile
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = []
+        fields = ['people_type', 'studentNumber', 'gender', 'address', 'shenasname',
+                  'fatherName', 'emergencyPhone', 'birthYear', 'birthMonth', 'birthDay']
+        widgets = {
+            'gender': forms.RadioSelect
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        # self.fields['gender'].widget = forms.RadioSelect
+
+    def clean(self):
+        cleaned_data=self.cleaned_data
+        if cleaned_data.get('people_type') not in [Profile.PEOPLE_TYPE_SHARIF_STUDENT,Profile.PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT,Profile.PEOPLE_TYPE_SHARIF_GRADUATED_TALABE,Profile.PEOPLE_TYPE_SHARIF_GRADUATED]:
+            if 'studentNumber' in self.errors:
+                del self.errors['studentNumber']
+                cleaned_data['studentNumber']=None
+        return cleaned_data
+
+    def clean_birthDay(self):
+        day = self.cleaned_data['birthDay']
+        if not day or day < 1 or day > 31:
+            raise forms.ValidationError('روز تولد معتبر نیست')
+        return day
+
+    def clean_studentNumber(self):
+        stu=self.cleaned_data['studentNumber']
+        if not stu:
+            raise forms.ValidationError(_('شماره دانشجویی نمی تواند خالی باشد'))
+        other=Profile.objects.filter(studentNumber=stu).first()
+        from .views import isNum
+        if not isNum(stu) or len(stu)!=8:
+            raise forms.ValidationError(_('فرمت شماره دانشجویی درست نیست'))
+        if other and other.id != self.instance.id:
+            raise forms.ValidationError(_('شماره دانشجویی تکراری است'))
+        return stu
+
+class ProfilePassportForm(forms.ModelForm):
+    # error_css_class = 'error'
+    class Meta:
+        model = Profile
+        # exclude = ['privacy', 'user', 'entranceDate', 'deActivated', 'couple', 'cellPhone', 'gender', 'address', 'shenasname',
+        #            'studentNumber', 'fatherName', 'emergencyPhone', 'birthYear', 'birthMonth', 'birthDay',
+        #            'people_type']
+        fields = ['conscription',
+                  'conscriptionDesc', 'passport', 'passport_number', 'passport_dateofissue', 'passport_dateofexpiry',
+                  'mugshot']
+        widgets = {
+            'passport_dateofissue': forms.DateInput(attrs={'class': 'datepicker'}),
+            'passport_dateofexpiry': forms.DateInput(attrs={'class': 'datepicker'}),
+        }
+        labels = {
+            'mugshot': 'عکس گذرنامه'
+        }
+        help_texts = {
+            'mugshot': "عکس ۲ در ۳ مشابه عکس گذرنامه برای مانیفست",
+            "passport_number": "به صورت ۸ رقمی و بدون حرف اول"
+
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProfilePassportForm, self).__init__(*args, **kwargs)
+
 
 class PasswordResetForm(forms.Form):
     username = forms.CharField(label=_("کدملی"), max_length=60)
@@ -238,7 +305,6 @@ class PasswordResetForm(forms.Form):
                            html_email_template_name=html_email_template_name)
 
 
-
 def checkMelliCode(mellicode):
     a = mellicode
     if (len(a) == 8):
@@ -263,10 +329,11 @@ def checkMelliCode(mellicode):
     else:
         raise forms.ValidationError(_('کد ملی وارد شده معتبر نیست'))
 
+
 def checkCellPhone(cellPhone):
     a = cellPhone
     if (len(a) == 10 and int(a[0]) == 9):
-        a='0'+a
+        a = '0' + a
     if (len(a) == 11):
         if (int(a[0]) == 0 and int(a[1]) == 9):
             return True

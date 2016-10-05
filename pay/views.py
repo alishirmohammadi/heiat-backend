@@ -38,7 +38,7 @@ def payment_callback(request):
     payment = Payment.objects.filter(refId=refId).first()
 
     payment.verify(saleReferenceId, saleOrderId)
-    if payment.success:
+    if payment.success and payment.registration:
         numofpayment = payment.registration.numberOfPayments
         a = numofpayment + 1
         payment.registration.numberOfPayments = a
@@ -46,10 +46,11 @@ def payment_callback(request):
     return render(request, 'result.html', {'payment': payment})
 
 
-def charity(request):
-
+def charity(request,expense_id=None):
     if request.method == 'GET':
         all_expenses=Expense.objects.filter(is_open=True)
+        if expense_id:
+            all_expenses=all_expenses.filter(id=expense_id)
         return render(request, 'charity.html', {'all_expenses':all_expenses})
     else:
         expense=Expense.objects.get(id=request.POST.get('expense',1))

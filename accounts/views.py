@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .forms import ProfileForm
+from .forms import ProfileForm,ProfilePassportForm
 from django.contrib import messages
 from django.db.models import Q
 
@@ -30,20 +30,49 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 @login_required
-def add(request):
-    profile = Profile()
-    # school = School.objects.filter(admin=request.user).first()
-
+def profile(request,passport=None):
+    profile = request.user.my_profile
+    form_name= ProfilePassportForm if passport else ProfileForm
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES)
+        form = form_name(request.POST, request.FILES,instance=profile)
         if form.is_valid():
             profile = form.save()
-            # return HttpResponseRedirect('/profile/' + str(Member.objects.filter(field__school=school).last().id))
     else:
-        form = ProfileForm(instance=profile)
-    return render(request, "pro.html", {
+        form = form_name(instance=profile)
+    if not passport:
+        passport='main'
+    return render(request, "profile_main.html", {
         'form': form,
+        'tab':passport
     })
+
+@login_required
+def profile_couple(request):
+    me=request.user.my_profile
+    message='ابتدا باید هر یک از زوجین به صورت مجرد برای خود پروفایل بسازد و سپس یکی کد ملی دیگری را اینجا وارد کند'
+    color='black'
+    if request.method=='POST':
+        couple_melliCode=request.POST.get('couple_melliCode','')
+        if couple_melliCode:
+            color="red"
+            if not checkMelliCode(couple_melliCode):
+                message='کد ملی همسر معتبر نیست'
+            else:
+                couple=Profile.objects.filter(user__username=couple_melliCode).first()
+                if not couple:
+                    message='چنین کاربری وجود ندارد'
+                elif couple.gender == me.gender:
+                    message='ازدواج با همجنس مجاز نیست'
+                elif couple.couple and couple.couple.id != me.id:
+                    message='همسر شما همسر دیگری دارد'
+                else:
+                    me.couple=couple
+                    me.save()
+                    couple.couple=me
+                    couple.save()
+                    message="همسر شما با موفقیت ثبت شد"
+                    color="green"
+    return render(request,'profile_couple.html',{'message':message,'color':color})
 
 
 def isNum(data):

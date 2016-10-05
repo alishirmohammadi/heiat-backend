@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {#{% load thumbnail %}#}
-{% load  %}
+{% load %}
 <!DOCTYPE html>
 <html>
 
@@ -10,25 +10,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}{% endblock description %}">
     <meta name="author" content="Arun Ravindran">
-    <link rel="stylesheet" href="{% static 'datePicker.css'%}"/>
-    <script src="{% static 'jquery-1.11.1.min.js' %}"></script>
-    <script src="{% static 'pwt-date.js'%}"></script>
-    <script src="{% static 'persian-datepicker-0.4.5.js'%}"></script>
+{#    <link rel="stylesheet" href="{% static 'datePicker.css' %}"/>#}
+ <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {#  <link rel="stylesheet" href="/resources/demos/style.css">#}
+    <script src="/static/js/jquery-1.12.4.js"></script>
+    <script src="/static/js/jquery-ui.js"></script>
+{#    <script src="{% static 'jquery-1.11.1.min.js' %}"></script>#}
+{#    <script src="{% static 'pwt-date.js' %}"></script>#}
+{#    <script src="{% static 'persian-datepicker-0.4.5.js' %}"></script>#}
 
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     <title>{% block title %}azzahra{% endblock %}</title>
     <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
-    <script>tinymce.init({forced_root_block : "",mode: "specific_textareas", editor_deselector : "mceNoEditor"});</script>
+    <script>tinymce.init({
+        forced_root_block: "",
+        mode: "specific_textareas",
+        editor_deselector: "mceNoEditor"
+    });</script>
     <!— Bootstrap core CSS —>
     <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     <script>
         $(document).ready(function () {
-            $('[data-toggle="popover"]').popover({trigger: "hover", placement: "auto"});
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "1900:2012",
+                // You can put more options here.
+
+            });
         });
     </script>
     <style>
-
+.errorlist{
+    color: red;
+}
         @font-face {
             font-family: 'B Nazanin+';
             src: url('{% static 'fontBnazanin/fonts/BNazanin+Regular.eot' %}');
@@ -84,8 +100,8 @@
     <!— /.container-fluid —>
 </nav>
 
-    {% block second_navbar %}
-    {% endblock %}
+{% block second_navbar %}
+{% endblock %}
 
 
 
