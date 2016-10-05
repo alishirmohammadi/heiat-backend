@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div>
-        <form id="myForm" action="https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl" method="POST">
+        <form id="myForm" action="https://bpm.shaparak.ir/pgwchannel/startpay.mellat" method="POST">
             <input type="hidden" name="RefId" value="{{ payment.refId }}">
             <input type="submit" value="go" style="display: none;">
         </form>
