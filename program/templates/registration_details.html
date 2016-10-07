@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load tags %}
-
+{% block title %}
+{{ myregister.program.title }}
+{% endblock %}
 {% block navbar %}
     {% include '_navbar.html' with active_link='ref_detail' %}
 {% endblock %}
@@ -29,7 +31,9 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>نوع سفر</td>
+                        <td>
+                            به عنوان
+                        </td>
                         <td> {{ myregister.profile.people_type_choices|get_tuple_item:myregister.profile.people_type }} </td>
                     </tr>
                     <tr>

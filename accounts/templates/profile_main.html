@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% load tags %}
+{% block title %}
+   پروفایل
+    {{ user.my_profile }}
+{% endblock %}
 {% block navbar %}
     {% include '_navbar.html' with active_link='profile' %}
 {% endblock %}

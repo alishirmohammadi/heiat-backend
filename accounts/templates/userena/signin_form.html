@@ -1,7 +1,9 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
 {% load tags %}
-{% block title %}{% trans "Signin" %}{% endblock %}
+{% block title %}
+    ورود به حساب کاربری
+{% endblock %}
 {% block navbar %}
     {% include '_navbar.html' with active_link='signin' %}
 {% endblock %}
@@ -11,20 +13,32 @@
 
 
             <div class="col-lg-3 col-md-6">
-                <ul class="list-group" >
+                <ul class="list-group"  >
                     {% get_lastProg as p %}
-                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
-                            class="badge">{{ p.title }}  </span>جدید ترین برنامه:
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px" dir="rtl"><span
+                            class="badge">{{ p.title }}  </span>:
+                        <span>
+                            جدید ترین برنامه
+                        </span>
                     </li>
-                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
-                            class="badge">{{ p.programInterval }}</span>زمان برنامه:
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px" dir="rtl"><span
+                            class="badge">{{ p.programInterval }}</span>:
+                        <span>
+                            زمان برنامه
+                        </span>
                     </li>
-                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
-                            class="badge">{{ p.registerInterval }}</span>زمان ثبت نام:
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px" dir="rtl"><span
+                            class="badge">{{ p.registerInterval }}</span>:
+                        <span>
+                            زمان ثبت نام
+                        </span>
                     </li>
-                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px"><span
-                            class="badge">{{ p.email }}</span>
-                        ایمیل:
+                    <li class="list-group-item" style="font-family: 'B Titr';font-size: 12px" dir="rtl"><span
+                            class="badge">{{ p.email }}</span>:
+                        <span>
+                            ایمیل
+                        </span>
+
                     </li>
                 </ul>
             </div>

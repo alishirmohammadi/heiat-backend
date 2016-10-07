@@ -212,7 +212,7 @@ class ProfileForm(forms.ModelForm):
         from .views import isNum
         if not isNum(stu) or len(stu)!=8:
             raise forms.ValidationError(_('فرمت شماره دانشجویی درست نیست'))
-        if other and other.id != self.instanse.id:
+        if other and other.id != self.instance.id:
             raise forms.ValidationError(_('شماره دانشجویی تکراری است'))
         return stu
 
