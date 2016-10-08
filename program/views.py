@@ -273,7 +273,7 @@ def editStatus(request, program_id):
                 if title and textcontent:
                     try:
                         from django.core.mail import get_connection
-                        connection=get_connection(fail_silently=False,host='smtp.gmail.com',port=587,username=program.email,password=program.emailPassword,use_tls=True)
+                        connection=get_connection(fail_silently=True,host='smtp.gmail.com',port=587,username=program.email,password=program.emailPassword,use_tls=True)
                         from_email=program.title+'<'+program.email+'>'
                         message2 = EmailMessage(title, textcontent,from_email=from_email, bcc=to_email,connection=connection)
                         message2.content_subtype = "html"
