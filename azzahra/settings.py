@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'pay',
     'zeep'
 
-
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,6 +126,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 LANGUAGE_CODE = 'fa-ir'
 
 from django.utils.translation import ugettext_lazy as _
+
 LANGUAGES = (
     ('en', _('English')),
     ('fa', _('Farsi')),
@@ -151,12 +151,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-SITE_ID=1
-from .local import MEDIA_ROOT_LOCAL,DATABASES_LOCAL
+SITE_ID = 1
+from .local import MEDIA_ROOT_LOCAL, DATABASES_LOCAL
 # MEDIA_ROOT = os.path.join(os.path.abspath(''),'app/static/')
-MEDIA_ROOT=MEDIA_ROOT_LOCAL
-DATABASES=DATABASES_LOCAL
-USERENA_HTML_EMAIL=True
+MEDIA_ROOT = MEDIA_ROOT_LOCAL
+DATABASES = DATABASES_LOCAL
+USERENA_HTML_EMAIL = True
+USERENA_REGISTER_PROFILE = False
 
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',
@@ -168,5 +169,6 @@ USERENA_MUGSHOT_PATH = getattr(settings,
                                'USERENA_MUGSHOT_PATH',
                                'mugshots/')
 
-LOGIN_URL='/accounts/signin/'
-USERENA_MUGSHOT_SIZE = 120*120
+LOGIN_URL = '/accounts/signin/'
+USERENA_MUGSHOT_SIZE = 120 * 120
+

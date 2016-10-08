@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="container">
+
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-top: 50px">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -10,7 +10,8 @@
                     <span class="icon-bar"></span>
                 </button>
             </div>
-            <div class="collapse navbar-collapse" id="second_nav">
+            <div class="collapse navbar-collapse" id="second_nav" style="width: 100px;">
+            <div class="container">
                 <ul class="nav navbar-nav second-nav" >
 
                 <li {% if active_link == 'main' %} class="active"{% endif %}><a href="/profile" style="font-family: 'B Mitra';font-weight: bold">اطلاعات شخصی</a></li>
@@ -19,6 +20,7 @@
 
                 </ul>
             </div>
+            </div>
         </div>
     </nav>
-</div>
+

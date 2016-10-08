@@ -193,8 +193,8 @@ class Management(models.Model):
     comment = models.CharField(max_length=800, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'مدیریت'
-        verbose_name_plural = 'مدیریت ها'
+        verbose_name = 'مسئولیت'
+        verbose_name_plural = 'مسئولیت‌ها'
 
     def seedocument(self):
         return {

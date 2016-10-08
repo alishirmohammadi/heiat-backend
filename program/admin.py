@@ -18,9 +18,9 @@ class ManagementInline(admin.TabularInline):
 
     manager_url.allow_tags = True
 
-    readonly_fields = ('manager_url', 'role', 'comment')
+    readonly_fields = ('manager_url',)
     exclude = (
-        'profile', 'canEditProgram', 'canFilter', 'canSelect', 'canEditRegistration', 'canDocument', 'canMassage',
+        'canEditProgram', 'canFilter', 'canSelect', 'canEditRegistration', 'canDocument', 'canMessage',
         'canAdd',
         'documentation')
     # list_display_links = ('provider',)/\
