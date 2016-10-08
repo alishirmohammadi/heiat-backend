@@ -113,7 +113,7 @@
                             <b>{{ statusChoices|get_tuple_item:item }}</b>
                             <input class="checkbox-inline" type="checkbox" name="status_choices" value="{{ item }}"
                                    {% if item in filterAll.status %}checked="checked"{% endif %}
-                            >
+                                    >
                         {% endfor %}
 
                     </label>
@@ -366,9 +366,9 @@
 
 
                 {% if mymanagement.canSelect %}
-{#                    <input type="number" name="selectFilter" value="select" id="selectFilter"#}
-{#                           style="text-align: center; width: 7%; float: right"#}
-{#                           placeholder="تعداد" class="form-control">#}
+                    {#                    <input type="number" name="selectFilter" value="select" id="selectFilter"#}
+                    {#                           style="text-align: center; width: 7%; float: right"#}
+                    {#                           placeholder="تعداد" class="form-control">#}
                     <input class="form-control" data-toggle="popover"
                            title="تذکرات" name="selectFilter" value="select" id="selectFilter"
                            data-content="1- باید مجردهای پسر و مجردهای دختر و متاهل ها جداگانه قرعه کشی شوند. 2- برای قرعه کشی متاهل ها، باید یکی از زوجین انتخاب و به تعداد زوجها قرعه کشی شود."
@@ -467,7 +467,9 @@
             <table class="table table-striped table-responsive">
                 <tr>
                     <th style="text-align: center">{{ all.count }}</th>
-                <th style="text-align: center">کدملی همسر</th>
+                    {% if mymanagement.program.hasCoupling %}
+                        <th style="text-align: center">کدملی همسر</th>
+                    {% endif %}
                     <th style="text-align: center">کدملی</th>
                     <th style="text-align: center">نام</th>
                     {% if mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
@@ -489,8 +491,10 @@
 
                         <td style="text-align: center;  {% if item.couple_inconsistency %}
                             background:orange{% endif %}">{{ item.id }}</td>
-                    <td style="text-align: center;  {% if item.couple_inconsistency %}
-                            background:orange{% endif %}">{{ item.profile.couple.user.username }}</td>
+                        {% if mymanagement.program.hasCoupling %}
+                            <td style="text-align: center;  {% if item.couple_inconsistency %}
+                                background:orange{% endif %}">{{ item.profile.couple.user.username }}</td>
+                        {% endif %}
                         <td style="text-align: center">{{ item.profile.user.username }}</td>
                         <td style="text-align: center">{{ item.profile.user.get_full_name }}</td>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_MASHHAD %}
@@ -535,7 +539,8 @@
 <span style="display: inline-block;float: right">
             <label style="direction: rtl">
                 <span><button class="btn btn-primary" type="submit" id="message" name="message"
-                              value="message">ارسال</button></span>
+                              value="message">ارسال
+                </button></span>
                 <span>پیامک <input class="checkbox-inline" type="checkbox" name="sms"
                                    value="sms"></span>
                 <span>ایمیل <input class="checkbox-inline" type="checkbox" name="email" value="email"></span>
@@ -561,7 +566,7 @@
                     <label><input style="margin-left: 6%" class="form-control" type="text" name="messageTitle"
                                   id="messageTitle"
                                   placeholder="موضوع پیام"
-                    ></label>
+                            ></label>
                     <div style="margin-left: 5%" id="textarea_feedback"></div>
                 </span>
                 <br>

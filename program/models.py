@@ -1,7 +1,7 @@
 # Encoding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime,date
+from datetime import datetime, date
 from accounts.models import Profile
 from django.db.models import Sum, Q
 
@@ -26,10 +26,12 @@ class Program(models.Model):
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
+    TYPE_MARASEM = 'marasem'
     type_choices = (
         (TYPE_ARBAEEN, 'اربعین'),
         (TYPE_ETEKAF, 'اعتکاف'),
-        (TYPE_MASHHAD, 'پابوس عشق')
+        (TYPE_MASHHAD, 'پابوس عشق'),
+        (TYPE_MARASEM, 'مراسم'),
 
     )
     type = models.CharField(max_length=200, choices=type_choices)
@@ -106,6 +108,7 @@ class Registration(models.Model):
     class Meta:
         verbose_name = 'ثبت نام'
         verbose_name_plural = 'ثبت نام ها'
+
     def get_pricing(self):
         return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
             coupling=self.coupling).filter(
@@ -125,23 +128,16 @@ class Registration(models.Model):
         return self.program.title + ' ' + self.profile.user.get_full_name()
 
     def couple_inconsistency(self):
-        if self.profile.couple:
-            coup = self.profile.couple
-            prog = self.program
-            coup_reg = Registration.objects.filter(profile=coup).filter(program=prog).first()
-            if self.coupling:
-                if coup_reg.coupling:
-                    if self.status != coup_reg.status:
-                        return True
-                    elif self.numberOfPayments != coup_reg.numberOfPayments:
-                        return True
+        if self.program.hasCoupling and self.coupling and self.profile.couple:
+                coup_reg = Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).first()
+                if coup_reg and coup_reg.coupling:
+                        if self.status != coup_reg.status:
+                            return True
+                        elif self.numberOfPayments != coup_reg.numberOfPayments:
+                            return True
                 else:
-                    return True
-            else:
-                if coup_reg.coupling:
-                    return True
-        else:
-            pass
+                        return True
+        return False
 
 
 class Management(models.Model):
@@ -199,6 +195,7 @@ class Management(models.Model):
     class Meta:
         verbose_name = 'مدیریت'
         verbose_name_plural = 'مدیریت ها'
+
     def seedocument(self):
         return {
             Management.ROLE_MASTER_MANAGER: [Management.ROLE_MASTER_MANAGER, Management.ROLE_VICAR,
@@ -294,6 +291,7 @@ class Pricing(models.Model):
         verbose_name = 'قیمت'
         verbose_name_plural = 'قیمت ها'
 
+
 class Message(models.Model):
     sender = models.ForeignKey(Management)
     subject = models.CharField(max_length=200, null=True, blank=True)
@@ -306,6 +304,7 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'پیام'
         verbose_name_plural = 'پیام ها'
+
     def __str__(self):
         return str(self.sender)
 
