@@ -38,7 +38,7 @@ class Profile(UserenaBaseProfile):
     studentNumber = models.CharField(max_length=20, null=True,blank=True,verbose_name="شماره دانشجویی")
     GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
     gender = models.BooleanField(default=True,choices=GENDER_CHOICES,verbose_name="جنسیت")
-    couple = models.ForeignKey('self', null=True,verbose_name="همسر")
+    couple = models.ForeignKey('self', null=True,verbose_name="همسر",blank=True)
     address = models.CharField(max_length=400,verbose_name="آدرس",null=True)
     shenasname = models.CharField(max_length=11,verbose_name="شماره شناسنامه",null=True)
     fatherName = models.CharField(max_length=200,verbose_name="نام پدر",null=True)

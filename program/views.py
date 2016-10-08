@@ -272,7 +272,11 @@ def editStatus(request, program_id):
                     'profile__user__email', flat=True )
                 if title and textcontent:
                     try:
-                        message2 = EmailMessage(title, textcontent, bcc=to_email)
+                        from django.core.mail import get_connection
+                        connection=get_connection(fail_silently=False,host='smtp.gmail.com',port=587,username=program.email,password=program.emailPassword,use_tls=True)
+                        from_email=program.title+'<'+program.email+'>'
+                        message2 = EmailMessage(title, textcontent,from_email=from_email, bcc=to_email,connection=connection)
+                        message2.content_subtype = "html"
                         message2.send()
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
@@ -281,7 +285,7 @@ def editStatus(request, program_id):
 
             inbox_filter = request.POST.get('sms', 'false')
             if inbox_filter == 'sms':
-                message.sendEmail = True
+                message.sendSms = True
                 message.save()
                 to = editingRegs.filter(program=program).values_list(
                     'profile__cellPhone', flat=True)

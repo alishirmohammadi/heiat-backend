@@ -5,7 +5,7 @@ from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.models import Registration , Management
-# from zeep import Client
+from zeep import Client
 
 
 def export_users_xls(status_list):
@@ -208,7 +208,7 @@ def filter_to_registrations(filter, program):
     return registerations
 
 
-def sendsms(list,text):
+def sendSMS(list,text):
     client = Client(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl')
     if len(list) // 100 == len(list) / 100:
         t = (len(list) // 100)

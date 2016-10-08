@@ -41,8 +41,10 @@ class Program(models.Model):
         verbose_name_plural = 'برنامه ها'
 
     def Master(self):
-        rolchoice = Management.objects.filter(role__exact='master manager').first().profile
-        return rolchoice
+        man = Management.objects.filter(role__exact='master manager').first()
+        if man:
+            return man.profile
+        return '-'
 
     def sum_of_money(self):
         from pay.models import Payment
