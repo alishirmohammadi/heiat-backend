@@ -58,6 +58,7 @@ def panel(request, management_id):
                                           'gender': ['male'],
                                           'couple': [], 'age': [], 'entrance_year': [], 'level': [],
                                           'conscription': [], 'passport': [], 'label1': [], 'label2': [],
+                                          'mugshot': [],
                                           'label3': [],
                                           'label4': [],'additionalOption':[]})
 
@@ -75,7 +76,7 @@ def panel(request, management_id):
                                               'statusChoices': Registration.status_choices,
                                               'filterAll': filter_all,
                                               'student_range': studentRange,
-                                              'label_range': range(11),
+                                              'label_range': list(map(str,range(11))),
                                               })
 
     else:
@@ -95,6 +96,7 @@ def panel(request, management_id):
             'label3': request.POST.getlist('label3'),
             'label4': request.POST.getlist('label4'),
             'additionalOption':request.POST.getlist('additionalOption'),
+            'mugshot':request.POST.getlist('mugshot'),
 
         }
         request.session['filter'] = all_filter

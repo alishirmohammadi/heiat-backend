@@ -108,7 +108,6 @@
                 <div>
                     <label id="status_choices">
                         وضعیت ثبت نام:
-                        <br>
                         {% for item in statusChoices|get_keys %}
                             <b>{{ statusChoices|get_tuple_item:item }}</b>
                             <input class="checkbox-inline" type="checkbox" name="status_choices" value="{{ item }}"
@@ -123,7 +122,6 @@
                 <div>
                     <label id="people_type_choices">
                         به عنوان:
-                        <br>
                         {% for item,perisan in mymanagement.profile.people_type_choices %}
                             <b>{{ perisan }}</b>
                             <input class="checkbox-inline" type="checkbox" name="people_type_choices" value="{{ item }}"
@@ -139,7 +137,6 @@
                 <div>
                     <label id="payment">
                         وضعیت پرداخت:
-                        <br>
                         <b>بدون پرداخت</b> <input class="checkbox-inline" type="checkbox" name="payment" value="0"
                                                   {% if '0' in filterAll.payment %}checked="checked"{% endif %}>
                         <b>فقط قسط اول</b> <input class="checkbox-inline" type="checkbox" name="payment" value="1"
@@ -160,17 +157,17 @@
                                         {% if 'female' in filterAll.gender %}checked="checked"{% endif %}>
                     </label>
                 </div>
-
-                <div style="direction:rtl ">
-                    <label id="coupled">
-                        نوع سفر:
-                        <b>مجردی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="single"
-                                           {% if 'single' in filterAll.couple %}checked="checked"{% endif %}>
-                        <b>متاهلی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="couple"
-                                            {% if 'couple' in filterAll.couple %}checked="checked"{% endif %}>
-                    </label>
-                </div>
-
+                {% if mymanagement.program.hasCoupling %}
+                    <div style="direction:rtl ">
+                        <label id="coupled">
+                            نوع سفر:
+                            <b>مجردی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="single"
+                                               {% if 'single' in filterAll.couple %}checked="checked"{% endif %}>
+                            <b>متاهلی</b><input class="checkbox-inline" type="checkbox" name="coupled" value="couple"
+                                                {% if 'couple' in filterAll.couple %}checked="checked"{% endif %}>
+                        </label>
+                    </div>
+                {% endif %}
                 {% if mymanagement.program.type == mymanagement.program.TYPE_ETEKAF %}
                     <div style="direction:rtl ">
                         <label id="age">
@@ -208,28 +205,53 @@
                         </label>
                     </div>
                 {% elif mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
-                    <div style="direction:rtl ">
-                        <label id="additionalOption">
-                            نوع حمل و نقل:
-                            <b>{{ mymanagement.program.additionalOption }}</b> <input class="checkbox-inline"
-                                                                                      type="checkbox"
-                                                                                      name="additionalOption"
-                                                                                      value="additionalOption"
-                                                                                      {% if 'additionalOption' in filterAll.additionalOption %}checked="checked"{% endif %}>
+                    {% if mymanagement.program.additionalOption %}
+                        <div style="direction:rtl ">
 
-                        </label>
-                    </div>
+                            <label id="additionalOption">
+                            {{ mymanagement.program.additionalOption }}:
+                                <b>بله</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="additionalOption"
+                                                  value="y"
+                                                  {% if 'y' in filterAll.additionalOption %}checked="checked"{% endif %}>
+                                <b>خیر</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="additionalOption"
+                                                  value="n"
+                                                  {% if 'n' in filterAll.additionalOption %}checked="checked"{% endif %}>
+
+                            </label>
+                        </div>
+                    {% endif %}
+                        <div style="direction:rtl ">
+
+                            <label id="mugshot">
+                             عکس:
+                                <b>دارد</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="mugshot"
+                                                  value="y"
+                                                  {% if 'y' in filterAll.mugshot %}checked="checked"{% endif %}>
+                                <b>ندارد</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="mugshot"
+                                                  value="n"
+                                                  {% if 'n' in filterAll.mugshot %}checked="checked"{% endif %}>
+
+                            </label>
+                        </div>
                     <div style="direction:rtl ">
                         <label id="passport">
 
                             وضعیت گذرنامه:
 
                             <b>نامعتبر</b> <input class="checkbox-inline" type="checkbox"
-                                                                            name="passport" value="invalid"
+                                                  name="passport" value="invalid"
                                 {% if 'invalid' in filterAll.passport %} checked="checked"{% endif %}>
                             <b>معتبر</b> <input class="checkbox-inline" type="checkbox"
-                                                                           name="passport" value="valid"
-                                                                           {% if 'valid' in filterAll.passport %}checked="checked"{% endif %}>
+                                                name="passport" value="valid"
+                                                {% if 'valid' in filterAll.passport %}checked="checked"{% endif %}>
                             <b>ندارد</b><input class="checkbox-inline" type="checkbox" name="passport" value="NotHave"
                                                {% if 'NotHave' in filterAll.passport %}checked="checked"{% endif %}>
 
@@ -251,33 +273,6 @@
 
                 {% endif %}
 
-                <div style="direction:rtl ">
-                    <label id="additional_options">
-                        گزینه دیگر
-
-                    </label>
-                </div>
-
-
-                {% if False %}
-                    <div style="direction:rtl ">
-                        <label id="ability">
-                            توانمندی:
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="0"><b>ندارم</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="1"><b>اجرایی</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="2"><b>تدارکات و
-                            پشتیبانی</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="3"><b>فرهنگی</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="4"><b>مداحی و روضه
-                            خوانی</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="5"><b>مدعوین</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="6"><b>رابط خواهران و
-                            برادران</b>
-                            <input class="checkbox-inline" type="checkbox" name="ability" value="7"><b>مالی</b>
-                        </label>
-                    </div>
-
-                {% endif %}
 
                 <div style="direction:rtl ">
                     <label id="label1">
@@ -301,58 +296,37 @@
 
                 <div style="direction:rtl ">
                     <label id="label3">
-
                         برچسب 3:
-
                         {% for item in label_range %}
-
-                            {% if item == 0 %}
-
+                            {% if item == '0' %}
                                 <b>حالت پیشفرض</b>
                                 <input class="checkbox-inline" type="checkbox" name="label3" value="{{ item }}"
                                        {% if item in filterAll.label3 %}checked="checked"{% endif %}>
-
                             {% else %}
                                 <b>حالت {{ item }}</b>
                                 <input class="checkbox-inline" type="checkbox" name="label3" value="{{ item }}"
                                        {% if item in filterAll.label3 %}checked="checked"{% endif %}>
-
-
                             {% endif %}
-
                         {% endfor %}
-
                     </label>
                 </div>
-
                 <div style="direction:rtl ">
                     <label id="label4">
                         برچسب 4:
-
-
-
                         {% for item in label_range %}
-                            {% if item == 0 %}
-
+                            {% if item == '0' %}
                                 <b>حالت پیشفرض</b>
                                 <input class="checkbox-inline" type="checkbox" name="label4" value="{{ item }}"
                                        {% if item in filterAll.label4 %}checked="checked"{% endif %}>
-
                             {% else %}
                                 <b>حالت {{ item }}</b>
                                 <input class="checkbox-inline" type="checkbox" name="label4" value="{{ item }}"
                                        {% if item in filterAll.label4 %}checked="checked"{% endif %}>
-
-
                             {% endif %}
-
                         {% endfor %}
-
-
                     </label>
-
-
                 </div>
+
 
                 <button type="submit" id="show" name="show" class="btn btn-primary" value="نمایش">نمایش</button>
                 <button type="submit" id="print" name="print" class="btn btn-success" value="پرینت">پرینت</button>

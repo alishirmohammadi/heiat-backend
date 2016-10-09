@@ -90,9 +90,7 @@ def filter_to_registrations(filter, program):
 
     if filter.get('status', []):
         registerations = registerations.filter(status__in=filter.get('status', []))
-    if filter.get('additionalOption', []):
-        registerations = registerations.filter(additionalOption=True)
-
+   
     if filter.get('people_type', []):
         registerations = registerations.filter(profile__people_type__in=filter.get('people_type', []))
 
@@ -161,6 +159,15 @@ def filter_to_registrations(filter, program):
                 # This Filter i not complete, and reqire below Filter code:
                 # profile__birthYear__lt=old_age
 
+    mugshot_filter = filter.get('mugshot', [])
+    if mugshot_filter:
+        if len(mugshot_filter) == 1:
+            mugshot_filter = mugshot_filter[0]
+            if mugshot_filter == 'y':
+                registerations = registerations.filter(profile__mugshot__isnull=False).exclude(profile__mugshot='')
+            elif mugshot_filter == 'n':
+                registerations = registerations.filter(Q(profile__mugshot__isnull=True) | Q(profile__mugshot=''))
+
     label1_filter = filter.get('label1', [])
     if label1_filter:
         if len(label1_filter) == 1:
@@ -178,6 +185,15 @@ def filter_to_registrations(filter, program):
                 registerations = registerations.filter(label2=True)
             elif label2_filter == 'n':
                 registerations = registerations.filter(label2=False)
+    
+    additionalOtionFilter = filter.get('additionalOption', [])
+    if additionalOtionFilter:
+        if len(additionalOtionFilter) == 1:
+            additionalOtionFilter = additionalOtionFilter[0]
+            if additionalOtionFilter == 'y':
+                registerations = registerations.filter(additionalOption=True)
+            elif additionalOtionFilter == 'n':
+                registerations = registerations.filter(additionalOption=False)
 
     if filter.get('label3', []):
         registerations = registerations.filter(label3__in=filter.get('label3', []))
