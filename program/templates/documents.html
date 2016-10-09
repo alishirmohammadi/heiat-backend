@@ -44,9 +44,6 @@
              <br><br>
                 </form>
         {% for item in document_managements %}
-{% if item.id == mymanagement.id %}
-
-            {% endif %}
 
 
             <div style="direction: rtl;text-align: right" {% if item.id == mymanagement.id %}class="hide"{% else %} class="well" {% endif %}>
@@ -61,7 +58,7 @@
 <br>
                     این نظر را داد:
                 </div>
-                <div style="font-family: 'B Nazanin';font-size: 15px">{{ item.documentation }}</div>
+                <div style="font-family: 'B Nazanin';font-size: 15px">{{ item.documentation|safe }}</div>
 
 
             </div>

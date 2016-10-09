@@ -6,6 +6,7 @@ import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
 from program.models import Registration , Management
 from zeep import Client
+from accounts.models import Profile
 
 
 def export_users_xls(status_list):
@@ -195,15 +196,17 @@ def filter_to_registrations(filter, program):
     last_program = getLastProgram()
     if filter.get('passport', []):
         if 'NotHave' not in filter.get('passport', []):
-            registerations = registerations.exclude(profile__passport__in='not have')
+            registerations = registerations.exclude(profile__passport=Profile.PASSPORT_NOT_HAVE)
         if 'LessThan6' not in filter.get('passport', []):
             for item in registerations:
-                if item.profile.passport_dateofexpiry - last_program.startDate > datetime.timedelta(183):
-                    registerations = registerations.exclude(profile__user_id=item.profile_id)
+                if item.profile.passport_dateofexpiry:
+                    if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
+                        item.delete()
         if 'MoreThan6' not in filter.get('passport', []):
                 for item in registerations:
-                    if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
-                        registerations = registerations.exclude(profile__user_id=item.profile_id)
+                    if item.profile.passport_dateofexpiry:
+                        if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):
+                            item.delete()
 
     return registerations
 
