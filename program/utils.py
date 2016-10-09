@@ -196,13 +196,13 @@ def filter_to_registrations(filter, program):
     last_program = getLastProgram()
     if filter.get('passport', []):
         if 'NotHave' not in filter.get('passport', []):
-            registerations = registerations.exclude(profile__passport=Profile.PASSPORT_NOT_HAVE)
-        if 'LessThan6' not in filter.get('passport', []):
+            registerations = registerations.exclude(profile__passport=Profile.PASSPORT_NOT_HAVE).exclude(profile__passport__isnull=True)
+        if 'invalid' not in filter.get('passport', []):
             for item in registerations:
-                if item.profile.passport_dateofexpiry:
-                    if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
+                if item.profile.passport == Profile.PASSPORT_HAVE and (not item.profile.passport_dateofexpiry or (item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183))):
                         registerations=registerations.exclude(id=item.id)
-        if 'MoreThan6' not in filter.get('passport', []):
+
+        if 'valid' not in filter.get('passport', []):
                 for item in registerations:
                     if item.profile.passport_dateofexpiry:
                         if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):

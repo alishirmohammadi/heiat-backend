@@ -224,12 +224,12 @@
 
                             وضعیت گذرنامه:
 
-                            <b>کمتر از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox"
-                                                                            name="passport" value="LessThan6"
-                                {% if 'LessThan6' in filterAll.passport %} checked="checked"{% endif %}>
-                            <b>بیش از 6 ماه بعد از تاریخ برنامه</b> <input class="checkbox-inline" type="checkbox"
-                                                                           name="passport" value="MoreThan6"
-                                                                           {% if 'MoreThan6' in filterAll.passport %}checked="checked"{% endif %}>
+                            <b>نامعتبر</b> <input class="checkbox-inline" type="checkbox"
+                                                                            name="passport" value="invalid"
+                                {% if 'invalid' in filterAll.passport %} checked="checked"{% endif %}>
+                            <b>معتبر</b> <input class="checkbox-inline" type="checkbox"
+                                                                           name="passport" value="valid"
+                                                                           {% if 'valid' in filterAll.passport %}checked="checked"{% endif %}>
                             <b>ندارد</b><input class="checkbox-inline" type="checkbox" name="passport" value="NotHave"
                                                {% if 'NotHave' in filterAll.passport %}checked="checked"{% endif %}>
 
