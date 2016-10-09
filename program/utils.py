@@ -201,12 +201,12 @@ def filter_to_registrations(filter, program):
             for item in registerations:
                 if item.profile.passport_dateofexpiry:
                     if item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183):
-                        item.delete()
+                        registerations=registerations.exclude(id=item.id)
         if 'MoreThan6' not in filter.get('passport', []):
                 for item in registerations:
                     if item.profile.passport_dateofexpiry:
                         if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):
-                            item.delete()
+                            registerations=registerations.exclude(id=item.id)
 
     return registerations
 
