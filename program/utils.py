@@ -223,7 +223,14 @@ def filter_to_registrations(filter, program):
                     if item.profile.passport_dateofexpiry:
                         if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):
                             registerations=registerations.exclude(id=item.id)
-
+    birth=filter.get('birth',[])
+    if birth and len(birth)==1:
+        birth=birth[0]
+        for reg in registerations:
+            if reg.profile.is_birth_valid() and birth=='invalid':
+                registerations=registerations.exclude(id=reg.id)
+            elif not reg.profile.is_birth_valid() and birth=='valid':
+                registerations=registerations.exclude(id=reg.id)
     return registerations
 
 

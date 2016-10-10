@@ -20,8 +20,6 @@ from program.word.export_to_word import registrations_to_print, registrations_to
 from . import jalali
 
 
-
-
 @login_required
 def documentation(request, management_id):
     management = Management.objects.filter(id=management_id).first()
@@ -36,14 +34,16 @@ def documentation(request, management_id):
         # todo: save documentation
         documentation = request.POST.get('documentation', '')
         management = Management.objects.filter(id=management_id).first()
-        management.documentation=documentation
+        management.documentation = documentation
         management.save()
         managements = Management.objects.filter(program__type=management.program.type).filter(
             role__in=management.seedocument())
         managements = managements.exclude(documentation__isnull=True).exclude(documentation='')
-        return render(request, 'documents.html', {'document_managements': managements, 'mymanagement': management,})
+        return render(request, 'documents.html', {'document_managements': managements, 'mymanagement': management, })
 
         # pass
+
+
 @login_required
 def panel(request, management_id):
     management = Management.objects.filter(id=management_id).first()
@@ -58,9 +58,9 @@ def panel(request, management_id):
                                           'gender': ['male'],
                                           'couple': [], 'age': [], 'entrance_year': [], 'level': [],
                                           'conscription': [], 'passport': [], 'label1': [], 'label2': [],
-                                          'mugshot': [],
-                                          'label3': [],
-                                          'label4': [],'additionalOption':[]})
+                                          'mugshot': [], 'birth': [], 'label3': [], 'label4': [],
+                                          'additionalOption': []
+                                          })
 
         registrations = filter_to_registrations(filter_all, management.program)
         studentRange = []
@@ -76,7 +76,7 @@ def panel(request, management_id):
                                               'statusChoices': Registration.status_choices,
                                               'filterAll': filter_all,
                                               'student_range': studentRange,
-                                              'label_range': list(map(str,range(11))),
+                                              'label_range': list(map(str, range(11))),
                                               })
 
     else:
@@ -95,8 +95,9 @@ def panel(request, management_id):
             'label2': request.POST.getlist('label2'),
             'label3': request.POST.getlist('label3'),
             'label4': request.POST.getlist('label4'),
-            'additionalOption':request.POST.getlist('additionalOption'),
-            'mugshot':request.POST.getlist('mugshot'),
+            'additionalOption': request.POST.getlist('additionalOption'),
+            'mugshot': request.POST.getlist('mugshot'),
+            'birth': request.POST.getlist('birth'),
 
         }
         request.session['filter'] = all_filter
@@ -129,10 +130,11 @@ def panel(request, management_id):
                         selected.status = Registration.STATUS_RESERVED
                     selected.save()
                     total = total - 1
-                    if all_filter.get('couple', [])==['couple']:
-                        if len(all_filter.get('gender', []) )==1:
+                    if all_filter.get('couple', []) == ['couple']:
+                        if len(all_filter.get('gender', [])) == 1:
                             if selected.status == Registration.STATUS_CERTAIN:
-                                Registration.objects.filter(profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
+                                Registration.objects.filter(
+                                    profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
 
             return HttpResponseRedirect('/program/panel/' + str(management.program.id))
         else:
@@ -141,7 +143,6 @@ def panel(request, management_id):
 
 @login_required
 def addregistration(request, program_id):
-
     program = Program.objects.filter(id=program_id).first()
     management = Management.objects.filter(profile=request.user.my_profile).filter(program=program).first()
     if not management or not management.canAdd:
@@ -149,7 +150,7 @@ def addregistration(request, program_id):
 
     codemelli = request.POST.get('mellicode', '')
     coupled = request.POST.get('coupled', '')
-    prof = Profile.objects.filter(user__username =codemelli).first()
+    prof = Profile.objects.filter(user__username=codemelli).first()
     if prof:
         peopletype = prof.people_type
         alreadyRegistered = Registration.objects.filter(program=program).filter(profile=prof).exclude(
@@ -177,7 +178,7 @@ def addregistration(request, program_id):
                             registeredCouple.coupling = True
                             registeredCouple.save()
                 else:
-                         messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
+                    messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
                 addregister.save()
                 messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
 
@@ -271,13 +272,17 @@ def editStatus(request, program_id):
                 message.sendEmail = True
                 message.save()
                 to_email = editingRegs.filter(program=program).values_list(
-                    'profile__user__email', flat=True )
+                    'profile__user__email', flat=True)
                 if title and textcontent:
                     try:
                         from django.core.mail import get_connection
-                        connection=get_connection(fail_silently=True,host='smtp.gmail.com',port=587,username=program.email,password=program.emailPassword,use_tls=True)
-                        from_email=program.title+'<'+program.email+'>'
-                        message2 = EmailMessage(title, textcontent,from_email=from_email, bcc=to_email,connection=connection)
+
+                        connection = get_connection(fail_silently=True, host='smtp.gmail.com', port=587,
+                                                    username=program.email, password=program.emailPassword,
+                                                    use_tls=True)
+                        from_email = program.title + '<' + program.email + '>'
+                        message2 = EmailMessage(title, textcontent, from_email=from_email, bcc=to_email,
+                                                connection=connection)
                         message2.content_subtype = "html"
                         message2.send()
                     except BadHeaderError:
@@ -297,7 +302,10 @@ def editStatus(request, program_id):
 
     return HttpResponseRedirect('/program/panel/' + str(program.id))
 
+
 from .models import Program
+
+
 @login_required
 def my_managements(request):
     managements = Management.objects.filter(profile__user__exact=request.user)
@@ -310,7 +318,6 @@ def my_managements(request):
     return render(request, 'my_managements.html', {'managements': managements})
 
 
-
 @login_required
 def manage(request, management_id):
     management = Management.objects.filter(id=management_id).first()
@@ -320,23 +327,23 @@ def manage(request, management_id):
         return HttpResponseRedirect('/program/panel/' + str(management.id))
     if request.method == 'GET':
         pricelist = []
-        for p,q in Profile.people_type_choices:
+        for p, q in Profile.people_type_choices:
             pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(additionalOption=False).filter(
                 program=management.program).first()
             obj = {'people_type': p, 'coupling': False, 'obj': pr}
             pricelist.append(obj)
-        for p,q  in Profile.people_type_choices:
+        for p, q in Profile.people_type_choices:
             pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(additionalOption=False).filter(
                 program=management.program).first()
             obj = {'people_type': p, 'coupling': True, 'obj': pr}
             pricelist.append(obj)
         if management.program.additionalOption:
-            for p,q  in Profile.people_type_choices:
+            for p, q in Profile.people_type_choices:
                 pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
                     program=management.program).filter(additionalOption=True).first()
                 obj = {'people_type': p, 'coupling': False, 'obj': pr, 'additional': True}
                 pricelist.append(obj)
-            for p,q  in Profile.people_type_choices:
+            for p, q in Profile.people_type_choices:
                 pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
                     program=management.program).filter(additionalOption=True).first()
                 obj = {'people_type': p, 'coupling': True, 'obj': pr, 'additional': True}
@@ -364,7 +371,7 @@ def manage(request, management_id):
     program.email = email
     program.notes = note
     if startDate:
-        program.startDate=startDate
+        program.startDate = startDate
     program.save()
     return HttpResponseRedirect('/program/manage/' + str(management_id))
 
@@ -473,6 +480,7 @@ def removeInstallment(request, pricing_id, price_num):
     rid = Management.objects.filter(program=program).filter(profile=request.user.my_profile).first().id
     return HttpResponseRedirect('/program/manage/' + str(rid))
 
+
 @login_required
 def my_programs(request):
     profile = request.user.my_profile
@@ -519,7 +527,9 @@ def my_programs(request):
                 couple_reg.additionalOption = additional
                 couple_reg.save()
         return HttpResponseRedirect('/program/')
-def only_print (request, management_id, profile_id):
+
+
+def only_print(request, management_id, profile_id):
     management = Management.objects.filter(id=management_id).first()
     registerations = Registration.objects.filter(program=management.program)
     registerations = registerations.filter(profile__user_id=profile_id)

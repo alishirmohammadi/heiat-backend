@@ -241,6 +241,24 @@
 
                             </label>
                         </div>
+
+                    <div style="direction:rtl ">
+
+                            <label id="mugshot">
+                             تاریخ تولد:
+                                <b>معتبر</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="birth"
+                                                  value="valid"
+                                                  {% if 'valid' in filterAll.birth %}checked="checked"{% endif %}>
+                                <b>نامعتبر</b> <input class="checkbox-inline"
+                                                  type="checkbox"
+                                                  name="birth"
+                                                  value="invalid"
+                                                  {% if 'invalid' in filterAll.birth %}checked="checked"{% endif %}>
+
+                            </label>
+                        </div>
                     <div style="direction:rtl ">
                         <label id="passport">
 

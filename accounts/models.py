@@ -98,6 +98,17 @@ class Profile(UserenaBaseProfile):
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
+    def is_birth_valid(self):
+        if self.birthDay<1 or self.birthDay>31:
+            return False
+        if self.birthMonth<1 or self.birthMonth>12:
+            return False
+        if self.birthYear>9 and self.birthYear<99:
+            return True
+        if self.birthYear>=1300 and self.birthYear<1400:
+            return True
+        return False
+
     class Meta:
         verbose_name = 'حساب کاربری'
         verbose_name_plural = 'حسابهای کاربری'
