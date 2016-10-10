@@ -61,7 +61,7 @@ class Profile(UserenaBaseProfile):
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
     passport = models.CharField(max_length=200, choices=passport_choices, null=True,verbose_name="وضعیت گذرنامه")
-    passport_number = models.IntegerField(null=True, blank=True,verbose_name="شماره گذرنامه")
+    passport_number = models.CharField(null=True, blank=True,verbose_name="شماره گذرنامه",max_length=10)
     passport_dateofissue = models.DateField(null=True, blank=True,verbose_name="تاریخ صدور گذرنامه به میلادی")
     passport_dateofexpiry = models.DateField(null=True, blank=True,verbose_name="تاریخ انقضا گذرنامه به میلادی")
     CONSCRIPTION_WENT = 'went'

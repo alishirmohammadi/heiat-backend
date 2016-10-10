@@ -235,7 +235,7 @@ class ProfilePassportForm(forms.ModelForm):
         }
         help_texts = {
             'mugshot': "عکس ۲ در ۳ مشابه عکس گذرنامه برای مانیفست",
-            "passport_number": "به صورت ۸ رقمی و بدون حرف اول"
+            "passport_number": "به صورت یک حرف و سپس ۸ رقم"
 
         }
 
