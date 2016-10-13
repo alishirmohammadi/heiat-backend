@@ -12,6 +12,10 @@ from django.db.models import Sum, Q
 class Expense(models.Model):
     is_open=models.BooleanField(default=True)
     expense_name=models.CharField(max_length=200)
+    callback_url=models.URLField(max_length=300,null=True,blank=True)
+    class Meta:
+        verbose_name = 'درگاه'
+        verbose_name_plural = 'درگاه‌ها'
     def sum_of_money(self):
         return Payment.objects.filter(expense=self).filter(success=True).aggregate(Sum('amount'))['amount__sum']
 
