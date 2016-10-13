@@ -57,6 +57,7 @@ def payment_callback(request):
     return render(request, 'result.html', {'payment': payment})
 
 
+@csrf_exempt
 def terminal(request, expense_id=None):
     if request.method == 'GET':
         all_expenses = Expense.objects.filter(is_open=True).filter(callback_url__isnull=True)
