@@ -43,17 +43,6 @@ def payment_callback(request):
         a = numofpayment + 1
         payment.registration.numberOfPayments = a
         payment.registration.save()
-    if payment.expense and payment.expense.callback_url:
-        resp = {
-            'success': payment.success,
-            'refId': refId,
-            'saleReferenceId': saleReferenceId,
-            'amount': payment.amount,
-            'orderId': payment.id
-        }
-        import requests
-
-        requests.post(payment.expense.callback_url, data=resp)
     return render(request, 'result.html', {'payment': payment})
 
 
