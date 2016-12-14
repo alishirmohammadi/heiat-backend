@@ -28,7 +28,7 @@ class ManagementInline(admin.TabularInline):
 
 
 class Program_Admin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'type', 'year', 'Master', 'number_of_register', 'certain_or_came', 'sum_of_money']
+    list_display = ['id', 'title', 'type', 'year', 'master', 'number_of_register', 'certain_or_came', 'sum_of_money']
     inlines = [ManagementInline]
 
 

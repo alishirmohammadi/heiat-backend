@@ -40,8 +40,8 @@ class Program(models.Model):
         verbose_name = 'برنامه'
         verbose_name_plural = 'برنامه ها'
 
-    def Master(self):
-        man = Management.objects.filter(role__exact='master manager').first()
+    def master(self):
+        man = Management.objects.filter(role__exact='master manager').filter(program=self).first()
         if man:
             return man.profile
         return '-'
@@ -53,7 +53,7 @@ class Program(models.Model):
         return (total['amount__sum'])
 
     def number_of_register(self):
-        total = Registration.objects.exclude(status__contains=Registration.STATUS_REMOVED).count()
+        total = Registration.objects.filter(program=self).exclude(status__contains=Registration.STATUS_REMOVED).count()
         return total
 
     def certain_or_came(self):

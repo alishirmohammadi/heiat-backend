@@ -171,4 +171,5 @@ USERENA_MUGSHOT_PATH = getattr(settings,
 
 LOGIN_URL = '/accounts/signin/'
 USERENA_MUGSHOT_SIZE = 120 * 120
+# APPEND_SLASH=False
 
