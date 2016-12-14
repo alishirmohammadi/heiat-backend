@@ -49,7 +49,8 @@ def payment_callback(request):
 @csrf_exempt
 def terminal(request, expense_id=None):
     if request.method == 'GET':
-        all_expenses = Expense.objects.filter(is_open=True).filter(callback_url__gt='')
+        from django.db.models import Q
+        all_expenses = Expense.objects.filter(is_open=True).filter(Q(callback_url__isnull=True)|Q(callback_url=''))
         if expense_id:
             all_expenses = all_expenses.filter(id=expense_id)
         return render(request, 'terminal.html', {'all_expenses': all_expenses})
