@@ -1,5 +1,5 @@
 from .models import Program, Registration, Pricing, Management, Message, Message_reciving
-from pay.models import Payment
+# from pay.models import Payment
 from django.contrib import admin
 from .models import Management
 
@@ -64,13 +64,6 @@ class Message_Admin(admin.ModelAdmin):
 
 admin.site.register(Message, Message_Admin)
 
-
-class Payment_Admin(admin.ModelAdmin):
-    list_display = ['id', 'registration', 'numberOfInstallment', 'amount', 'refId', 'saleRefId', 'takingDate',
-                    'success']
-
-
-admin.site.register(Payment, Payment_Admin)
 
 
 class Pricing_Admin(admin.ModelAdmin):

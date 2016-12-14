@@ -19,6 +19,8 @@ class Expense(models.Model):
     def sum_of_money(self):
         return Payment.objects.filter(expense=self).filter(success=True).aggregate(Sum('amount'))['amount__sum']
 
+    def __str__(self):
+        return self.expense_name
 # Create your models here.
 class Payment(models.Model):
     registration = models.ForeignKey(Registration,null=True)
