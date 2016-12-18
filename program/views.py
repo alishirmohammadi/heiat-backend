@@ -300,7 +300,7 @@ def editStatus(request, program_id):
 
                 sendSMS(to, title)
 
-    return HttpResponseRedirect('/program/panel/' + str(program.id))
+    return HttpResponseRedirect('/program/panel/' + str(management.id))
 
 
 from .models import Program
