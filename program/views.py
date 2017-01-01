@@ -69,7 +69,7 @@ def panel(request, management_id):
             c = str(c)[2:4]
         c = int(c)
         for item in range(5):
-            studentRange.append(c - item)
+            studentRange.append(str(c - item))
 
         return render(request, 'panel.html', {'all': registrations,
                                               'mymanagement': management,
@@ -104,7 +104,7 @@ def panel(request, management_id):
 
         action = request.POST.get('editFilter', 'show')
         if action == 'show':
-            return HttpResponseRedirect('/program/panel/' + str(management.program.id))
+            return HttpResponseRedirect('/program/panel/' + str(management.id))
 
         registrations = filter_to_registrations(all_filter, management.program)
         if action == 'excel':
@@ -136,7 +136,7 @@ def panel(request, management_id):
                                 Registration.objects.filter(
                                     profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
 
-            return HttpResponseRedirect('/program/panel/' + str(management.program.id))
+            return HttpResponseRedirect('/program/panel/' + str(management.id))
         else:
             return HttpResponseRedirect('/error')
 

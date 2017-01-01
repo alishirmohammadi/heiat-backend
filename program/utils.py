@@ -4,7 +4,7 @@ from .models import Registration
 from django.http import HttpResponse
 import xlwt
 from django.core.mail import send_mail, BadHeaderError, get_connection
-from program.models import Registration , Management
+from program.models import Registration, Management
 from zeep import Client
 from accounts.models import Profile
 
@@ -18,7 +18,8 @@ def export_users_xls(status_list):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone','profile_mellicode','Registration_feedback','Registration_additionalOption']
+    columns = ['numOfPayment', 'coupling', 'status', 'first_name', 'last_name', 'email', 'cellphone',
+               'profile_mellicode', 'Registration_feedback', 'Registration_additionalOption']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Sheet body, remaining rows
@@ -51,12 +52,12 @@ def registrations_to_excel(registrations):
         profile__user__last_name = j.profile.user.last_name
         profile__user__email = j.profile.user.email
         profile__cellPhone = j.profile.cellPhone
-        profile_mellicode=j.profile.user.username
+        profile_mellicode = j.profile.user.username
         Registration_feedback = j.feedBack
         if j.additionalOption:
-            Registration_additionalOption=j.additionalOption
+            Registration_additionalOption = j.additionalOption
         else:
-            Registration_additionalOption='not have'
+            Registration_additionalOption = 'not have'
         object = (numberOfPayment,
                   coupling,
                   status,
@@ -70,6 +71,7 @@ def registrations_to_excel(registrations):
                   )
         status_list.append(object)
     return export_users_xls(status_list)
+
 
 # def send_email(from_email,from_password,bcc,subject,content):
 #     my_use_tls = False
@@ -90,7 +92,7 @@ def filter_to_registrations(filter, program):
 
     if filter.get('status', []):
         registerations = registerations.filter(status__in=filter.get('status', []))
-   
+
     if filter.get('people_type', []):
         registerations = registerations.filter(profile__people_type__in=filter.get('people_type', []))
 
@@ -98,34 +100,6 @@ def filter_to_registrations(filter, program):
         registerations = registerations.filter(numberOfPayments__in=filter.get('payment', []))
     # if filter.get('passportCheck', []):
     #     registerations = registerations.filter(numberOfPayments__in=filter.get('passportCheck', []))
-    if filter.get('entrance_year', []):
-         c = program.year
-         if len(str(c)) == 4:
-             c = str(c)[2:4]
-         c = int(c)
-         if str(c-4) in filter.get('entrance_year', []):
-            filter.get('entrance_year', []).remove(str(c-4))
-            for i in range(c-3, c+1):
-                if str(i) not in filter.get('entrance_year', []):
-                    registerations = registerations.exclude(profile__studentNumber__startswith=str(i))
-         else :
-             for i in range(c - 10, c + 1):
-                 if str(i) not in filter.get('entrance_year', []):
-                     registerations = registerations.exclude(profile__studentNumber__startswith = str(i))
-    if filter.get('level', []):
-         if 'bs' not in filter.get('level', []):
-           registerations = registerations.exclude(profile__studentNumber__iregex=r'^(\d)(\d)[1](\d)(\d)(\d)(\d)(\d)$')
-         if 'ms' not in filter.get('level', []):
-           registerations = registerations.exclude(Q(profile__studentNumber__iregex=r'^(\d)(\d)[2](\d)(\d)(\d)(\d)(\d)$')|Q(profile__studentNumber__iregex=r'^(\d)(\d)[7](\d)(\d)(\d)(\d)(\d)$'))
-         if 'phd' not in filter.get('level', []):
-           registerations = registerations.exclude(profile__studentNumber__iregex=r'^(\d)(\d)[3](\d)(\d)(\d)(\d)(\d)$')
-         if 'other' not in filter.get('level', []):
-                 registerations = registerations.filter(
-                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[2](\d)(\d)(\d)(\d)(\d)$')|
-                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[7](\d)(\d)(\d)(\d)(\d)$')|
-                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[1](\d)(\d)(\d)(\d)(\d)$')|
-                 Q(profile__studentNumber__iregex=r'^(\d)(\d)[3](\d)(\d)(\d)(\d)(\d)$')
-             )
 
     gender_filter = filter.get('gender', [])
     if gender_filter:
@@ -139,7 +113,7 @@ def filter_to_registrations(filter, program):
     if couple_filter:
         if len(couple_filter) == 1:
             couple_filter = couple_filter[0]
-            if gender_filter == 'single':
+            if couple_filter == 'single':
                 registerations = registerations.filter(coupling=False)
             elif couple_filter == 'couple':
                 registerations = registerations.filter(coupling=True)
@@ -185,7 +159,7 @@ def filter_to_registrations(filter, program):
                 registerations = registerations.filter(label2=True)
             elif label2_filter == 'n':
                 registerations = registerations.filter(label2=False)
-    
+
     additionalOtionFilter = filter.get('additionalOption', [])
     if additionalOtionFilter:
         if len(additionalOtionFilter) == 1:
@@ -209,32 +183,62 @@ def filter_to_registrations(filter, program):
         registerations = registerations.filter(profile__conscription__in=filter.get('conscription', []))
     from .utils import getLastProgram
     import datetime
+
     last_program = getLastProgram()
     if filter.get('passport', []):
         if 'NotHave' not in filter.get('passport', []):
-            registerations = registerations.exclude(profile__passport=Profile.PASSPORT_NOT_HAVE).exclude(profile__passport__isnull=True)
+            registerations = registerations.exclude(profile__passport=Profile.PASSPORT_NOT_HAVE).exclude(
+                profile__passport__isnull=True)
         if 'invalid' not in filter.get('passport', []):
             for item in registerations:
-                if item.profile.passport == Profile.PASSPORT_HAVE and (not item.profile.passport_dateofexpiry or (item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183))):
-                        registerations=registerations.exclude(id=item.id)
+                if item.profile.passport == Profile.PASSPORT_HAVE and (not item.profile.passport_dateofexpiry or (
+                        item.profile.passport_dateofexpiry - last_program.startDate < datetime.timedelta(183))):
+                    registerations = registerations.exclude(id=item.id)
 
         if 'valid' not in filter.get('passport', []):
-                for item in registerations:
-                    if item.profile.passport_dateofexpiry:
-                        if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):
-                            registerations=registerations.exclude(id=item.id)
-    birth=filter.get('birth',[])
-    if birth and len(birth)==1:
-        birth=birth[0]
+            for item in registerations:
+                if item.profile.passport_dateofexpiry:
+                    if item.profile.passport_dateofexpiry - last_program.startDate >= datetime.timedelta(183):
+                        registerations = registerations.exclude(id=item.id)
+    birth = filter.get('birth', [])
+    if birth and len(birth) == 1:
+        birth = birth[0]
         for reg in registerations:
-            if reg.profile.is_birth_valid() and birth=='invalid':
-                registerations=registerations.exclude(id=reg.id)
-            elif not reg.profile.is_birth_valid() and birth=='valid':
-                registerations=registerations.exclude(id=reg.id)
+            if reg.profile.is_birth_valid() and birth == 'invalid':
+                registerations = registerations.exclude(id=reg.id)
+            elif not reg.profile.is_birth_valid() and birth == 'valid':
+                registerations = registerations.exclude(id=reg.id)
+    if filter.get('entrance_year', []):
+        c = program.year
+        if len(str(c)) == 4:
+            c = str(c)[2:4]
+        c = int(c)
+        ent_filter = filter.get('entrance_year', [])[:]
+        registerations = registerations.exclude(profile__studentNumber__startswith='*').exclude(
+            profile__studentNumber='').exclude(profile__studentNumber__isnull=True)
+        if str(c - 4) in ent_filter:
+            ent_filter.remove(str(c - 4))
+            for i in range(c - 3, c + 1):
+                if str(i) not in ent_filter:
+                    registerations = registerations.exclude(profile__studentNumber__startswith=str(i))
+        else:
+            for i in range(c - 10, c + 1):
+                if str(i) not in ent_filter:
+                    registerations = registerations.exclude(profile__studentNumber__startswith=str(i))
+    if filter.get('level', []):
+        if 'other' not in filter.get('level', []):
+            registerations = registerations.filter(profile__studentNumber__regex=r'[0-9]{2}[1237][0-9]{5}')
+        if 'bs' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[1][0-9]{5}')
+        if 'ms' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[27][0-9]{5}')
+        if 'phd' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[3][0-9]{5}')
+
     return registerations
 
 
-def sendSMS(list,text):
+def sendSMS(list, text):
     client = Client(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl')
     if len(list) // 100 == len(list) / 100:
         t = (len(list) // 100)
@@ -251,14 +255,17 @@ def sendSMS(list,text):
                 b = b + "," + str(list[j + (i * 100)])
         client.service.SendSimpleSMS2('9174486355', '3496', b, '50002016008706', text, False)
 
+
 def getLastProgram():
     from .models import Program
+
     return Program.objects.filter(isPublic=True).last()
 
 
 def validateEmail(email):
     from django.core.validators import validate_email
     from django.core.exceptions import ValidationError
+
     try:
         validate_email(email)
         return True
@@ -302,16 +309,20 @@ def checkMelliCode(mellicode):
             return False
     else:
         return False
+
+
 def student_enterance(studentnumber):
     return studentnumber[0:2]
+
+
 def student_type(studentnumber):
-    a=studentnumber[2]
-    if a==1:
-        type='bs'
-    elif a==2 or a==7:
-        type='ms'
-    elif a==3:
-        type='phd'
+    a = studentnumber[2]
+    if a == 1:
+        type = 'bs'
+    elif a == 2 or a == 7:
+        type = 'ms'
+    elif a == 3:
+        type = 'phd'
     else:
-        type='unkhown'
+        type = 'unkhown'
     return type

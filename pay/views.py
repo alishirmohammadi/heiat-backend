@@ -10,8 +10,7 @@ def start_pay(request, registration_id):
     reg = Registration.objects.filter(id=registration_id).first()
     if not reg or request.user != reg.profile.user:
         return HttpResponseRedirect('/error')
-    price = Pricing.objects.filter(program=reg.program).filter(coupling=reg.coupling).filter(
-        people_type=reg.profile.people_type).filter(additionalOption=reg.additionalOption).first()
+    price = reg.get_pricing()
     if reg.numberOfPayments == 0:
         numberOfInstallment = 1
         amount = price.price1

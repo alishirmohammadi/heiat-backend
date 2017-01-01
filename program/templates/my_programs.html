@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load tags %}
 {% block title %}
-برنامه های من
+    برنامه های من
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
@@ -113,10 +113,12 @@
                                                         color="red">همسر شما امکان ثبت نام ندارد</font></span>
                                             {% endif %}
                                         {% else %}
-                                            <input data-toggle="popover"
+                                            <span> متاهلی</span>
+                                            <input style="display: inline-block" data-toggle="popover"
                                                    title="سفر به صورت متاهلی"
                                                    data-content="اگر موقع زدن دکمه ثبت نام این تیک علامت خورده باشد همسر شما نیز به همراه شما در برنامه ثبت نام میشود"
                                                    type="checkbox" name="hascoupling" class="checkbox">
+
                                         {% endif %}
                                     {% else %}
                                         <span data-toggle="popover"
@@ -182,7 +184,7 @@
                                               title="عدم تکمیل پروفایل"
                                               data-content="برای سفر خارجی ملزم به داشتن و ارائه پاسپورت هستید ابتدا اطلاعات پاسپورت خود را در قسمت پروفایل تکمیل کنید"><b><font
                                                 color="red">
-                                           ابتدا
+                                            ابتدا
                                             <a href="/profile/passport">
                                                 پروفایل
                                             </a>
@@ -242,7 +244,7 @@
                                     <td><b>
 
                                         {{ user.my_profile.people_type_choices|get_tuple_item:m.people_type }}
-                                        {% if m.Coupling %}
+                                        {% if m.coupling %}
                                             متاهلی
                                             {% if m.additionalOption %}
                                                 {{ m.program.additionalOption }}

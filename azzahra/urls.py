@@ -52,7 +52,7 @@ urlpatterns = [
     url(r'^profile/$', 'accounts.views.profile'),
     url(r'^profile/(?P<passport>passport)$', 'accounts.views.profile'),
     url(r'^profile/couple$', 'accounts.views.profile_couple'),
-    url(r'^$', RedirectView.as_view(url='/program/', permanent=True), name='home'),
+    url(r'^$', RedirectView.as_view(url='/program/'), name='home'),
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
     url(r'^FAQ/$',  TemplateView.as_view(template_name="FAQ.html"), name="FAQ"),

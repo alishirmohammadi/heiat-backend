@@ -111,10 +111,16 @@ class Registration(models.Model):
         verbose_name = 'ثبت نام'
         verbose_name_plural = 'ثبت نام ها'
 
+    def get_couple_registration(self):
+        return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(coupling=True).exclude(status=self.STATUS_REMOVED).first()
+
     def get_pricing(self):
-        return Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
+        pr1 = Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
             coupling=self.coupling).filter(
             additionalOption=self.additionalOption).first()
+        if not pr1 and self.get_couple_registration:
+            return self.get_couple_registration().get_pricing()
+        return pr1
 
     def get_num_of_installments(self):
         p = self.get_pricing()
@@ -131,14 +137,14 @@ class Registration(models.Model):
 
     def couple_inconsistency(self):
         if self.program.hasCoupling and self.coupling and self.profile.couple:
-                coup_reg = Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).first()
-                if coup_reg and coup_reg.coupling:
-                        if self.status != coup_reg.status:
-                            return True
-                        elif self.numberOfPayments != coup_reg.numberOfPayments:
-                            return True
-                else:
-                        return True
+            coup_reg =self.get_couple_registration()
+            if coup_reg and coup_reg.coupling:
+                if self.status != coup_reg.status:
+                    return True
+                elif self.numberOfPayments != coup_reg.numberOfPayments:
+                    return True
+            else:
+                return True
         return False
 
 
