@@ -221,6 +221,13 @@ def editStatus(request, program_id):
         editingRegs.update(status=request.POST.get('status_choices', ''))
     elif action == 'numberOfPayments':
         editingRegs.update(numberOfPayments=int(request.POST.get('numberOfPayments', '')))
+    elif action == 'additionalOption':
+        if program.additionalOption:
+            selectValue = request.POST.get('additionalOption', 'false')
+            if selectValue=="true":
+                editingRegs.update(additionalOption=True)
+            else:
+                editingRegs.update(additionalOption=False)
     elif action == 'coupled':
         selectValue = request.POST.get('coupled', '')
         if program.hasCoupling:

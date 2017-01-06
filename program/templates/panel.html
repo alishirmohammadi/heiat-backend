@@ -40,6 +40,10 @@
                 $("#hidden").attr('value', "coupled");
                 $("#form2").submit();
             });
+            $("#additionalOption-btn").click(function () {
+                $("#hidden").attr('value', "additionalOption");
+                $("#form2").submit();
+            });
             $("#message").click(function () {
                 $("#hidden").attr('value', "message");
                 $("#form2").submit();
@@ -168,6 +172,25 @@
                         </label>
                     </div>
                 {% endif %}
+                {% if mymanagement.program.additionalOption %}
+                    <div style="direction:rtl ">
+
+                        <label id="additionalOption">
+                            {{ mymanagement.program.additionalOption }}:
+                            <b>بله</b> <input class="checkbox-inline"
+                                              type="checkbox"
+                                              name="additionalOption"
+                                              value="y"
+                                              {% if 'y' in filterAll.additionalOption %}checked="checked"{% endif %}>
+                            <b>خیر</b> <input class="checkbox-inline"
+                                              type="checkbox"
+                                              name="additionalOption"
+                                              value="n"
+                                              {% if 'n' in filterAll.additionalOption %}checked="checked"{% endif %}>
+
+                        </label>
+                    </div>
+                {% endif %}
                 {% if mymanagement.program.type == mymanagement.program.TYPE_ETEKAF %}
                     <div style="direction:rtl ">
                         <label id="age">
@@ -205,60 +228,42 @@
                         </label>
                     </div>
                 {% elif mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}
-                    {% if mymanagement.program.additionalOption %}
-                        <div style="direction:rtl ">
-
-                            <label id="additionalOption">
-                            {{ mymanagement.program.additionalOption }}:
-                                <b>بله</b> <input class="checkbox-inline"
-                                                  type="checkbox"
-                                                  name="additionalOption"
-                                                  value="y"
-                                                  {% if 'y' in filterAll.additionalOption %}checked="checked"{% endif %}>
-                                <b>خیر</b> <input class="checkbox-inline"
-                                                  type="checkbox"
-                                                  name="additionalOption"
-                                                  value="n"
-                                                  {% if 'n' in filterAll.additionalOption %}checked="checked"{% endif %}>
-
-                            </label>
-                        </div>
-                    {% endif %}
-                        <div style="direction:rtl ">
-
-                            <label id="mugshot">
-                             عکس:
-                                <b>دارد</b> <input class="checkbox-inline"
-                                                  type="checkbox"
-                                                  name="mugshot"
-                                                  value="y"
-                                                  {% if 'y' in filterAll.mugshot %}checked="checked"{% endif %}>
-                                <b>ندارد</b> <input class="checkbox-inline"
-                                                  type="checkbox"
-                                                  name="mugshot"
-                                                  value="n"
-                                                  {% if 'n' in filterAll.mugshot %}checked="checked"{% endif %}>
-
-                            </label>
-                        </div>
 
                     <div style="direction:rtl ">
 
-                            <label id="mugshot">
-                             تاریخ تولد:
-                                <b>معتبر</b> <input class="checkbox-inline"
-                                                  type="checkbox"
-                                                  name="birth"
-                                                  value="valid"
-                                                  {% if 'valid' in filterAll.birth %}checked="checked"{% endif %}>
-                                <b>نامعتبر</b> <input class="checkbox-inline"
+                        <label id="mugshot">
+                            عکس:
+                            <b>دارد</b> <input class="checkbox-inline"
+                                               type="checkbox"
+                                               name="mugshot"
+                                               value="y"
+                                               {% if 'y' in filterAll.mugshot %}checked="checked"{% endif %}>
+                            <b>ندارد</b> <input class="checkbox-inline"
+                                                type="checkbox"
+                                                name="mugshot"
+                                                value="n"
+                                                {% if 'n' in filterAll.mugshot %}checked="checked"{% endif %}>
+
+                        </label>
+                    </div>
+
+                    <div style="direction:rtl ">
+
+                        <label id="mugshot">
+                            تاریخ تولد:
+                            <b>معتبر</b> <input class="checkbox-inline"
+                                                type="checkbox"
+                                                name="birth"
+                                                value="valid"
+                                                {% if 'valid' in filterAll.birth %}checked="checked"{% endif %}>
+                            <b>نامعتبر</b> <input class="checkbox-inline"
                                                   type="checkbox"
                                                   name="birth"
                                                   value="invalid"
                                                   {% if 'invalid' in filterAll.birth %}checked="checked"{% endif %}>
 
-                            </label>
-                        </div>
+                        </label>
+                    </div>
                     <div style="direction:rtl ">
                         <label id="passport">
 
@@ -638,6 +643,19 @@
                                 </select>
                             </td>
                             <td>
+                                {% if mymanagement.program.additionalOption %}
+                                    <button class="btn btn-success center-block" type="button" id="additionalOption-btn">
+                                    تغییر
+                                    {{ mymanagement.program.additionalOption }}
+                                    </button>
+                                    <select name="additionalOption" class="form-control">
+                                        <option value="true">{{ mymanagement.program.additionalOption }}</option>
+                                        <option value="false">
+                                            غیر
+                                            {{ mymanagement.program.additionalOption }}
+                                        </option>
+                                    </select>
+                                {% endif %}
                             </td>
                         </tr>
                         <tr>
