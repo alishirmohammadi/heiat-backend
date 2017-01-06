@@ -48,7 +48,7 @@
                         <tr>
                             <th style="text-align: right">مضاف:</th>
                             <td><input class="form-control" type="text" name="AdditionalOption"
-                                       value="{{ mymanagement.program.additionalOption }}">
+                                       placeholder="{{ mymanagement.program.additionalOption }}">
                             </td>
                         </tr>
                         {% if mymanagement.program.type == mymanagement.program.TYPE_ARBAEEN %}

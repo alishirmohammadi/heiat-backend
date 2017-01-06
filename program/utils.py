@@ -208,6 +208,16 @@ def filter_to_registrations(filter, program):
                 registerations = registerations.exclude(id=reg.id)
             elif not reg.profile.is_birth_valid() and birth == 'valid':
                 registerations = registerations.exclude(id=reg.id)
+    if filter.get('level', []):
+        if 'other' not in filter.get('level', []):
+            registerations = registerations.filter(profile__studentNumber__regex=r'[0-9]{2}[1237][0-9]{5}')
+        if 'bs' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[1][0-9]{5}')
+        if 'ms' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[27][0-9]{5}')
+        if 'phd' not in filter.get('level', []):
+            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[3][0-9]{5}')
+
     if filter.get('entrance_year', []):
         c = program.year
         if len(str(c)) == 4:
@@ -225,15 +235,6 @@ def filter_to_registrations(filter, program):
             for i in range(c - 10, c + 1):
                 if str(i) not in ent_filter:
                     registerations = registerations.exclude(profile__studentNumber__startswith=str(i))
-    if filter.get('level', []):
-        if 'other' not in filter.get('level', []):
-            registerations = registerations.filter(profile__studentNumber__regex=r'[0-9]{2}[1237][0-9]{5}')
-        if 'bs' not in filter.get('level', []):
-            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[1][0-9]{5}')
-        if 'ms' not in filter.get('level', []):
-            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[27][0-9]{5}')
-        if 'phd' not in filter.get('level', []):
-            registerations = registerations.exclude(profile__studentNumber__iregex=r'[0-9]{2}[3][0-9]{5}')
 
     return registerations
 
