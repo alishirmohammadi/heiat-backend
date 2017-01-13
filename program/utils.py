@@ -276,15 +276,17 @@ def validateEmail(email):
 
 def farsiNumber(Num):
     Num1 = str(Num)
-    Num1.replace('1', '1')
-    Num1.replace('1', '2')
-    Num1.replace('1', '3')
-    Num1.replace('1', '4')
-    Num1.replace('1', '5')
-    Num1.replace('1', '6')
-    Num1.replace('1', '7')
-    Num1.replace('1', '8')
-    Num1.replace('1', '9')
+    Num1=Num1.replace('۱', '1')
+    Num1=Num1.replace('۲', '2')
+    Num1=Num1.replace('۳', '3')
+    Num1=Num1.replace('۴', '4')
+    Num1=Num1.replace('۵', '5')
+    Num1=Num1.replace('۶', '6')
+    Num1=Num1.replace('۷', '7')
+    Num1=Num1.replace('۸', '8')
+    Num1=Num1.replace('۹', '9')
+    Num1=Num1.replace('۰', '0')
+    return Num1
 
 
 def checkMelliCode(mellicode):

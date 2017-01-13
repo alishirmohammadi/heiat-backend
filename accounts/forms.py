@@ -18,6 +18,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from program.utils import farsiNumber
 
 attrs_dict = {'class': 'required'}
 USERNAME_RE = r'^[\.\w]+$'
@@ -85,6 +86,11 @@ class SignupFormExtra(SignupForm):
         username, email, password = (self.cleaned_data['username'],
                                      self.cleaned_data['email'],
                                      self.cleaned_data['password1'])
+        try:
+            username=farsiNumber(username)
+        except:
+            pass
+
 
         new_user = UserenaSignup.objects.create_user(username,
                                                      email,
@@ -208,6 +214,10 @@ class ProfileForm(forms.ModelForm):
         stu=self.cleaned_data['studentNumber']
         if not stu:
             raise forms.ValidationError(_('شماره دانشجویی نمی تواند خالی باشد'))
+        try:
+            stu=farsiNumber(stu)
+        except:
+            pass
         other=Profile.objects.filter(studentNumber=stu).first()
         from .views import isNum
         if not isNum(stu) or len(stu)!=8:
