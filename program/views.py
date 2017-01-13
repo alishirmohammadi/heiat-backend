@@ -126,15 +126,25 @@ def panel(request, management_id):
                     if face >= t:
                         selected.status = Registration.STATUS_CERTAIN
                         face = face - 1
+                        if selected.coupling:
+                            couple_reg_q=selected.get_couple_registration()
+                            if couple_reg_q:
+                                couple_reg_q.status = Registration.STATUS_CERTAIN
+                                couple_reg_q.save()
                     else:
                         selected.status = Registration.STATUS_RESERVED
+                        if selected.coupling:
+                            couple_reg_q=selected.get_couple_registration()
+                            if couple_reg_q:
+                                couple_reg_q.status = Registration.STATUS_RESERVED
+                                couple_reg_q.save()
                     selected.save()
                     total = total - 1
-                    if all_filter.get('couple', []) == ['couple']:
-                        if len(all_filter.get('gender', [])) == 1:
-                            if selected.status == Registration.STATUS_CERTAIN:
-                                Registration.objects.filter(
-                                    profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
+                    # if all_filter.get('couple', []) == ['couple']:
+                    #     if len(all_filter.get('gender', [])) == 1:
+                    #         if selected.status == Registration.STATUS_CERTAIN:
+                    #             Registration.objects.filter(
+                    #                 profile=selected.profile.couple).first().status = Registration.STATUS_CERTAIN
 
             return HttpResponseRedirect('/program/panel/' + str(management.id))
         else:
