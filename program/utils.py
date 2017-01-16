@@ -73,6 +73,65 @@ def registrations_to_excel(registrations):
     return export_users_xls(status_list)
 
 
+
+def new_registrations_to_excel(registrations,program):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="users.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+    # Sheet header, first row
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ["شناسه",'پرداخت', 'وضعیت', 'نام', 'نام خانوادگی', 'ایمیل', 'موبایل',
+               'کد ملی', 'فیدبک']
+    if program.hasCoupling:
+        columns.append("متاهلی")
+    if program.additionalOption:
+        columns.append(program.additionalOption)
+    if program.type==program.TYPE_MASHHAD:
+        columns.append("شماره دانشجویی")
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    for reg in registrations:
+        row_num += 1
+        col_num=0
+        ws.write(row_num, col_num, reg.id, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.numberOfPayments, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, get_tuple_item(Registration.status_choices, reg.status), font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.user.first_name, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.user.last_name, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.user.email, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.cellPhone, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.user.username, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.feedback, font_style)
+        if program.hasCoupling:
+            col_num+=1
+            ws.write(row_num, col_num, "متاهلی" if reg.coupling else "مجردی", font_style)
+        if program.additionalOption:
+            col_num+=1
+            ws.write(row_num, col_num, "بله" if reg.coupling else "خیر", font_style)
+        if program.type==program.TYPE_MASHHAD:
+            col_num+=1
+            ws.write(row_num, col_num,reg.profile.studentNumber , font_style)
+
+    wb.save(response)
+    return response
+
+
+
 # def send_email(from_email,from_password,bcc,subject,content):
 #     my_use_tls = False
 #     connection = get_connection(host='mehr.sharif.ir',

@@ -108,9 +108,9 @@ def panel(request, management_id):
 
         registrations = filter_to_registrations(all_filter, management.program)
         if action == 'excel':
-            from .utils import registrations_to_excel
+            from .utils import new_registrations_to_excel
 
-            return registrations_to_excel(registrations)
+            return new_registrations_to_excel(registrations,management.program)
         if action == 'manifest':
             return registrations_to_manifest(registrations)
         if action == 'print':
