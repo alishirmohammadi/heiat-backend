@@ -116,7 +116,7 @@ def new_registrations_to_excel(registrations,program):
         col_num+=1
         ws.write(row_num, col_num, reg.profile.user.username, font_style)
         col_num+=1
-        ws.write(row_num, col_num, reg.feedback, font_style)
+        ws.write(row_num, col_num, reg.feedBack, font_style)
         if program.hasCoupling:
             col_num+=1
             ws.write(row_num, col_num, "متاهلی" if reg.coupling else "مجردی", font_style)
