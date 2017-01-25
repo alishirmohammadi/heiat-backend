@@ -84,7 +84,7 @@ def new_registrations_to_excel(registrations,program):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
     columns = ["شناسه",'پرداخت', 'وضعیت', 'نام', 'نام خانوادگی', 'ایمیل', 'موبایل',
-               'کد ملی', 'فیدبک']
+               'کد ملی','تاریخ تولد', 'فیدبک']
     if program.hasCoupling:
         columns.append("متاهلی")
     if program.additionalOption:
@@ -115,6 +115,8 @@ def new_registrations_to_excel(registrations,program):
         ws.write(row_num, col_num, reg.profile.cellPhone, font_style)
         col_num+=1
         ws.write(row_num, col_num, reg.profile.user.username, font_style)
+        col_num+=1
+        ws.write(row_num, col_num, reg.profile.get_formatted_birthday(), font_style)
         col_num+=1
         ws.write(row_num, col_num, reg.feedBack, font_style)
         if program.hasCoupling:
