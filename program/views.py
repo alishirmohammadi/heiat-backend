@@ -110,7 +110,7 @@ def panel(request, management_id):
         if action == 'excel':
             from .utils import new_registrations_to_excel
 
-            return new_registrations_to_excel(registrations,management.program)
+            return new_registrations_to_excel(registrations, management.program)
         if action == 'manifest':
             return registrations_to_manifest(registrations)
         if action == 'print':
@@ -127,14 +127,14 @@ def panel(request, management_id):
                         selected.status = Registration.STATUS_CERTAIN
                         face = face - 1
                         if selected.coupling:
-                            couple_reg_q=selected.get_couple_registration()
+                            couple_reg_q = selected.get_couple_registration()
                             if couple_reg_q:
                                 couple_reg_q.status = Registration.STATUS_CERTAIN
                                 couple_reg_q.save()
                     else:
                         selected.status = Registration.STATUS_RESERVED
                         if selected.coupling:
-                            couple_reg_q=selected.get_couple_registration()
+                            couple_reg_q = selected.get_couple_registration()
                             if couple_reg_q:
                                 couple_reg_q.status = Registration.STATUS_RESERVED
                                 couple_reg_q.save()
@@ -162,38 +162,33 @@ def addregistration(request, program_id):
     coupled = request.POST.get('coupled', '')
     prof = Profile.objects.filter(user__username=codemelli).first()
     if prof:
-        peopletype = prof.people_type
         alreadyRegistered = Registration.objects.filter(program=program).filter(profile=prof).exclude(
             status=Registration.STATUS_REMOVED)
 
         if not alreadyRegistered:
-            price = Pricing.objects.filter(program=program).filter(coupling=bool(coupled)).filter(
-                people_type=peopletype).first()
-            if price:
-                addregister = Registration()
-                addregister.profile = prof
-                addregister.program = program
-                if program.hasCoupling and prof.coupling:
-                    if coupled == 'married':
-                        addregister.coupling = True
-                        registeredCouple = Registration.objects.filter(program=program).filter(
-                            profile=prof.couple).first()
-                        if registeredCouple:
-                            registeredCouple.coupling = True
-                            registeredCouple.save()
-                        else:
-                            registeredCouple = Registration()
-                            registeredCouple.profile = prof.coupling
-                            registeredCouple.program = program
-                            registeredCouple.coupling = True
-                            registeredCouple.save()
-                else:
-                    messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
-                addregister.save()
-                messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
-
+            addregister = Registration()
+            addregister.profile = prof
+            addregister.program = program
+            if program.hasCoupling and prof.coupling():
+                if coupled == 'married':
+                    addregister.coupling = True
+                    registeredCouple = Registration.objects.filter(program=program).filter(
+                        profile=prof.couple).first()
+                    if registeredCouple:
+                        registeredCouple.coupling = True
+                        registeredCouple.save()
+                    else:
+                        registeredCouple = Registration()
+                        registeredCouple.profile = prof.couple
+                        registeredCouple.program = program
+                        registeredCouple.coupling = True
+                        registeredCouple.save()
             else:
-                messages.add_message(request, messages.INFO, 'قیمت تعریف نشده')
+                messages.add_message(request, messages.INFO, 'این فرد متاهل ثبت نام نکرده است')
+            addregister.save()
+            messages.add_message(request, messages.INFO, 'با موفقیت انجام شد')
+
+
         else:
             messages.add_message(request, messages.INFO, 'این فرد در این برنامه حضور دارد')
     else:
@@ -234,7 +229,7 @@ def editStatus(request, program_id):
     elif action == 'additionalOption':
         if program.additionalOption:
             selectValue = request.POST.get('additionalOption', 'false')
-            if selectValue=="true":
+            if selectValue == "true":
                 editingRegs.update(additionalOption=True)
             else:
                 editingRegs.update(additionalOption=False)
