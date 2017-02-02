@@ -29,6 +29,7 @@ class Program(models.Model):
     TYPE_MARASEM = 'marasem'
     TYPE_GUEST = 'guest'
     TYPE_SOUTH = 'south'
+    TYPE_VOROODI = 'voroodi'
 
     type_choices = (
         (TYPE_ARBAEEN, 'اربعین'),
@@ -36,6 +37,7 @@ class Program(models.Model):
         (TYPE_MASHHAD, 'پابوس عشق'),
         (TYPE_MARASEM, 'مراسم'),
         (TYPE_SOUTH, 'اردو جنوب'),
+        (TYPE_VOROODI, 'اردو ورودی ها'),
         (TYPE_GUEST, 'سایر'),
 
     )
