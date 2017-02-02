@@ -27,11 +27,16 @@ class Program(models.Model):
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
     TYPE_MARASEM = 'marasem'
+    TYPE_GUEST = 'guest'
+    TYPE_SOUTH = 'south'
+
     type_choices = (
         (TYPE_ARBAEEN, 'اربعین'),
         (TYPE_ETEKAF, 'اعتکاف'),
         (TYPE_MASHHAD, 'پابوس عشق'),
         (TYPE_MARASEM, 'مراسم'),
+        (TYPE_SOUTH, 'اردو جنوب'),
+        (TYPE_GUEST, 'سایر'),
 
     )
     type = models.CharField(max_length=200, choices=type_choices)
