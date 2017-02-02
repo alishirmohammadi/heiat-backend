@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load tags %}
 {% block title %}
-{{ myregister.program.title }}
+    {{ myregister.program.title }}
 {% endblock %}
 {% block navbar %}
     {% include '_navbar.html' with active_link='ref_detail' %}
@@ -84,27 +84,37 @@
                                 </tr>
                                 <tr>
                                     <td>مبلغ قابل پرداخت</td>
-                                    <td>
-                                        {% if myregister.numberOfPayments == 0 %}
-                                            {{ myregister.get_pricing.price1 }}
-                                        {% elif myregister.numberOfPayments == 1 %}
-                                            {{ myregister.get_pricing.price2 }}
-                                        {% elif myregister.numberOfPayments == 2 %}
-                                            {{ myregister.get_pricing.price3 }}
-                                        {% endif %}
-                                        تومان
-                                    </td>
+                                    {% if myregister.get_pricing %}
+                                        <td>
+                                            {% if myregister.numberOfPayments == 0 %}
+                                                {{ myregister.get_pricing.price1 }}
+                                            {% elif myregister.numberOfPayments == 1 %}
+                                                {{ myregister.get_pricing.price2 }}
+                                            {% elif myregister.numberOfPayments == 2 %}
+                                                {{ myregister.get_pricing.price3 }}
+                                            {% endif %}
+                                            تومان
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            قسطی برای شما تعیین نشده است.
+                                            به مسئول برنامه ایمیل بفرستید.
+                                        </td>
+                                    {% endif %}
+
 
                                 </tr>
                                 <tr>
                                 <td>
-                                    <a id="pay"
-                                       href="/pay/start/{{ myregister.id }}/"
-                                       class="btn btn-success"
-                                       data-toggle="popover"
-                                       title=""
-                                       data-content="">
-                                        پرداخت</a>
+                                    {% if myregister.get_pricing %}
+                                        <a id="pay"
+                                           href="/pay/start/{{ myregister.id }}/"
+                                           class="btn btn-success"
+                                           data-toggle="popover"
+                                           title=""
+                                           data-content="">
+                                            پرداخت</a>
+                                    {% endif %}
                                 </td>
                                 <td></td>
 
@@ -203,7 +213,8 @@
                                 <thead>
                                 <tr>
                                     <h3>{{ massage.message.subject }}</h3>
-                                    <p>{{massage.message.messageSendDate|get_time}}</p>
+
+                                    <p>{{ massage.message.messageSendDate|get_time }}</p>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -322,7 +333,8 @@
                 <form method="post">
                     {% csrf_token %}
                     <h3><b>انقادات و پیشنهادات</b></h3>
-                   <textarea style="width: 100%" name="feedback" class="mceNoEditor">{{ myregister.feedBack }}</textarea>
+                    <textarea style="width: 100%" name="feedback"
+                              class="mceNoEditor">{{ myregister.feedBack }}</textarea>
                     <br>
                     <input type="submit" class="btn btn-warning center-block" name="feedback_btn" value="ثبت">
 

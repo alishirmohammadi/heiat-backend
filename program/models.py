@@ -118,7 +118,7 @@ class Registration(models.Model):
         pr1 = Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
             coupling=self.coupling).filter(
             additionalOption=self.additionalOption).first()
-        if not pr1 and self.get_couple_registration:
+        if not pr1 and self.get_couple_registration():
             return self.get_couple_registration().get_pricing()
         return pr1
 
