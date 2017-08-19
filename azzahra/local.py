@@ -13,3 +13,4 @@ DATABASES_LOCAL = {
 
     }
 }
+STATIC_ROOT_LOCAL='/home/omid/static'

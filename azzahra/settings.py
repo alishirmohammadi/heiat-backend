@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!%k2v4k!9*(%@ft_by9gh02%#n@b^vfiljin^3h+n!9&qj7_ds'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -152,8 +152,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID = 1
-from .local import MEDIA_ROOT_LOCAL, DATABASES_LOCAL
-# MEDIA_ROOT = os.path.join(os.path.abspath(''),'app/static/')
+from .local import MEDIA_ROOT_LOCAL, DATABASES_LOCAL, STATIC_ROOT_LOCAL
+
+STATIC_ROOT = STATIC_ROOT_LOCAL
 MEDIA_ROOT = MEDIA_ROOT_LOCAL
 DATABASES = DATABASES_LOCAL
 USERENA_HTML_EMAIL = True
@@ -172,4 +173,3 @@ USERENA_MUGSHOT_PATH = getattr(settings,
 LOGIN_URL = '/accounts/signin/'
 USERENA_MUGSHOT_SIZE = 120 * 120
 # APPEND_SLASH=False
-
