@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include,patterns
+from django.conf.urls import url, include
 from django.contrib import admin
 from accounts.forms import SignupFormExtra, PasswordResetForm
 from django.contrib.auth import views as auth_views
@@ -55,9 +55,8 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/program/'), name='home'),
     # url(r'^accounts/signout/', RedirectView.as_view(url='/accounts/signin', permanent=True), name='home'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activate', name='userena_activate'),
-    url(r'^FAQ/$',  TemplateView.as_view(template_name="FAQ.html"), name="FAQ"),
+    url(r'^FAQ/$', TemplateView.as_view(template_name="FAQ.html"), name="FAQ"),
     url(r'^error/', 'accounts.views.error'),
-
 
     # url(r'^accounts/edit_profile', 'accounts.views.saveProfile'),
 
@@ -82,11 +81,8 @@ urlpatterns = [
     url(r'^accounts/', include('userena.urls')),
     url(r'^pay/', include('pay.urls')),
     url(r'^program/', include('program.urls')),
+    url(r'^static/(?P<path>.*)$',
+        'django.views.static.serve',
+        {'document_root': settings.STATIC_ROOT})
 
 ]
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-urlpatterns += patterns('', (
-    r'^static/(?P<path>.*)$',
-    'django.views.static.serve',
-    {'document_root': settings.STATIC_ROOT}
-))

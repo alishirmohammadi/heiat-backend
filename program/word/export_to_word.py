@@ -7,6 +7,7 @@ from docx.shared import Pt
 from io import BytesIO
 from docx.enum.text import WD_LINE_SPACING
 import program.word.jalali
+from django.conf import settings
 
 
 def styling(c, t, f):
@@ -142,7 +143,7 @@ def registrations_to_print(registerations):
         # if item.profile. Mugshot:
         #     a = 'عکس دارد'
         run = p.add_run('عکس دارد')
-        picture = open('./program/word/3.JPG', 'rb')
+        picture = open(settings.BASE_DIR+'/program/word/3.JPG', 'rb')
         add_picture_to_run(run, picture, width=Cm(0.5), height=Cm(0.5))
         p.line_spacing_rule = WD_LINE_SPACING.DOUBLE
         p.add_run('  ')
@@ -242,14 +243,14 @@ def registrations_to_manifest(registerations):
     p1 = hdr_cells[1].add_paragraph('')
 
     run = p1.add_run('')
-    picture = open('./program/word/1.jpg', 'rb')
+    picture = open(settings.BASE_DIR+'/program/word/1.jpg', 'rb')
     add_picture_to_run(run, picture, width=Cm(5.5), height=Cm(4))
     run.bold = True
     p1_format = p1.paragraph_format
     p1_format.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     p1 = hdr_cells[2].add_paragraph('')
     run = p1.add_run('')
-    picture = open('./program/word/2.jpg', 'rb')
+    picture = open(settings.BASE_DIR+'/program/word/2.jpg', 'rb')
     add_picture_to_run(run, picture, width=Cm(5.5), height=Cm(4))
     run.bold = True
     p1_format = p1.paragraph_format
