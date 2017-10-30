@@ -341,14 +341,14 @@ def registrations_to_manifest(registerations):
             p1 = hdr_cells[1].add_paragraph('')
 
             run = p1.add_run('')
-            picture = open('./program/word/1.jpg', 'rb')
+            picture = open(settings.BASE_DIR+'/program/word/1.jpg', 'rb')
             add_picture_to_run(run, picture, width=Cm(5.5), height=Cm(4))
             run.bold = True
             p1_format = p1.paragraph_format
             p1_format.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
             p1 = hdr_cells[2].add_paragraph('')
             run = p1.add_run('')
-            picture = open('./program/word/2.jpg', 'rb')
+            picture = open(settings.BASE_DIR+'/program/word/2.jpg', 'rb')
             add_picture_to_run(run, picture, width=Cm(5.5), height=Cm(4))
             run.bold = True
             p1_format = p1.paragraph_format
@@ -454,11 +454,11 @@ def registrations_to_manifest(registerations):
         styling(row_cells[3], str(t1), 12)
         p1 = row_cells[0].add_paragraph('')
         if item.profile.mugshot:
-          picture = open('./' + str(item.profile.mugshot), 'rb')
+          picture = open(settings.BASE_DIR+'/' + str(item.profile.mugshot), 'rb')
           run = p1.add_run('')
           add_picture_to_run(run, picture, width=Cm(2), height=Cm(3))
         else:
-            picture = open('./program/word/4.jpg', 'rb')
+            picture = open(settings.BASE_DIR+'/program/word/4.jpg', 'rb')
             run = p1.add_run('')
             add_picture_to_run(run, picture, width=Cm(2), height=Cm(3))
     f = BytesIO()
