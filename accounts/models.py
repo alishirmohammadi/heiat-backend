@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from userena.models import UserenaBaseProfile
 from django.utils.translation import ugettext_lazy as _
+
+
 # Create your models here.
 class Profile(UserenaBaseProfile):
     user = models.OneToOneField(User,
@@ -99,9 +101,11 @@ class Profile(UserenaBaseProfile):
         return self.user.first_name + ' ' + self.user.last_name
 
     def is_birth_valid(self):
-        if self.birthDay < 1 or self.birthDay > 31:
+        if not self.birthDay or self.birthDay < 1 or self.birthDay > 31:
             return False
-        if self.birthMonth < 1 or self.birthMonth > 12:
+        if not self.birthMonth or self.birthMonth < 1 or self.birthMonth > 12:
+            return False
+        if not self.birthYear:
             return False
         if self.birthYear > 9 and self.birthYear < 99:
             return True
