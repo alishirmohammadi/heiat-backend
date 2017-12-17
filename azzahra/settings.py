@@ -112,13 +112,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'mehr.sharif.ir'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'azzahra@mehr.sharif.ir'
-EMAIL_HOST_PASSWORD = 'hei@1391'
-
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST_USER = 'azzahraa.sharif.ir'
+EMAIL_HOST_PASSWORD = '2rooohet'
+DEFAULT_FROM_EMAIL = 'هیئت الزهرا<azzahraa.sharif.ir@gmail.com>'
 SERVER_EMAIL = EMAIL_HOST_USER
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -174,3 +173,4 @@ LOGIN_URL = '/accounts/signin/'
 USERENA_MUGSHOT_SIZE = 120 * 120
 # APPEND_SLASH=False
 ADMINS = (('Omid Baharloo', 'omid.gonbad@gmail.com'),)
+#USERENA_ACTIVATION_REQUIRED=False
