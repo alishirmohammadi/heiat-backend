@@ -115,9 +115,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'azzahraa.sharif.ir'
-EMAIL_HOST_PASSWORD = '2rooohet'
-DEFAULT_FROM_EMAIL = 'هیئت الزهرا<azzahraa.sharif.ir@gmail.com>'
+EMAIL_HOST_USER = 'omid.gonbad'
+EMAIL_HOST_PASSWORD = '1389/9/9'
+DEFAULT_FROM_EMAIL = 'هیئت الزهرا<omid.gonbad@gmail.com>'
 SERVER_EMAIL = EMAIL_HOST_USER
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
