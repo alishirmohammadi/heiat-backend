@@ -8,10 +8,11 @@ __pycache__/
 gmon.out
 *_env/
 env/
+venv/
 
 .idea/
 
-azzahraa/local.py
+*/local.py
 
 db.sqlite3
 

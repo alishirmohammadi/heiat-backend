@@ -69,15 +69,20 @@ class Profile(UserenaBaseProfile):
     CONSCRIPTION_WENT = 'went'
     CONSCRIPTION_EXEMPT = 'exempt'
     CONSCRIPTION_EDUCATIONAL_EXEMPT = 'educational exempt'
+    CONSCRIPTION_ARMY = 'army'
+    CONSCRIPTION_RESPITE = 'respite'
     CONSCRIPTION_OTHER = 'other'
     conscription_choices = (
         (CONSCRIPTION_WENT, 'دارای کارت پایان خدمت'),
         (CONSCRIPTION_EXEMPT, 'معافیت دایم '),
         (CONSCRIPTION_EDUCATIONAL_EXEMPT, 'معافیت تحصیلی'),
+        (CONSCRIPTION_ARMY, 'نظامی'),
+        (CONSCRIPTION_RESPITE, 'مهلت قانونی معرفی'),
         (CONSCRIPTION_OTHER, 'سایر'),
     )
     conscription = models.CharField(max_length=200, choices=conscription_choices, verbose_name="وضعیت نظام وظیفه")
     conscriptionDesc = models.CharField(max_length=200, null=True, blank=True, verbose_name="توضیحات بیشتر نظام وظیفه")
+    birth_date=models.DateField(null=True,blank=True)
 
     def hasManagement(self):
         from program.models import Management

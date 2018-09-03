@@ -13,5 +13,5 @@ DATABASES_LOCAL = {
 
     }
 }
-STATIC_ROOT_LOCAL='/home/omid/static'
+STATIC_ROOT_LOCAL='/home/omid/heiat/static'
 PROJECT_ROOT_LOCAL='/home/omid/PycharmProjects/azzahraa8'
