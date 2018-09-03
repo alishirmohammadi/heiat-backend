@@ -80,6 +80,21 @@ class Post(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
 
 
+class PriceShift(models.Model):
+    program = models.ForeignKey(Program, related_name='shifts')
+    PROPERTY_PEOPLE_TYPE = 'people_type'
+    PROPERTY_COUPLING = 'coupling'
+    PROPERTY_GENDER = 'gender'
+    PROPERTY_CHOICES = (
+        (PROPERTY_PEOPLE_TYPE, 'وضعیت تحصیل'),
+        (PROPERTY_COUPLING, 'متاهلی'),
+        (PROPERTY_GENDER, 'جنسیت'),
+    )
+    property_name = models.CharField(max_length=32, choices=PROPERTY_CHOICES)
+    value = models.CharField(max_length=128)
+    shift = models.IntegerField(default=0)
+
+
 class Registration(models.Model):
     profile = models.ForeignKey(Profile)
     program = models.ForeignKey(Program)
@@ -159,6 +174,20 @@ class Registration(models.Model):
             else:
                 return True
         return False
+
+
+class Question(models.Model):
+    program = models.ForeignKey(Program, related_name='questions')
+    title = models.CharField(max_length=128)
+    desc = models.TextField(null=True, blank=True)
+    user_sees = models.BooleanField(default=False)
+    shift = models.IntegerField(default=0)
+
+
+class Answer(models.Model):
+    registration = models.ForeignKey(Registration, related_name='avaioption')
+    question = models.ForeignKey(Question, related_name='answers')
+    yes = models.BooleanField(default=True)
 
 
 class Management(models.Model):
