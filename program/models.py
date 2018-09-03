@@ -6,7 +6,6 @@ from accounts.models import Profile
 from django.db.models import Sum, Q
 
 
-
 # Create your models here.
 
 class Program(models.Model):
@@ -75,6 +74,12 @@ class Program(models.Model):
         return Pricing.objects.filter(program=self)
 
 
+class Post(models.Model):
+    program = models.ForeignKey(Program, related_name='posts')
+    text = models.TextField()
+    post_date = models.DateTimeField(auto_now_add=True)
+
+
 class Registration(models.Model):
     profile = models.ForeignKey(Profile)
     program = models.ForeignKey(Program)
@@ -119,7 +124,8 @@ class Registration(models.Model):
         verbose_name_plural = 'ثبت نام ها'
 
     def get_couple_registration(self):
-        return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(coupling=True).exclude(status=self.STATUS_REMOVED).first()
+        return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(
+            coupling=True).exclude(status=self.STATUS_REMOVED).first()
 
     def get_pricing(self):
         pr1 = Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
@@ -144,7 +150,7 @@ class Registration(models.Model):
 
     def couple_inconsistency(self):
         if self.program.hasCoupling and self.coupling and self.profile.couple:
-            coup_reg =self.get_couple_registration()
+            coup_reg = self.get_couple_registration()
             if coup_reg and coup_reg.coupling:
                 if self.status != coup_reg.status:
                     return True
