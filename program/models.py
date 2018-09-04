@@ -336,7 +336,6 @@ class Pricing(models.Model):
             sum_value += self.price3
         return sum_value
 
-
     def __str__(self):
         return self.people_type + ' ' + ' ' + self.program.title
 
@@ -360,6 +359,21 @@ class Message(models.Model):
 
     def __str__(self):
         return str(self.sender)
+
+
+class Message2(models.Model):
+    registration = models.ForeignKey(Registration, related_name='messages')
+    to_user = models.BooleanField(default=True)
+    text = models.TextField()
+    send_sms = models.BooleanField(default=False)
+    send_date = models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        verbose_name = 'پیام'
+        verbose_name_plural = 'پیام ها'
+
+    def __str__(self):
+        return str(self.registration)
 
 
 class Message_reciving(models.Model):
