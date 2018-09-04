@@ -1,4 +1,3 @@
-MEDIA_ROOT_LOCAL= './'
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -13,5 +12,5 @@ DATABASES_LOCAL = {
 
     }
 }
-STATIC_ROOT_LOCAL='/home/omid/heiat/static'
-PROJECT_ROOT_LOCAL='/home/omid/PycharmProjects/azzahraa8'
+STATIC_ROOT_LOCAL = '/home/omid/heiat/static'
+MEDIA_ROOT_LOCAL = '/home/omid/jamnevisi/media/'

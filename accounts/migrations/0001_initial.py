@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('mugshot', models.CharField(max_length=50, verbose_name='mugshot')),
                 ('privacy', models.CharField(choices=[('open', 'Open'), ('registered', 'Registered'), ('closed', 'Closed')], default='registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
                 ('entranceDate', models.DateTimeField(default=datetime.datetime.now, max_length=20)),
                 ('melliCode', models.CharField(max_length=10, verbose_name='کد ملی')),

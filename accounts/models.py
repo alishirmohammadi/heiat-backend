@@ -40,7 +40,7 @@ class Profile(models.Model):
     student_number = models.CharField(max_length=20, null=True, blank=True, verbose_name="شماره دانشجویی")
     GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
     gender = models.BooleanField(default=True, choices=GENDER_CHOICES, verbose_name="جنسیت")
-    couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True)
+    couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True,on_delete=models.SET_NULL)
     father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True)
     mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True)
     PASSPORT_NOT_HAVE = 'not have'

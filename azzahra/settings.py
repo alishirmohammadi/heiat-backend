@@ -122,5 +122,7 @@ ADMINS = (('Omid Baharloo', 'omid.gonbad@gmail.com'),)
 from .local import *
 
 STATIC_ROOT = STATIC_ROOT_LOCAL
+STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_ROOT_LOCAL
+MEDIA_URL = '/media/'
 DATABASES = DATABASES_LOCAL

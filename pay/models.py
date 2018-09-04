@@ -26,8 +26,8 @@ class Expense(models.Model):
 
 # Create your models here.
 class Payment(models.Model):
-    registration = models.ForeignKey(Registration, null=True)
-    expense = models.ForeignKey(Expense, null=True)
+    registration = models.ForeignKey(Registration, null=True,related_name='payments',on_delete=models.CASCADE)
+    expense = models.ForeignKey(Expense, null=True,related_name='payments',on_delete=models.CASCADE)
     numberOfInstallment = models.IntegerField(default=1, null=True)
     amount = models.IntegerField()
     refId = models.CharField(max_length=40, null=True, blank=True)

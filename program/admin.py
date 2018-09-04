@@ -1,4 +1,4 @@
-from .models import Program, Registration, Pricing, Management, Message, Message_reciving
+from .models import Program, Registration, Management
 # from pay.models import Payment
 from django.contrib import admin
 from .models import Management
@@ -50,24 +50,3 @@ class Management_Admin(admin.ModelAdmin):
 
 admin.site.register(Management, Management_Admin)
 
-
-class Message_reciving_Admin(admin.ModelAdmin):
-    list_display = ['id', 'message', 'registration']
-
-
-admin.site.register(Message_reciving, Message_reciving_Admin)
-
-
-class Message_Admin(admin.ModelAdmin):
-    list_display = ['id', 'sender', 'subject', 'content', 'sendEmail', 'sendSms', 'sendInbox', 'messageSendDate']
-
-
-admin.site.register(Message, Message_Admin)
-
-
-
-class Pricing_Admin(admin.ModelAdmin):
-    list_display = ['id', 'program', 'coupling', 'people_type']
-
-
-admin.site.register(Pricing, Pricing_Admin)

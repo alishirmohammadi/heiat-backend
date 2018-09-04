@@ -86,20 +86,20 @@ class Program(models.Model):
 
 
 class Post(models.Model):
-    program = models.ForeignKey(Program, related_name='posts')
+    program = models.ForeignKey(Program, related_name='posts',on_delete=models.CASCADE)
     text = models.TextField()
     post_date = models.DateTimeField(auto_now_add=True)
 
 
 class PriceShift(models.Model):
-    program = models.ForeignKey(Program, related_name='shifts')
+    program = models.ForeignKey(Program, related_name='shifts',on_delete=models.CASCADE)
     people_type = models.CharField(max_length=128, choices=Profile.PEOPLE_TYPE_CHOICES)
     shift = models.IntegerField(default=0)
 
 
 class Registration(models.Model):
-    profile = models.ForeignKey(Profile)
-    program = models.ForeignKey(Program)
+    profile = models.ForeignKey(Profile,related_name='registrations',on_delete=models.CASCADE)
+    program = models.ForeignKey(Program,related_name='registrations',on_delete=models.CASCADE)
     registrationDate = models.DateTimeField(default=datetime.now)
     additionalOption = models.BooleanField(default=False)
     label1 = models.BooleanField(default=False)
@@ -179,7 +179,7 @@ class Registration(models.Model):
 
 
 class Question(models.Model):
-    program = models.ForeignKey(Program, related_name='questions')
+    program = models.ForeignKey(Program, related_name='questions',on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     desc = models.TextField(null=True, blank=True)
     user_sees = models.BooleanField(default=False)
@@ -187,14 +187,14 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    registration = models.ForeignKey(Registration, related_name='answers')
-    question = models.ForeignKey(Question, related_name='answers')
+    registration = models.ForeignKey(Registration, related_name='answers',on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='answers',on_delete=models.CASCADE)
     yes = models.BooleanField(default=True)
 
 
 class Management(models.Model):
-    program = models.ForeignKey(Program)
-    profile = models.ForeignKey(Profile)
+    program = models.ForeignKey(Program,related_name='managements',on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile,related_name='managements',on_delete=models.CASCADE)
     canEditProgram = models.BooleanField(default=False)
     canFilter = models.BooleanField(default=False)
     canSelect = models.BooleanField(default=False)
@@ -304,73 +304,9 @@ class Management(models.Model):
         return str(self.profile) + '-' + str(self.role) + '-' + str(self.program)
 
 
-class Pricing(models.Model):
-    program = models.ForeignKey(Program)
-    price1 = models.IntegerField(null=True, blank=True)
-    price2 = models.IntegerField(null=True, blank=True)
-    price3 = models.IntegerField(null=True, blank=True)
-    coupling = models.BooleanField(default=False)
-    additionalOption = models.BooleanField(default=False)
-    PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
-    PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'
-    PEOPLE_TYPE_SHARIF_GRADUATED_TALABE = 'sharif graduated talabe'
-    PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT = 'sharif graduated student not sharif'
-    PEOPLE_TYPE_NOTSHARIF_STUDENT = 'not sharif student'
-    PEOPLE_TYPE_NOTSHARIF_GRADUATED = 'not sharif graduated'
-    PEOPLE_TYPE_TALABE = 'talabe'
-    PEOPLE_TYPE_SHARIF_MASTER = 'sharif master'
-    PEOPLE_TYPE_SHARIF_EMPLOYED = 'sharif employed'
-    PEOPLE_TYPE_OTHER = 'other'
-    people_type_choices = (
-        (PEOPLE_TYPE_SHARIF_STUDENT, 'دانشجو شریف'),
-        (PEOPLE_TYPE_SHARIF_GRADUATED, 'فارغ التحصیل شریف'),
-        (PEOPLE_TYPE_SHARIF_GRADUATED_TALABE, 'فاغ التحصیل شریف و طلبه فعلی'),
-        (PEOPLE_TYPE_SHARIF_GRADUATED_NOTSHARIF_STUDENT, 'فارغ التحصیل شریف و دانشجو سایر'),
-        (PEOPLE_TYPE_NOTSHARIF_STUDENT, 'دانشجو سایر'),
-        (PEOPLE_TYPE_NOTSHARIF_GRADUATED, 'فارغ التحصیل سایر'),
-        (PEOPLE_TYPE_TALABE, 'طلبه'),
-        (PEOPLE_TYPE_SHARIF_MASTER, 'استاد شریف'),
-        (PEOPLE_TYPE_SHARIF_EMPLOYED, 'کارمند شریف'),
-        (PEOPLE_TYPE_OTHER, 'سایر'),
-    )
-
-    people_type = models.CharField(max_length=200, choices=people_type_choices)
-
-    def sum_prices(self):
-        sum_value = self.price1
-        if self.price2:
-            sum_value += self.price2
-        if self.price3:
-            sum_value += self.price3
-        return sum_value
-
-    def __str__(self):
-        return self.people_type + ' ' + ' ' + self.program.title
-
-    class Meta:
-        verbose_name = 'قیمت'
-        verbose_name_plural = 'قیمت ها'
-
-
-class Message(models.Model):
-    sender = models.ForeignKey(Management)
-    subject = models.CharField(max_length=200, null=True, blank=True)
-    content = models.CharField(max_length=1000, null=True, blank=True)
-    sendEmail = models.BooleanField(default=False)
-    sendSms = models.BooleanField(default=False)
-    sendInbox = models.BooleanField(default=False)
-    messageSendDate = models.DateTimeField(default=datetime.now)
-
-    class Meta:
-        verbose_name = 'پیام'
-        verbose_name_plural = 'پیام ها'
-
-    def __str__(self):
-        return str(self.sender)
-
 
 class Message2(models.Model):
-    registration = models.ForeignKey(Registration, related_name='messages')
+    registration = models.ForeignKey(Registration, related_name='messages',on_delete=models.CASCADE)
     to_user = models.BooleanField(default=True)
     text = models.TextField()
     send_sms = models.BooleanField(default=False)
@@ -383,14 +319,3 @@ class Message2(models.Model):
     def __str__(self):
         return str(self.registration)
 
-
-class Message_reciving(models.Model):
-    message = models.ForeignKey(Message)
-    registration = models.ForeignKey(Registration)
-
-    def __str__(self):
-        return self.message
-
-    class Meta:
-        verbose_name = 'دریافت پیام'
-        verbose_name_plural = 'دریافت پیام ها'
