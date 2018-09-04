@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'accounts',
     'program',
     'pay',
@@ -50,6 +53,39 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+        'accounts.throttles.BurstUserRateThrottle',
+        'accounts.throttles.SustainedUserRateThrottle',
+        'accounts.throttles.BurstAnonRateThrottle',
+        'accounts.throttles.SustainedAnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'burst_user': '90/min',
+        'burst_anon': '30/min',
+        'sustained_user': '3000/day',
+        'sustained_anon': '1000/day',
+    }
+}
+
+DJOSER = {
+    # 'DOMAIN': local.FRONT_DOMAIN_LOCAL,
+    # 'SITE_NAME': 'جمع‌نویسی',
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'PASSWORD_VALIDATORS': [],
+    'SERIALIZERS': {
+        # 'user': 'accounts.serializers.UserSerializer',
+        # 'user_registration': 'accounts.serializers.UserRegisterSerializer'
+    },
+}
 
 ROOT_URLCONF = 'azzahra.urls'
 
@@ -124,4 +160,4 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_ROOT_LOCAL
 MEDIA_URL = '/media/'
 DATABASES = DATABASES_LOCAL
-SITE_ID=1
+SITE_ID = 1

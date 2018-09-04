@@ -3,10 +3,12 @@ from django.contrib import admin
 from .models import Management
 from django.utils.safestring import mark_safe
 
+
 class ManagementInline(admin.TabularInline):
     model = Management
     min_num = 0
     extra = 0
+
     # def show_firm_url(self, obj):
     #     return format_html("<a href='{url}'>{http://google.com}</a>", url=obj.firm_url)
 
@@ -14,7 +16,6 @@ class ManagementInline(admin.TabularInline):
 
     def manager_url(self, obj):
         return mark_safe(u'<a href="/admin/program/management/{}">{}</a>'.format(obj.id, obj.profile))
-
 
     readonly_fields = ('manager_url',)
     exclude = (
@@ -25,26 +26,23 @@ class ManagementInline(admin.TabularInline):
     can_delete = False
 
 
-class Program_Admin(admin.ModelAdmin):
+class ProgramAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'year', 'master', 'number_of_register', 'certain_or_came', 'sum_of_money']
     inlines = [ManagementInline]
 
 
-admin.site.register(Program, Program_Admin)
+admin.site.register(Program, ProgramAdmin)
 
 
-
-class Registration_Admin(admin.ModelAdmin):
+class RegistrationAdmin(admin.ModelAdmin):
     list_display = ['id', 'profile', 'program', 'registrationDate', 'coupling', 'status']
 
 
-admin.site.register(Registration, Registration_Admin)
+admin.site.register(Registration, RegistrationAdmin)
 
 
-class Management_Admin(admin.ModelAdmin):
+class ManagementAdmin(admin.ModelAdmin):
     list_display = ['id', 'program', 'profile', 'role']
-    # form = BookForm
 
 
-admin.site.register(Management, Management_Admin)
-
+admin.site.register(Management, ManagementAdmin)
