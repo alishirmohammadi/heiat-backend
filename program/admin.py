@@ -1,8 +1,7 @@
 from .models import Program, Registration, Management
-# from pay.models import Payment
 from django.contrib import admin
 from .models import Management
-
+from django.utils.safestring import mark_safe
 
 class ManagementInline(admin.TabularInline):
     model = Management
@@ -14,9 +13,8 @@ class ManagementInline(admin.TabularInline):
     # show_firm_url.short_description = "Firm URL"
 
     def manager_url(self, obj):
-        return u'<a href="/admin/program/management/{}">{}</a>'.format(obj.id, obj.profile)
+        return mark_safe(u'<a href="/admin/program/management/{}">{}</a>'.format(obj.id, obj.profile))
 
-    manager_url.allow_tags = True
 
     readonly_fields = ('manager_url',)
     exclude = (
