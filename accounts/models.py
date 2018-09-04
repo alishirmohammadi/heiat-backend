@@ -8,12 +8,12 @@ from django.utils.translation import ugettext_lazy as _
 
 
 # Create your models here.
-class Profile(UserenaBaseProfile):
+class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 unique=True,
                                 verbose_name=_('user'),
-                                related_name='my_profile')
+                                related_name='profile')
     PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
     PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'
     PEOPLE_TYPE_SHARIF_GRADUATED_TALABE = 'sharif graduated talabe'
@@ -24,7 +24,7 @@ class Profile(UserenaBaseProfile):
     PEOPLE_TYPE_SHARIF_MASTER = 'sharif master'
     PEOPLE_TYPE_SHARIF_EMPLOYED = 'sharif employed'
     PEOPLE_TYPE_OTHER = 'other'
-    people_type_choices = (
+    PEOPLE_TYPE_CHOICES = (
         (PEOPLE_TYPE_SHARIF_STUDENT, 'دانشجو شریف'),
         (PEOPLE_TYPE_SHARIF_GRADUATED, 'فارغ التحصیل شریف'),
         (PEOPLE_TYPE_SHARIF_GRADUATED_TALABE, 'فاغ التحصیل شریف و طلبه فعلی'),
@@ -36,36 +36,24 @@ class Profile(UserenaBaseProfile):
         (PEOPLE_TYPE_SHARIF_EMPLOYED, 'کارمند شریف'),
         (PEOPLE_TYPE_OTHER, 'سایر'),
     )
-    people_type = models.CharField(max_length=200, choices=people_type_choices, default=PEOPLE_TYPE_OTHER,
+    people_type = models.CharField(max_length=200, choices=PEOPLE_TYPE_CHOICES, default=PEOPLE_TYPE_OTHER,
                                    verbose_name='وضعیت تحصیل')
-    studentNumber = models.CharField(max_length=20, null=True, blank=True, verbose_name="شماره دانشجویی")
+    student_number = models.CharField(max_length=20, null=True, blank=True, verbose_name="شماره دانشجویی")
     GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
     gender = models.BooleanField(default=True, choices=GENDER_CHOICES, verbose_name="جنسیت")
     couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True)
-    address = models.CharField(max_length=400, verbose_name="آدرس", null=True)
-    shenasname = models.CharField(max_length=11, verbose_name="شماره شناسنامه", null=True)
-    fatherName = models.CharField(max_length=200, verbose_name="نام پدر", null=True)
-    cellPhone = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True)
-    emergencyPhone = models.CharField(max_length=20, null=True, verbose_name="شماره تلفن ضروری")
-    # deActivated = models.BooleanField(default=False,verbose_name="")
-    birthYear = models.IntegerField(default=1370, verbose_name="سال تولد شمسی")
-    MONTH_CHOICES = (
-        (1, 'فروردین'), (2, 'اردیبهشت'), (3, 'خرداد'), (4, 'تیر'), (5, 'مرداد'), (6, 'شهریور'), (7, 'مهر'), (8, 'آبان'),
-        (9, 'آذر'),
-        (10, 'دی'), (11, 'بهمن'), (12, 'اسفند'))
-    birthMonth = models.IntegerField(null=True, choices=MONTH_CHOICES, verbose_name="ماه تولد")
-    birthDay = models.IntegerField(null=True, verbose_name="روز تولد")
-
+    father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True)
+    mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True)
     PASSPORT_NOT_HAVE = 'not have'
     PASSPORT_HAVE = 'have'
-    passport_choices = (
+    PASSPORT_CHOICES = (
         (PASSPORT_HAVE, 'دارم'),
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
-    passport = models.CharField(max_length=200, choices=passport_choices, null=True, verbose_name="وضعیت گذرنامه")
+    passport = models.CharField(max_length=200, choices=PASSPORT_CHOICES, null=True, verbose_name="وضعیت گذرنامه")
     passport_number = models.CharField(null=True, blank=True, verbose_name="شماره گذرنامه", max_length=10)
-    passport_dateofissue = models.DateField(null=True, blank=True, verbose_name="تاریخ صدور گذرنامه به میلادی")
-    passport_dateofexpiry = models.DateField(null=True, blank=True, verbose_name="تاریخ انقضا گذرنامه به میلادی")
+    passport_date_of_issue = models.DateField(null=True, blank=True, verbose_name="تاریخ صدور گذرنامه به میلادی")
+    passport_date_of_expiry = models.DateField(null=True, blank=True, verbose_name="تاریخ انقضا گذرنامه به میلادی")
     CONSCRIPTION_WENT = 'went'
     CONSCRIPTION_EXEMPT = 'exempt'
     CONSCRIPTION_EDUCATIONAL_EXEMPT = 'educational exempt'
@@ -83,64 +71,8 @@ class Profile(UserenaBaseProfile):
         (CONSCRIPTION_OTHER, 'سایر'),
     )
     conscription = models.CharField(max_length=200, choices=conscription_choices, verbose_name="وضعیت نظام وظیفه")
-    conscriptionDesc = models.CharField(max_length=200, null=True, blank=True, verbose_name="توضیحات بیشتر نظام وظیفه")
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-
-    def hasManagement(self):
-        from program.models import Management
-
-        manage = Management.objects.filter(profile=self).first()
-        return manage
-
-    def coupling(self):
-        if self.couple == None:
-            return False
-        return True
-
-    def registered_on_last(self):
-        from program.models import Registration
-        from program.utils import getLastProgram
-
-        return Registration.objects.filter(profile=self).filter(program=getLastProgram()).exclude(
-            status=Registration.STATUS_REMOVED).first()
-
-    def __str__(self):
-        return self.user.first_name + ' ' + self.user.last_name
-
-    def is_birth_valid(self):
-        if not self.birthDay or self.birthDay < 1 or self.birthDay > 31:
-            return False
-        if not self.birthMonth or self.birthMonth < 1 or self.birthMonth > 12:
-            return False
-        if not self.birthYear:
-            return False
-        if self.birthYear > 9 and self.birthYear < 99:
-            return True
-        if self.birthYear >= 1300 and self.birthYear < 1400:
-            return True
-        return False
-
-    def get_formatted_birthday(self):
-        from program.utils import farsiNumber
-
-        try:
-            ans = farsiNumber(self.birthYear)
-            if len(ans) == 2:
-                ans = "13" + ans
-            ans += "/"
-            mon = farsiNumber(self.birthMonth)
-            if len(mon) == 1:
-                mon = "0" + mon
-            ans += mon
-            ans += "/"
-            day = farsiNumber(self.birthDay)
-            if len(day) == 1:
-                day = "0" + day
-            ans += day
-            return ans
-        except:
-            return "نامعتبر"
 
     class Meta:
         verbose_name = 'حساب کاربری'

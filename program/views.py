@@ -339,23 +339,23 @@ def manage(request, management_id):
         return HttpResponseRedirect('/program/panel/' + str(management.id))
     if request.method == 'GET':
         pricelist = []
-        for p, q in Profile.people_type_choices:
+        for p, q in Profile.PEOPLE_TYPE_CHOICES:
             pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(additionalOption=False).filter(
                 program=management.program).first()
             obj = {'people_type': p, 'coupling': False, 'obj': pr}
             pricelist.append(obj)
-        for p, q in Profile.people_type_choices:
+        for p, q in Profile.PEOPLE_TYPE_CHOICES:
             pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(additionalOption=False).filter(
                 program=management.program).first()
             obj = {'people_type': p, 'coupling': True, 'obj': pr}
             pricelist.append(obj)
         if management.program.additionalOption:
-            for p, q in Profile.people_type_choices:
+            for p, q in Profile.PEOPLE_TYPE_CHOICES:
                 pr = Pricing.objects.filter(people_type=p).filter(coupling=False).filter(
                     program=management.program).filter(additionalOption=True).first()
                 obj = {'people_type': p, 'coupling': False, 'obj': pr, 'additional': True}
                 pricelist.append(obj)
-            for p, q in Profile.people_type_choices:
+            for p, q in Profile.PEOPLE_TYPE_CHOICES:
                 pr = Pricing.objects.filter(people_type=p).filter(coupling=True).filter(
                     program=management.program).filter(additionalOption=True).first()
                 obj = {'people_type': p, 'coupling': True, 'obj': pr, 'additional': True}

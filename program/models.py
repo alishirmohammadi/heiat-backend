@@ -93,7 +93,7 @@ class Post(models.Model):
 
 class PriceShift(models.Model):
     program = models.ForeignKey(Program, related_name='shifts')
-    people_type = models.CharField(max_length=128, choices=Profile.people_type_choices)
+    people_type = models.CharField(max_length=128, choices=Profile.PEOPLE_TYPE_CHOICES)
     shift = models.IntegerField(default=0)
 
 

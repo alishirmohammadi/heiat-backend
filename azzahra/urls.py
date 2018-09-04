@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from accounts.forms import SignupFormExtra, PasswordResetForm
 from django.contrib.auth import views as auth_views
 from userena.compat import auth_views_compat_quirks, password_reset_uid_kwarg
 from userena import settings as userena_settings
@@ -68,16 +67,6 @@ urlpatterns = [
     }),
     url(r'^admin/', admin.site.urls),
     # url(r'^password_reset/', include('password_reset.urls'), ),
-    url(r'^accounts/signup/$', 'userena.views.signup', {'signup_form': SignupFormExtra}),
-    # url(r'^accounts/password/reset/$','django.contrib.auth.views.password_reset',{'password_reset_form': PasswordResetForm}),
-    url(r'^accounts/password/reset/$',
-        auth_views.password_reset,
-        merged_dict({'template_name': 'userena/password_reset_form.html',
-                     'email_template_name': 'userena/emails/password_reset_message.txt',
-                     'password_reset_form': PasswordResetForm,
-                     'extra_context': {'without_usernames': userena_settings.USERENA_WITHOUT_USERNAMES}
-                     }, auth_views_compat_quirks['userena_password_reset']),
-        name='userena_password_reset'),
     url(r'^accounts/', include('userena.urls')),
     url(r'^pay/', include('pay.urls')),
     url(r'^program/', include('program.urls')),
