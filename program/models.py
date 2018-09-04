@@ -44,7 +44,15 @@ class Program(models.Model):
     base_price = models.IntegerField(null=True, blank=True)
     max_first_installment = models.IntegerField(default=10000000)
     max_second_installment = models.IntegerField(default=10000000)
-
+    STATE_CONFIG='config'
+    STATE_ACTIVE='active'
+    STATE_ARCHIVE='archive'
+    STATE_CHOICES=(
+        (STATE_CONFIG,'در حال پیکربندی'),
+        (STATE_ACTIVE,'فعال'),
+        (STATE_ARCHIVE,'بایگانی'),
+    )
+    state=models.CharField(max_length=32,choices=STATE_CHOICES,default=STATE_CONFIG)
     class Meta:
         verbose_name = 'برنامه'
         verbose_name_plural = 'برنامه ها'
