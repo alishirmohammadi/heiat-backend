@@ -41,15 +41,15 @@ class Profile(models.Model):
     GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
     gender = models.BooleanField(default=True, choices=GENDER_CHOICES, verbose_name="جنسیت")
     couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True,on_delete=models.SET_NULL)
-    father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True)
-    mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True)
+    father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True,blank=True)
+    mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True,blank=True)
     PASSPORT_NOT_HAVE = 'not have'
     PASSPORT_HAVE = 'have'
     PASSPORT_CHOICES = (
         (PASSPORT_HAVE, 'دارم'),
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
-    passport = models.CharField(max_length=200, choices=PASSPORT_CHOICES, null=True, verbose_name="وضعیت گذرنامه")
+    passport = models.CharField(max_length=200, choices=PASSPORT_CHOICES, null=True, verbose_name="وضعیت گذرنامه",blank=True)
     passport_number = models.CharField(null=True, blank=True, verbose_name="شماره گذرنامه", max_length=10)
     passport_date_of_issue = models.DateField(null=True, blank=True, verbose_name="تاریخ صدور گذرنامه به میلادی")
     passport_date_of_expiry = models.DateField(null=True, blank=True, verbose_name="تاریخ انقضا گذرنامه به میلادی")
@@ -60,7 +60,7 @@ class Profile(models.Model):
     CONSCRIPTION_RESPITE = 'respite'
     CONSCRIPTION_WITHOUT_CONDITION = 'without_condition'
     CONSCRIPTION_OTHER = 'other'
-    conscription_choices = (
+    CONSCRIPTION_CHOICES = (
         (CONSCRIPTION_WENT, 'دارای کارت پایان خدمت'),
         (CONSCRIPTION_EXEMPT, 'معافیت دایم '),
         (CONSCRIPTION_EDUCATIONAL_EXEMPT, 'معافیت تحصیلی'),
@@ -69,9 +69,12 @@ class Profile(models.Model):
         (CONSCRIPTION_RESPITE, 'مهلت قانونی معرفی'),
         (CONSCRIPTION_OTHER, 'سایر'),
     )
-    conscription = models.CharField(max_length=200, choices=conscription_choices, verbose_name="وضعیت نظام وظیفه")
+    conscription = models.CharField(max_length=200, choices=CONSCRIPTION_CHOICES, verbose_name="وضعیت نظام وظیفه",null=True,blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
 
     class Meta:
         verbose_name = 'حساب کاربری'
