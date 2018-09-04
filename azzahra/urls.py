@@ -66,8 +66,6 @@ urlpatterns = [
         'document_root': settings.MEDIA_ROOT,
     }),
     url(r'^admin/', admin.site.urls),
-    # url(r'^password_reset/', include('password_reset.urls'), ),
-    url(r'^accounts/', include('userena.urls')),
     url(r'^pay/', include('pay.urls')),
     url(r'^program/', include('program.urls')),
     url(r'^static/(?P<path>.*)$',

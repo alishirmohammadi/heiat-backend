@@ -37,15 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'accounts',
     'program',
-    # 'password_reset',
-    'django.contrib.sites',
-    'userena',
-    'guardian',
-    'easy_thumbnails',
     'pay',
-    'zeep'
 
 ]
 
