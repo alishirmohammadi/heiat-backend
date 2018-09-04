@@ -71,12 +71,14 @@ class Profile(UserenaBaseProfile):
     CONSCRIPTION_EDUCATIONAL_EXEMPT = 'educational exempt'
     CONSCRIPTION_ARMY = 'army'
     CONSCRIPTION_RESPITE = 'respite'
+    CONSCRIPTION_WITHOUT_CONDITION = 'without_condition'
     CONSCRIPTION_OTHER = 'other'
     conscription_choices = (
         (CONSCRIPTION_WENT, 'دارای کارت پایان خدمت'),
         (CONSCRIPTION_EXEMPT, 'معافیت دایم '),
         (CONSCRIPTION_EDUCATIONAL_EXEMPT, 'معافیت تحصیلی'),
         (CONSCRIPTION_ARMY, 'نظامی'),
+        (CONSCRIPTION_WITHOUT_CONDITION, 'غیر مشمول'),
         (CONSCRIPTION_RESPITE, 'مهلت قانونی معرفی'),
         (CONSCRIPTION_OTHER, 'سایر'),
     )
