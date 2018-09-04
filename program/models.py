@@ -41,6 +41,9 @@ class Program(models.Model):
 
     )
     type = models.CharField(max_length=200, choices=type_choices)
+    base_price = models.IntegerField(null=True, blank=True)
+    max_first_installment = models.IntegerField(default=10000000)
+    max_second_installment = models.IntegerField(default=10000000)
 
     class Meta:
         verbose_name = 'برنامه'
@@ -82,16 +85,7 @@ class Post(models.Model):
 
 class PriceShift(models.Model):
     program = models.ForeignKey(Program, related_name='shifts')
-    PROPERTY_PEOPLE_TYPE = 'people_type'
-    PROPERTY_COUPLING = 'coupling'
-    PROPERTY_GENDER = 'gender'
-    PROPERTY_CHOICES = (
-        (PROPERTY_PEOPLE_TYPE, 'وضعیت تحصیل'),
-        (PROPERTY_COUPLING, 'متاهلی'),
-        (PROPERTY_GENDER, 'جنسیت'),
-    )
-    property_name = models.CharField(max_length=32, choices=PROPERTY_CHOICES)
-    value = models.CharField(max_length=128)
+    people_type = models.CharField(max_length=128, choices=Profile.people_type_choices)
     shift = models.IntegerField(default=0)
 
 
@@ -185,7 +179,7 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    registration = models.ForeignKey(Registration, related_name='avaioption')
+    registration = models.ForeignKey(Registration, related_name='answers')
     question = models.ForeignKey(Question, related_name='answers')
     yes = models.BooleanField(default=True)
 
@@ -333,6 +327,15 @@ class Pricing(models.Model):
     )
 
     people_type = models.CharField(max_length=200, choices=people_type_choices)
+
+    def sum_prices(self):
+        sum_value = self.price1
+        if self.price2:
+            sum_value += self.price2
+        if self.price3:
+            sum_value += self.price3
+        return sum_value
+
 
     def __str__(self):
         return self.people_type + ' ' + ' ' + self.program.title
