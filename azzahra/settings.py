@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '!%k2v4k!9*(%@ft_by9gh02%#n@b^vfiljin^3h+n!9&qj7_ds'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -69,28 +67,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n',
             ],
         },
     },
 ]
-
 WSGI_APPLICATION = 'azzahra.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-ANONYMOUS_USER_ID = -1
-
-AUTH_PROFILE_MODULE = 'accounts.Profile'
-# Password validation
-# https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -129,7 +110,7 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -137,35 +118,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-SITE_ID = 1
-from .local import MEDIA_ROOT_LOCAL, DATABASES_LOCAL, STATIC_ROOT_LOCAL
+ADMINS = (('Omid Baharloo', 'omid.gonbad@gmail.com'),)
+from .local import *
 
 STATIC_ROOT = STATIC_ROOT_LOCAL
 MEDIA_ROOT = MEDIA_ROOT_LOCAL
 DATABASES = DATABASES_LOCAL
-USERENA_HTML_EMAIL = True
-USERENA_REGISTER_PROFILE = False
-
-USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
-                                      'USERENA_REDIRECT_ON_SIGNOUT',
-                                      '/accounts/signin')
-USERENA_SIGNIN_REDIRECT_URL = getattr(settings,
-                                      'USERENA_SIGNIN_REDIRECT_URL',
-                                      '/program')
-USERENA_MUGSHOT_PATH = getattr(settings,
-                               'USERENA_MUGSHOT_PATH',
-                               'mugshots/')
-
-LOGIN_URL = '/accounts/signin/'
-USERENA_MUGSHOT_SIZE = 120 * 120
-# APPEND_SLASH=False
-ADMINS = (('Omid Baharloo', 'omid.gonbad@gmail.com'),)
-#USERENA_ACTIVATION_REQUIRED=False
