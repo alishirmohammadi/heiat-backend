@@ -11,17 +11,11 @@ from django.db.models import Sum, Q
 class Program(models.Model):
     title = models.CharField(max_length=100, default='نام برنامه')
     year = models.IntegerField(null=True, blank=True)
-    isOpen = models.BooleanField(default=False)
-    additionalOption = models.CharField(max_length=30, null=True, blank=True)
-    hasCoupling = models.BooleanField(default=False)
-    isPublic = models.BooleanField(default=False)
-    programInterval = models.CharField(default='زمان برنامه', max_length=80)
-    registerInterval = models.CharField(default='زمان ثبت نام', max_length=80)
-    creationDate = models.DateTimeField(default=datetime.now)
-    notes = models.CharField(max_length=20000)
-    email = models.EmailField(max_length=200, null=True, blank=True)
-    emailPassword = models.CharField(max_length=200, null=True, blank=True)
-    startDate = models.DateField(default=date.today)
+    is_open = models.BooleanField(default=False)
+    has_coupling = models.BooleanField(default=False)
+    program_interval = models.CharField(default='زمان برنامه', max_length=80)
+    register_interval = models.CharField(default='زمان ثبت نام', max_length=80)
+    creation_date = models.DateTimeField(auto_now_add=True)
     TYPE_ARBAEEN = 'arbaeen'
     TYPE_ETEKAF = 'etekaf'
     TYPE_MASHHAD = 'mashhad'
@@ -30,7 +24,7 @@ class Program(models.Model):
     TYPE_SOUTH = 'south'
     TYPE_VOROODI = 'voroodi'
 
-    type_choices = (
+    TYPE_CHOICES = (
         (TYPE_ARBAEEN, 'اربعین'),
         (TYPE_ETEKAF, 'اعتکاف'),
         (TYPE_MASHHAD, 'پابوس عشق'),
@@ -40,19 +34,20 @@ class Program(models.Model):
         (TYPE_GUEST, 'سایر'),
 
     )
-    type = models.CharField(max_length=200, choices=type_choices)
+    type = models.CharField(max_length=200, choices=TYPE_CHOICES)
     base_price = models.IntegerField(null=True, blank=True)
     max_first_installment = models.IntegerField(default=10000000)
     max_second_installment = models.IntegerField(default=10000000)
-    STATE_CONFIG='config'
-    STATE_ACTIVE='active'
-    STATE_ARCHIVE='archive'
-    STATE_CHOICES=(
-        (STATE_CONFIG,'در حال پیکربندی'),
-        (STATE_ACTIVE,'فعال'),
-        (STATE_ARCHIVE,'بایگانی'),
+    STATE_CONFIG = 'config'
+    STATE_ACTIVE = 'active'
+    STATE_ARCHIVE = 'archive'
+    STATE_CHOICES = (
+        (STATE_CONFIG, 'در حال پیکربندی'),
+        (STATE_ACTIVE, 'فعال'),
+        (STATE_ARCHIVE, 'بایگانی'),
     )
-    state=models.CharField(max_length=32,choices=STATE_CHOICES,default=STATE_CONFIG)
+    state = models.CharField(max_length=32, choices=STATE_CHOICES, default=STATE_CONFIG)
+
     class Meta:
         verbose_name = 'برنامه'
         verbose_name_plural = 'برنامه ها'
@@ -81,33 +76,24 @@ class Program(models.Model):
     def __str__(self):
         return str(self.title)
 
-    def pricings(self):
-        return Pricing.objects.filter(program=self)
-
 
 class Post(models.Model):
-    program = models.ForeignKey(Program, related_name='posts',on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name='posts', on_delete=models.CASCADE)
     text = models.TextField()
     post_date = models.DateTimeField(auto_now_add=True)
 
 
 class PriceShift(models.Model):
-    program = models.ForeignKey(Program, related_name='shifts',on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name='shifts', on_delete=models.CASCADE)
     people_type = models.CharField(max_length=128, choices=Profile.PEOPLE_TYPE_CHOICES)
     shift = models.IntegerField(default=0)
 
 
 class Registration(models.Model):
-    profile = models.ForeignKey(Profile,related_name='registrations',on_delete=models.CASCADE)
-    program = models.ForeignKey(Program,related_name='registrations',on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, related_name='registrations', on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name='registrations', on_delete=models.CASCADE)
     registrationDate = models.DateTimeField(default=datetime.now)
-    additionalOption = models.BooleanField(default=False)
-    label1 = models.BooleanField(default=False)
-    label2 = models.BooleanField(default=False)
-    label3 = models.IntegerField(default=0)
-    label4 = models.IntegerField(default=0)
     coupling = models.BooleanField(default=False)
-    feedBack = models.CharField(max_length=2000, null=True, blank=True)
     numberOfPayments = models.IntegerField(default=0)
     STATUS_DEFAULT = 'default'
     STATUS_CERTAIN = 'certain'
@@ -121,7 +107,7 @@ class Registration(models.Model):
     STATUS_TEMPORARY = 'temporary'
     STATUS_FIRST_STAGE = 'first stage'
 
-    status_choices = (
+    STATUS_CHOICES = (
         (STATUS_DEFAULT, 'منتظر قرعه کشی'),
         (STATUS_CERTAIN, 'قطعی'),
         (STATUS_RESERVED, 'رزرو'),
@@ -134,7 +120,7 @@ class Registration(models.Model):
         (STATUS_TEMPORARY, 'موقت'),
         (STATUS_FIRST_STAGE, 'مرحله اول'),
     )
-    status = models.CharField(max_length=200, choices=status_choices, default=STATUS_DEFAULT)
+    status = models.CharField(max_length=200, choices=STATUS_CHOICES, default=STATUS_DEFAULT)
 
     class Meta:
         verbose_name = 'ثبت نام'
@@ -144,29 +130,11 @@ class Registration(models.Model):
         return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(
             coupling=True).exclude(status=self.STATUS_REMOVED).first()
 
-    def get_pricing(self):
-        pr1 = Pricing.objects.filter(program=self.program).filter(people_type=self.profile.people_type).filter(
-            coupling=self.coupling).filter(
-            additionalOption=self.additionalOption).first()
-        if not pr1 and self.get_couple_registration():
-            return self.get_couple_registration().get_pricing()
-        return pr1
-
-    def get_num_of_installments(self):
-        p = self.get_pricing()
-        if p.price3:
-            return 3
-        if p.price2:
-            return 2
-        if p.price1:
-            return 1
-        return 0
-
     def __str__(self):
         return self.program.title + ' ' + self.profile.user.get_full_name()
 
     def couple_inconsistency(self):
-        if self.program.hasCoupling and self.coupling and self.profile.couple:
+        if self.program.has_coupling and self.coupling and self.profile.couple:
             coup_reg = self.get_couple_registration()
             if coup_reg and coup_reg.coupling:
                 if self.status != coup_reg.status:
@@ -179,7 +147,7 @@ class Registration(models.Model):
 
 
 class Question(models.Model):
-    program = models.ForeignKey(Program, related_name='questions',on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name='questions', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     desc = models.TextField(null=True, blank=True)
     user_sees = models.BooleanField(default=False)
@@ -187,19 +155,18 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    registration = models.ForeignKey(Registration, related_name='answers',on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, related_name='answers',on_delete=models.CASCADE)
+    registration = models.ForeignKey(Registration, related_name='answers', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     yes = models.BooleanField(default=True)
 
 
 class Management(models.Model):
-    program = models.ForeignKey(Program,related_name='managements',on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile,related_name='managements',on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, related_name='managements', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, related_name='managements', on_delete=models.CASCADE)
     canEditProgram = models.BooleanField(default=False)
     canFilter = models.BooleanField(default=False)
     canSelect = models.BooleanField(default=False)
     canEditRegistration = models.BooleanField(default=False)
-    canDocument = models.BooleanField(default=False)
     canMessage = models.BooleanField(default=False)
     canAdd = models.BooleanField(default=False)
     documentation = models.CharField(null=True, blank=True, max_length=10000)
@@ -221,7 +188,7 @@ class Management(models.Model):
     ROLE_KITCHEN_MANAGER = 'kitchen manager'
     ROLE_KITCHEN_VICAR = 'kitchen vicar'
     ROLE_KITCHEN_CREW = 'kitchen crew'
-    role_choices = (
+    ROLE_CHOICES = (
         (ROLE_MASTER_MANAGER, 'مسئول برنامه'),
         (ROLE_VICAR, 'جانشین'),
         (ROLE_REGISTRATION_MANAGER, 'مسئول ثبت نام'),
@@ -241,7 +208,7 @@ class Management(models.Model):
         (ROLE_KITCHEN_VICAR, 'معاون سلف'),
         (ROLE_KITCHEN_CREW, 'کادر سلف'),
     )
-    role = models.CharField(max_length=200, choices=role_choices, default=ROLE_MASTER_MANAGER)
+    role = models.CharField(max_length=200, choices=ROLE_CHOICES, default=ROLE_MASTER_MANAGER)
     comment = models.CharField(max_length=800, null=True, blank=True)
 
     class Meta:
@@ -304,9 +271,8 @@ class Management(models.Model):
         return str(self.profile) + '-' + str(self.role) + '-' + str(self.program)
 
 
-
-class Message2(models.Model):
-    registration = models.ForeignKey(Registration, related_name='messages',on_delete=models.CASCADE)
+class Message(models.Model):
+    registration = models.ForeignKey(Registration, related_name='messages', on_delete=models.CASCADE)
     to_user = models.BooleanField(default=True)
     text = models.TextField()
     send_sms = models.BooleanField(default=False)
@@ -318,4 +284,3 @@ class Message2(models.Model):
 
     def __str__(self):
         return str(self.registration)
-
