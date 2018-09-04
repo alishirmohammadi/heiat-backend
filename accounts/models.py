@@ -82,7 +82,8 @@ class Profile(UserenaBaseProfile):
     )
     conscription = models.CharField(max_length=200, choices=conscription_choices, verbose_name="وضعیت نظام وظیفه")
     conscriptionDesc = models.CharField(max_length=200, null=True, blank=True, verbose_name="توضیحات بیشتر نظام وظیفه")
-    birth_date=models.DateField(null=True,blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
 
     def hasManagement(self):
         from program.models import Management
