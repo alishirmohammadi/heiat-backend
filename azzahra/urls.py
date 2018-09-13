@@ -6,6 +6,7 @@ from django.conf import settings
 from django.views.static import serve
 
 from program import views as program_views
+from accounts import views as accounts_views
 
 schema_view = get_schema_view(title='هیئت الزهرا دانشگاه شریف')
 
@@ -19,6 +20,7 @@ urlpatterns = [
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'auth/', include('djoser.urls.authtoken')),
     path(r'auth/', include('djoser.urls')),
+    path(r'accounts/profile/', accounts_views.EditProfileView.as_view()),
     path(r'', include(router.urls)),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),
