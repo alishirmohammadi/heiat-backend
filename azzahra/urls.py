@@ -11,15 +11,15 @@ schema_view = get_schema_view(title='هیئت الزهرا دانشگاه شری
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-# router.register(r'laws', law_views.LawViewSet, base_name='law')
+router.register(r'programs', program_views.ProgramViewSet, base_name='program')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('schema/', schema_view),
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'auth/', include('djoser.urls.authtoken')),
+    path(r'auth/', include('djoser.urls')),
     path(r'', include(router.urls)),
-    path('programs/', program_views.ProgramList.as_view()),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),
 ]
