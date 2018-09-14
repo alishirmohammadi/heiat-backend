@@ -8,7 +8,7 @@ class CoupleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('username', 'name','gender')
+        fields = ('username', 'name', 'gender')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -27,3 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'profile')
+
+
+from djoser.serializers import UserCreateSerializer
+
+
+class UserRegisterSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'password', 'id')

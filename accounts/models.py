@@ -1,9 +1,9 @@
 # Encoding: utf-8
 from django.db import models
-from datetime import datetime
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -40,16 +40,17 @@ class Profile(models.Model):
     student_number = models.CharField(max_length=20, null=True, blank=True, verbose_name="شماره دانشجویی")
     GENDER_CHOICES = ((True, 'مرد'), (False, 'زن'))
     gender = models.BooleanField(default=True, choices=GENDER_CHOICES, verbose_name="جنسیت")
-    couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True,on_delete=models.SET_NULL)
-    father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True,blank=True)
-    mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True,blank=True)
+    couple = models.ForeignKey('self', null=True, verbose_name="همسر", blank=True, on_delete=models.SET_NULL)
+    father_name = models.CharField(max_length=200, verbose_name="نام پدر", null=True, blank=True)
+    mobile = models.CharField(max_length=11, verbose_name="شماره موبایل", null=True, blank=True)
     PASSPORT_NOT_HAVE = 'not have'
     PASSPORT_HAVE = 'have'
     PASSPORT_CHOICES = (
         (PASSPORT_HAVE, 'دارم'),
         (PASSPORT_NOT_HAVE, 'ندارم'),
     )
-    passport = models.CharField(max_length=200, choices=PASSPORT_CHOICES, null=True, verbose_name="وضعیت گذرنامه",blank=True)
+    passport = models.CharField(max_length=200, choices=PASSPORT_CHOICES, null=True, verbose_name="وضعیت گذرنامه",
+                                blank=True)
     passport_number = models.CharField(null=True, blank=True, verbose_name="شماره گذرنامه", max_length=10)
     passport_date_of_issue = models.DateField(null=True, blank=True, verbose_name="تاریخ صدور گذرنامه به میلادی")
     passport_date_of_expiry = models.DateField(null=True, blank=True, verbose_name="تاریخ انقضا گذرنامه به میلادی")
@@ -69,7 +70,8 @@ class Profile(models.Model):
         (CONSCRIPTION_RESPITE, 'مهلت قانونی معرفی'),
         (CONSCRIPTION_OTHER, 'سایر'),
     )
-    conscription = models.CharField(max_length=200, choices=CONSCRIPTION_CHOICES, verbose_name="وضعیت نظام وظیفه",null=True,blank=True)
+    conscription = models.CharField(max_length=200, choices=CONSCRIPTION_CHOICES, verbose_name="وضعیت نظام وظیفه",
+                                    null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
 
@@ -79,3 +81,11 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'حساب کاربری'
         verbose_name_plural = 'حسابهای کاربری'
+
+
+
+# once a user has been created, a profile object will be created for it
+@receiver(post_save, sender=User)
+def create_profile(sender, instance=None, created=False, **kwargs):
+    if created and not kwargs.get('raw', False):
+        Profile.objects.create(user=instance)

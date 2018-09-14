@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,7 +74,7 @@ DJOSER = {
     'PASSWORD_VALIDATORS': [],
     'SERIALIZERS': {
         'user': 'accounts.serializers.UserSerializer',
-        # 'user_registration': 'accounts.serializers.UserRegisterSerializer'
+        'user_create': 'accounts.serializers.UserRegisterSerializer'
     },
 }
 
@@ -126,9 +127,10 @@ LANGUAGE_CODE = 'fa-ir'
 
 from django.utils.translation import ugettext_lazy as _
 
+
 LANGUAGES = (
-    ('en', _('English')),
     ('fa', _('Farsi')),
+    # ('en', _('English')),
 )
 
 LOCALE_PATHS = (
