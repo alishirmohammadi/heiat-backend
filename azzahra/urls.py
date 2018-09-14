@@ -22,6 +22,7 @@ urlpatterns = [
     path(r'auth/', include('djoser.urls.authtoken')),
     path(r'auth/', include('djoser.urls')),
     path(r'accounts/profile/', accounts_views.EditProfileView.as_view()),
+    path(r'accounts/couple/', accounts_views.set_couple),
     path(r'', include(router.urls)),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),

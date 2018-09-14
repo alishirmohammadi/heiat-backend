@@ -4,7 +4,6 @@ def check_melli_code(mellicode):
         a = '00' + a
     if (len(a) == 9):
         a = '0' + a
-    print(a)
     if (len(a) == 10):
         r = 0
         for i in range(0, 9):

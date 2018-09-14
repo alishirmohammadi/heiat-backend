@@ -8,7 +8,7 @@ class CoupleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('username', 'name')
+        fields = ('username', 'name','gender')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
