@@ -28,7 +28,7 @@ urlpatterns = [
     path(r'accounts/couple/', accounts_views.set_couple),
     path(r'expenses', pay_views.ExpenseList.as_view()),
     path(r'terminal/start/', pay_views.start_pay_terminal),
-    path(r'payment_callback/$', pay_views.payment_callback),
+    path(r'payment_callback/', pay_views.payment_callback),
     path(r'', include(router.urls)),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),
