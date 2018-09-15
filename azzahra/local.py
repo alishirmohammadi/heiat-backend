@@ -12,5 +12,5 @@ DATABASES_LOCAL = {
 
     }
 }
-STATIC_ROOT_LOCAL = '/home/omid/heiat/static'
-MEDIA_ROOT_LOCAL = '/home/omid/jamnevisi/media/'
+STATIC_ROOT_LOCAL = '/home/omid/heiat/static/'
+MEDIA_ROOT_LOCAL = '/home/omid/heiat/media/'
