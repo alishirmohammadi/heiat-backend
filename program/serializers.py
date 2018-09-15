@@ -23,13 +23,23 @@ class ProgramListSerializer(serializers.ModelSerializer):
 
 
 class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
+    from pay.serializers import PaymentInRegistrationSerializer
+    payments = PaymentInRegistrationSerializer(many=True)
+
     class Meta:
         model = Registration
-        fields = ('id', 'status')
+        fields = ('id', 'status', 'payments')
+
+
+class PostInProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('text', 'post_date')
 
 
 class ProgramDetailSerializer(serializers.ModelSerializer):
     registration = serializers.SerializerMethodField()
+    posts = PostInProgramSerializer(many=True)
 
     def get_registration(self, obj):
         try:
@@ -45,4 +55,4 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration','is_open')
+        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts')

@@ -1,61 +1,56 @@
-{% extends 'base.html' %}
-{% block navbar %}
-    {% include '_navbar.html' with active_link='terminal' %}
-{% endblock %}
-{% block content %}
-    <div class="container">
+<html>
+<head>
+    <title>
+        نتیجه پرداخت
+    </title>
+</head>
+<body>
+{% if payment.success %}
+    <h3 style="text-align: center;color: green">
+        پرداخت موفقیت آمیز بود. باتشکر
+    </h3>
+    <h5 style="text-align: center">
+        <label for="refId">
+            شماره مرجع:
+        </label>
+        <span id="refId">{{ payment.refId }}</span>
+    </h5>
+    <h5 style="text-align: center">
+        <label for="saleId">
+            رسید:
+        </label>
+        <span id="saleId">{{ payment.saleRefId }}</span>
+    </h5>
+
+    <h5 style="text-align: center">
+        <label for="amount">
+            مبلغ:
+        </label>
+        <span id="amount">{{ payment.amount }}</span>
+    </h5>
 
 
-        <div class="well">
-            {% if payment.success %}
-                <h3 style="text-align: center;color: green">
-                    پرداخت موفقیت آمیز بود. باتشکر
-                </h3>
-                <h5 style="text-align: center">
-                    <label for="refId">
-                        شماره مرجع:
-                    </label>
-                    <span id="refId">{{ payment.refId }}</span>
-                </h5>
-                <h5 style="text-align: center">
-                    <label for="saaleId">
-                        رسید:
-                    </label>
-                    <span id="saleId">{{ payment.saleRefId }}</span>
-                </h5>
+    <h5 style="text-align: center">
+        <label for="expense">
+            مورد مصرف:
+        </label>
+        <span id="expense">{{ payment.expense.expense_name }}</span>
+    </h5>
 
 
 
-            {% else %}
-                <h2 style="text-align: center;color: red">
-                    پرداخت ناموفق
-                </h2>
-                <h3 style="text-align: center">
-                    در صورت کم شدن مبلغ، ظرف ۷۲ ساعت به حساب شما عودت داده خواهد شد
-                </h3>
-                <h5 style="text-align: center">
-                    کد خطا
-                    :
-                    {{ payment.verify_rescode }}
-                </h5>
-            {% endif %}
-            {% if payment.expense.callback_url %}
-                <div style="color: #0073bb">
-                در حال هدایت به صفحه پذیرنده
-                </div>
-                <form id="myForm" action="{{ payment.expense.callback_url }}" method="post">
-                    <input type="hidden" name="success" value="{{ payment.success }}">
-                    <input type="hidden" name="refId" value="{{ payment.refId }}">
-                    <input type="hidden" name="saleReferenceId" value="{{ payment.saleRefId }}">
-                    <input type="hidden" name="amount" value="{{ payment.amount }}">
-                    <input type="hidden" name="orderId" value="{{ payment.id }}">
-                </form>
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $("#myForm").submit();
-                    });
-                </script>
-            {% endif %}
-        </div>
-    </div>
-{% endblock %}
+{% else %}
+    <h2 style="text-align: center;color: red">
+        پرداخت ناموفق
+    </h2>
+    <h3 style="text-align: center">
+        در صورت کم شدن مبلغ، ظرف ۷۲ ساعت به حساب شما عودت داده خواهد شد
+    </h3>
+    <h5 style="text-align: center">
+        کد خطا
+        :
+        {{ payment.verify_rescode }}
+    </h5>
+{% endif %}
+</body>
+</html>

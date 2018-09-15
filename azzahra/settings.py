@@ -68,8 +68,8 @@ REST_FRAMEWORK = {
 DJOSER = {
     # 'DOMAIN': local.FRONT_DOMAIN_LOCAL,
     # 'SITE_NAME': 'جمع‌نویسی',
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'PASSWORD_VALIDATORS': [],
     'SERIALIZERS': {
@@ -142,7 +142,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 ADMINS = (('Omid Baharloo', 'omid.gonbad@gmail.com'),)
 from .local import *
