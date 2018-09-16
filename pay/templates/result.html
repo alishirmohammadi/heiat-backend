@@ -9,7 +9,7 @@
     <h3 style="text-align: center;color: green">
         پرداخت موفقیت آمیز بود. باتشکر
     </h3>
-    <h5 style="text-align: center">
+    <h5 style="text-align: center;direction: rtl">
         <label for="refId">
             شماره مرجع:
         </label>
@@ -26,7 +26,11 @@
         <label for="amount">
             مبلغ:
         </label>
-        <span id="amount">{{ payment.amount }}</span>
+        <span id="amount">
+            {{ payment.amount }}
+        تومان
+        </span>
+
     </h5>
 
 
