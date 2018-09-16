@@ -57,5 +57,7 @@ def start_pay_terminal(request):
     amount = request.data.get('amount', 10000)
     expense_id = request.data.get('expense_id', 10000)
     payment = Payment.create(amount=amount, expense=Expense.objects.get(id=expense_id))
-    return response.Response(payment.refId)
+    refId=payment.refId
+    print('refid:'+refId)
+    return HttpResponse(payment.refId)
 
