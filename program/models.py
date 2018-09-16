@@ -147,15 +147,24 @@ class Registration(models.Model):
         return False
 
     def sum_payed(self):
-        return self.payments.filter(success=True).aggregate(sum_amount=Coalesce(Sum('amount'),0)).get('sum_amount',0)
+        return self.payments.filter(success=True).aggregate(sum_amount=Coalesce(Sum('amount'), 0)).get('sum_amount', 0)
 
     def nominal_price(self):
         ans = self.program.base_price
         shift = self.program.shifts.filter(people_type=self.profile.people_type).first()
         if shift:
             ans = ans + shift.shift
-        ans += self.answers.filter(yes=True).aggregate(sum_shift=Coalesce(Sum('question__shift'),0)).get('sum_shift',0)
+        ans += self.answers.filter(yes=True).aggregate(sum_shift=Coalesce(Sum('question__shift'), 0)).get('sum_shift',
+                                                                                                          0)
         return ans
+
+    def next_installment(self):
+        res = self.nominal_price() - self.sum_payed()
+        if self.numberOfPayments == 0:
+            return min(res, self.program.max_first_installment)
+        if self.numberOfPayments == 1:
+            return min(res, self.program.max_second_installment)
+        return res
 
 
 class Question(models.Model):

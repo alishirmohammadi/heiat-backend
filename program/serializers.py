@@ -35,7 +35,7 @@ class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'status','coupling','sum_payed', 'payments','messages')
+        fields = ('id', 'status','coupling','sum_payed','next_installment', 'payments','messages')
 
 
 class PostInProgramSerializer(serializers.ModelSerializer):
