@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from datetime import datetime, date
 from accounts.models import Profile
 from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
 
 
 # Create your models here.
@@ -35,7 +36,7 @@ class Program(models.Model):
 
     )
     type = models.CharField(max_length=200, choices=TYPE_CHOICES)
-    base_price = models.IntegerField(null=True, blank=True)
+    base_price = models.IntegerField(default=0)
     max_first_installment = models.IntegerField(default=10000000)
     max_second_installment = models.IntegerField(default=10000000)
     STATE_CONFIG = 'config'
@@ -144,6 +145,17 @@ class Registration(models.Model):
             else:
                 return True
         return False
+
+    def sum_payed(self):
+        return self.payments.filter(success=True).aggregate(sum_amount=Coalesce(Sum('amount'),0)).get('sum_amount',0)
+
+    def nominal_price(self):
+        ans = self.program.base_price
+        shift = self.program.shifts.filter(people_type=self.profile.people_type).first()
+        if shift:
+            ans = ans + shift.shift
+        ans += self.answers.filter(yes=True).aggregate(sum_shift=Coalesce(Sum('question__shift'),0)).get('sum_shift',0)
+        return ans
 
 
 class Question(models.Model):

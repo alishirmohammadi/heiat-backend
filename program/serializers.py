@@ -35,7 +35,7 @@ class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'status', 'payments','messages')
+        fields = ('id', 'status','coupling','sum_payed', 'payments','messages')
 
 
 class PostInProgramSerializer(serializers.ModelSerializer):
@@ -62,4 +62,4 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts')
+        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts','state','has_coupling')
