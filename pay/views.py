@@ -3,7 +3,7 @@ from program.models import Registration, Program, Profile
 from django.views.decorators.csrf import csrf_exempt
 from .models import Payment, Expense
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from rest_framework import response, decorators, generics
+from rest_framework import response, decorators, generics, permissions
 from .serializers import *
 
 
@@ -50,7 +50,7 @@ def payment_callback(request):
             a = numofpayment + 1
             payment.registration.numberOfPayments = a
             payment.registration.save()
-        return HttpResponseRedirect('/program/'+str(payment.registration.program_id)+'/payments')
+        return HttpResponseRedirect('/program/' + str(payment.registration.program_id) + '/payments')
     return render(request, 'result.html', {'payment': payment})
 
 
@@ -59,7 +59,21 @@ def start_pay_terminal(request):
     amount = request.data.get('amount', 10000)
     expense_id = request.data.get('expense_id', 10000)
     payment = Payment.create(amount=amount, expense=Expense.objects.get(id=expense_id))
-    refId=payment.refId
-    print('refid:'+refId)
     return HttpResponse(payment.refId)
 
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAuthenticated,))
+def start_pay_registration(request):
+    registration_id = request.data.get('registration_id')
+    if not registration_id:
+        return response.Response('درخواست نامعتبر', status=400)
+    registration = Registration.objects.filter(id=registration_id).first()
+    if not registration or registration.profile.user.username != request.user.username:
+        return response.Response('درخواست نامعتبر', status=400)
+    price = registration.next_installment()
+    if not price or price < 100:
+        return response.Response('مبلغ نامعتبر', status=400)
+    payment = Payment.create(registration=registration, amount=price,
+                             numberOfInstallment=registration.numberOfPayments + 1)
+    return HttpResponse(payment.refId)
