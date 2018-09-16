@@ -28,14 +28,21 @@ class MessageInRegistrationSerializer(serializers.ModelSerializer):
         fields = ('id', 'to_user', 'text', 'send_sms', 'send_date')
 
 
+class AnswerInRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ('id', 'yes', 'question')
+
+
 class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
     from pay.serializers import PaymentInRegistrationSerializer
     payments = PaymentInRegistrationSerializer(many=True)
-    messages=MessageInRegistrationSerializer(many=True)
+    messages = MessageInRegistrationSerializer(many=True)
+    answers = AnswerInRegistrationSerializer(many=True)
 
     class Meta:
         model = Registration
-        fields = ('id', 'status','coupling','sum_payed','next_installment', 'payments','messages')
+        fields = ('id', 'status', 'coupling', 'sum_payed', 'next_installment', 'payments', 'messages', 'answers')
 
 
 class PostInProgramSerializer(serializers.ModelSerializer):
@@ -44,9 +51,16 @@ class PostInProgramSerializer(serializers.ModelSerializer):
         fields = ('text', 'post_date')
 
 
+class QuestionInProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('id', 'title', 'desc')
+
+
 class ProgramDetailSerializer(serializers.ModelSerializer):
     registration = serializers.SerializerMethodField()
     posts = PostInProgramSerializer(many=True)
+    users_questions=QuestionInProgramSerializer(many=True)
 
     def get_registration(self, obj):
         try:
@@ -62,4 +76,5 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts','state','has_coupling')
+        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts', 'state',
+                  'has_coupling','users_questions')

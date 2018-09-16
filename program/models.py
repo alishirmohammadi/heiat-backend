@@ -74,6 +74,9 @@ class Program(models.Model):
             Q(status=Registration.STATUS_CERTAIN) | Q(status=Registration.STATUS_CAME)).count()
         return total
 
+    def users_questions(self):
+        return self.questions.filter(user_sees=True)
+
     def __str__(self):
         return str(self.title)
 
