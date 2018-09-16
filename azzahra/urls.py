@@ -27,6 +27,7 @@ urlpatterns = [
     path(r'accounts/couple/', accounts_views.set_couple),
     path(r'accounts/couple/', accounts_views.set_couple),
     path(r'expenses', pay_views.ExpenseList.as_view()),
+    path(r'registration/give_up/', program_views.give_up),
     path(r'pay/terminal/start/', pay_views.start_pay_terminal),
     path(r'pay/registration/start/', pay_views.start_pay_registration),
     path(r'pay/payment_callback/', pay_views.payment_callback),

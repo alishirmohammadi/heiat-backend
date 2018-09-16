@@ -36,7 +36,7 @@ admin.site.register(Program, ProgramAdmin)
 
 class RegistrationAdmin(admin.ModelAdmin):
     list_display = ['id', 'profile', 'program', 'registrationDate', 'coupling', 'status']
-
+    readonly_fields = ('profile',)
 
 admin.site.register(Registration, RegistrationAdmin)
 
