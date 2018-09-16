@@ -22,13 +22,20 @@ class ProgramListSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'program_interval', 'register_interval', 'status')
 
 
+class MessageInRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('id', 'to_user', 'text', 'send_sms', 'send_date')
+
+
 class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
     from pay.serializers import PaymentInRegistrationSerializer
     payments = PaymentInRegistrationSerializer(many=True)
+    messages=MessageInRegistrationSerializer(many=True)
 
     class Meta:
         model = Registration
-        fields = ('id', 'status', 'payments')
+        fields = ('id', 'status', 'payments','messages')
 
 
 class PostInProgramSerializer(serializers.ModelSerializer):

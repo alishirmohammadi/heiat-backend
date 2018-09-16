@@ -44,11 +44,13 @@ def payment_callback(request):
     payment = Payment.objects.filter(refId=refId).first()
 
     payment.verify(saleReferenceId, saleOrderId)
-    if payment.success and payment.registration:
-        numofpayment = payment.registration.numberOfPayments
-        a = numofpayment + 1
-        payment.registration.numberOfPayments = a
-        payment.registration.save()
+    if payment.registration:
+        if payment.success:
+            numofpayment = payment.registration.numberOfPayments
+            a = numofpayment + 1
+            payment.registration.numberOfPayments = a
+            payment.registration.save()
+        return HttpResponseRedirect('/program/'+str(payment.registration.program_id)+'/payments')
     return render(request, 'result.html', {'payment': payment})
 
 

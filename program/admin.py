@@ -1,4 +1,4 @@
-from .models import Program, Registration, Management
+from .models import Program, Registration, Management,Message
 from django.contrib import admin
 from .models import Management
 from django.utils.safestring import mark_safe
@@ -46,3 +46,4 @@ class ManagementAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Management, ManagementAdmin)
+admin.site.register(Message)
