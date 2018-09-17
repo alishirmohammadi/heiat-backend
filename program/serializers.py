@@ -60,7 +60,7 @@ class QuestionInProgramSerializer(serializers.ModelSerializer):
 class ProgramDetailSerializer(serializers.ModelSerializer):
     registration = serializers.SerializerMethodField()
     posts = PostInProgramSerializer(many=True)
-    users_questions=QuestionInProgramSerializer(many=True)
+    users_questions = QuestionInProgramSerializer(many=True)
 
     def get_registration(self, obj):
         try:
@@ -77,4 +77,10 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts', 'state',
-                  'has_coupling','users_questions')
+                  'has_coupling', 'users_questions')
+
+
+class NewMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('id', 'registration', 'text', 'send_date', 'to_user')

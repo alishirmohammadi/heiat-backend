@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, viewsets, response, decorators
 from .models import *
 from .serializers import *
-
+from .pemissions import *
 
 class ProgramViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
@@ -42,7 +42,7 @@ def give_up(request):
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAuthenticated,))
-def register(request,program_id):
+def register(request, program_id):
     program = Program.objects.filter(id=program_id).first()
     if not program or program.state != Program.STATE_ACTIVE or not program.is_open:
         return response.Response('درخواست نامعتبر', status=400)
@@ -69,3 +69,11 @@ def register(request,program_id):
             if couple_reg:
                 Answer.objects.update_or_create(question=question, registration=couple_reg, defaults={'yes': yes})
     return response.Response(RegistrationInProgramDetailSerializer(reg).data)
+
+
+class NewMessage(generics.CreateAPIView):
+    queryset = Message.objects.filter(to_user=False)
+    serializer_class = NewMessageSerializer
+    permission_classes = (permissions.IsAuthenticated,IsOwner)
+
+

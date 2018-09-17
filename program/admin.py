@@ -1,4 +1,4 @@
-from .models import Program, Registration, Management,Message,Question,Answer
+from .models import Program, Registration, Management,Message,Question,Answer,Post
 from django.contrib import admin
 from .models import Management
 from django.utils.safestring import mark_safe
@@ -28,7 +28,7 @@ class ManagementInline(admin.TabularInline):
 
 class ProgramAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'year', 'master', 'number_of_register', 'certain_or_came', 'sum_of_money']
-    inlines = [ManagementInline]
+    # inlines = [ManagementInline]
 
 
 admin.site.register(Program, ProgramAdmin)
@@ -49,3 +49,4 @@ admin.site.register(Management, ManagementAdmin)
 admin.site.register(Message)
 admin.site.register(Question)
 admin.site.register(Answer)
+admin.site.register(Post)
