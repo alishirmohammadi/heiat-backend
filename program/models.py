@@ -177,11 +177,17 @@ class Question(models.Model):
     user_sees = models.BooleanField(default=False)
     shift = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
 
 class Answer(models.Model):
     registration = models.ForeignKey(Registration, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     yes = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.question.title + '-' + self.registration.profile.user.get_full_name()
 
 
 class Management(models.Model):

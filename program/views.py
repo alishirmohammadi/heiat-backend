@@ -38,3 +38,34 @@ def give_up(request):
             cr.status = Registration.STATUS_GIVEN_UP
             cr.save()
     return response.Response('ok')
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAuthenticated,))
+def register(request,program_id):
+    program = Program.objects.filter(id=program_id).first()
+    if not program or program.state != Program.STATE_ACTIVE or not program.is_open:
+        return response.Response('درخواست نامعتبر', status=400)
+    reg = Registration.objects.filter(program=program).filter(profile__user=request.user).exclude(
+        status=Registration.STATUS_REMOVED).first()
+    if reg:
+        return response.Response('قبلا ثبت‌نام کرده‌اید', status=400)
+    reg = Registration.objects.create(program=program, profile=request.user.profile)
+    couple_reg = None
+    coupling = request.data.get('coupling', False)
+    if program.has_coupling and request.user.profile.couple and coupling:
+        reg.coupling = True
+        reg.save()
+        couple_reg, created = Registration.objects.update_or_create(program=program,
+                                                                    profile=request.user.profile.couple,
+                                                                    defaults={'coupling': True})
+    answers = request.data.get('answers', [])
+    for answer in answers:
+        question_id = answer.get('question_id', None)
+        question = Question.objects.filter(id=question_id).first()
+        if question and question.user_sees and question.program == program:
+            yes = answer.get('yes', False)
+            Answer.objects.update_or_create(question=question, registration=reg, defaults={'yes': yes})
+            if couple_reg:
+                Answer.objects.update_or_create(question=question, registration=couple_reg, defaults={'yes': yes})
+    return response.Response(RegistrationInProgramDetailSerializer(reg).data)
