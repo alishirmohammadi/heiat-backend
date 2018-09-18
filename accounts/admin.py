@@ -26,7 +26,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'user_url']
     inlines = [ManagementInline]
     search_fields = ('user__first_name', 'user__last_name', 'user__username',)
-    readonly_fields = ('user',)
+    readonly_fields = ('user','couple')
 
 
 admin.site.register(Profile, ProfileAdmin)
