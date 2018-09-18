@@ -3,11 +3,9 @@ from .models import *
 from .serializers import *
 
 
-class ManagementViewSet(viewsets.ReadOnlyModelViewSet):
+class ManagementList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ManagementListSerializer
 
     def get_queryset(self):
         return self.request.user.profile.managements.all()
-
-    def get_serializer_class(self):
-        return ManagementListSerializer

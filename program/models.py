@@ -54,7 +54,8 @@ class Program(models.Model):
         verbose_name_plural = 'برنامه ها'
 
     def master(self):
-        man = Management.objects.filter(role__exact='master manager').filter(program=self).first()
+        from manage_app.models import Management
+        man = self.managements.filter(role=Management.ROLE_MASTER_MANAGER).first()
         if man:
             return man.profile
         return '-'

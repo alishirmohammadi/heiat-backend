@@ -84,3 +84,9 @@ class NewMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('id', 'registration', 'text', 'send_date', 'to_user')
+
+
+class ProgramNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Program
+        fields = ('id', 'title')

@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import *
+from program.serializers import ProgramNestedSerializer
 
 
 class ManagementListSerializer(serializers.ModelSerializer):
-    program = serializers.StringRelatedField()
+    program = ProgramNestedSerializer()
     role = serializers.CharField(source='get_role_display')
 
     class Meta:

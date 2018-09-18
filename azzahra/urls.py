@@ -16,7 +16,7 @@ schema_view = get_schema_view(title='هیئت الزهرا دانشگاه شری
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'programs', program_views.ProgramViewSet, base_name='program')
-router.register(r'managements', manage_views.ManagementViewSet, base_name='manage')
+# router.register(r'managements', manage_views.ManagementViewSet, base_name='manage')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +34,7 @@ urlpatterns = [
     path(r'pay/terminal/start/', pay_views.start_pay_terminal),
     path(r'pay/registration/start/', pay_views.start_pay_registration),
     path(r'pay/payment_callback/', pay_views.payment_callback),
+    path(r'managements/', manage_views.ManagementList.as_view()),
     path(r'', include(router.urls)),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),
