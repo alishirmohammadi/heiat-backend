@@ -18,7 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             'mobile', 'birth_date', 'gender', 'people_type', 'student_number', 'conscription', 'father_name',
-            'passport', 'passport_number', 'passport_date_of_issue', 'passport_date_of_expiry', 'couple')
+            'passport', 'passport_number', 'passport_date_of_issue', 'passport_date_of_expiry', 'couple','has_management')
 
 
 class UserSerializer(serializers.ModelSerializer):

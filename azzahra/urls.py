@@ -9,12 +9,14 @@ from program import views as program_views
 from accounts import views as accounts_views
 from omid_utils import views as utils_views
 from pay import views as pay_views
+from manage_app import views as manage_views
 
 schema_view = get_schema_view(title='هیئت الزهرا دانشگاه شریف')
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'programs', program_views.ProgramViewSet, base_name='program')
+router.register(r'managements', manage_views.ManagementViewSet, base_name='manage')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

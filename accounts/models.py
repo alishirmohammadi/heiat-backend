@@ -78,10 +78,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
+    def has_management(self):
+        return self.managements.all().count() > 0
+
     class Meta:
         verbose_name = 'حساب کاربری'
         verbose_name_plural = 'حسابهای کاربری'
-
 
 
 # once a user has been created, a profile object will be created for it
