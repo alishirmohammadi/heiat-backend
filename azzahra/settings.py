@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'accounts',
     'program',
     'pay',
+    'manage_app'
 
 ]
 MIDDLEWARE = [

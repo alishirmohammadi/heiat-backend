@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Profile
-from program.models import Management
+from manage_app.models import Management
 from django.utils.safestring import mark_safe
 
 
