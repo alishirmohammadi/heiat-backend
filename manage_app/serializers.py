@@ -50,3 +50,9 @@ class ProgramManageSerializer(serializers.ModelSerializer):
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'is_open', 'state',
                   'has_coupling', 'questions', 'posts','registrations')
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('id', 'text', 'post_date','program')

@@ -16,3 +16,15 @@ class ProgramManagement(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticated, IsManager)
     serializer_class = ProgramManageSerializer
     queryset = Program.objects.all()
+
+
+class CreatePost(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
+    serializer_class = PostCreateSerializer
+
+
+class EditPost(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
+    serializer_class = PostSerializer

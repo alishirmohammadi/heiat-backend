@@ -36,6 +36,8 @@ urlpatterns = [
     path(r'pay/payment_callback/', pay_views.payment_callback),
     path(r'managements/', manage_views.ManagementList.as_view()),
     path(r'manage/program/<pk>/', manage_views.ProgramManagement.as_view()),
+    path(r'manage/posts/<pk>/', manage_views.EditPost.as_view()),
+    path(r'manage/posts/', manage_views.CreatePost.as_view()),
     path(r'', include(router.urls)),
     path(r'media/<path>', serve, {'document_root': settings.MEDIA_ROOT, }),
     path(r'static/<path>', serve, {'document_root': settings.STATIC_ROOT}),
