@@ -32,7 +32,7 @@ class ProfileInRegistrationListInProgramManageSerializer(serializers.ModelSerial
         fields = ('name', 'gender','people_type')
 
 
-class RegistrationInProgramManageSerializer(serializers.ModelSerializer):
+class RegistrationInManageSerializer(serializers.ModelSerializer):
     answers = AnswerInRegistrationSerializer(many=True)
     profile = ProfileInRegistrationListInProgramManageSerializer()
 
@@ -42,14 +42,12 @@ class RegistrationInProgramManageSerializer(serializers.ModelSerializer):
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
-    posts = PostSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
-    registrations = RegistrationInProgramManageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'is_open', 'state',
-                  'has_coupling', 'questions', 'posts','registrations')
+                  'has_coupling', 'questions')
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
