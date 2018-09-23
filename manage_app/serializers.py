@@ -38,7 +38,7 @@ class RegistrationInManageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers','numberOfPayments')
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
