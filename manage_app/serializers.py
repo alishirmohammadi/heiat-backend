@@ -48,7 +48,7 @@ class RegistrationInManageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments','registrationDate')
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
@@ -57,7 +57,7 @@ class ProgramManageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'is_open', 'state',
-                  'has_coupling', 'questions')
+                  'has_coupling', 'questions','type','year')
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
