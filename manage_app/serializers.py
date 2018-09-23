@@ -24,12 +24,22 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'text', 'post_date')
 
 
+class UserInProfileInManageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='get_full_name')
+
+    class Meta:
+        model = User
+        fields = ('username', 'name', 'email')
+
+
 class ProfileInRegistrationListInProgramManageSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='user.get_full_name')
+    user = UserInProfileInManageSerializer(read_only=True)
+    passport_status=serializers.CharField(source='get_passport_display')
 
     class Meta:
         model = Profile
-        fields = ('name', 'gender','people_type')
+        fields = ('user', 'gender', 'people_type', 'student_number', 'conscription', 'passport_status', 'passport_number',
+                  'passport_date_of_issue', 'passport_date_of_expiry', 'father_name', 'mobile', 'birth_date')
 
 
 class RegistrationInManageSerializer(serializers.ModelSerializer):
@@ -38,7 +48,7 @@ class RegistrationInManageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers','numberOfPayments')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments')
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
@@ -53,4 +63,4 @@ class ProgramManageSerializer(serializers.ModelSerializer):
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id', 'text', 'post_date','program')
+        fields = ('id', 'text', 'post_date', 'program')
