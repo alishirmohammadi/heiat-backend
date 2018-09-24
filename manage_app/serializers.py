@@ -80,10 +80,10 @@ class RegistrationDetailManageSerializer(serializers.ModelSerializer):
     answers = AnswerInRegistrationSerializer(many=True)
     profile = ProfileInRegistrationListInProgramManageSerializer()
     messages=MessageInRegistrationSerializer(many=True,read_only=True)
-
+    couple=RegistrationInManageSerializer(source='get_couple_registration',read_only=True)
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate','messages')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate','messages','couple')
 
 
 class NewMessageFromManagerSerializer(serializers.ModelSerializer):
