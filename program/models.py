@@ -170,6 +170,8 @@ class Registration(models.Model):
             return min(res, self.program.max_second_installment)
         return res
 
+    def last_from_user_message(self):
+        return self.messages.filter(to_user=False).order_by('-id').first()
 
 class Question(models.Model):
     program = models.ForeignKey(Program, related_name='questions', on_delete=models.CASCADE)

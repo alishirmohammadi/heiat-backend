@@ -34,12 +34,13 @@ class UserInProfileInManageSerializer(serializers.ModelSerializer):
 
 class ProfileInRegistrationListInProgramManageSerializer(serializers.ModelSerializer):
     user = UserInProfileInManageSerializer(read_only=True)
-    passport_status=serializers.CharField(source='get_passport_display')
+    passport_status = serializers.CharField(source='get_passport_display')
 
     class Meta:
         model = Profile
-        fields = ('user', 'gender', 'people_type', 'student_number', 'conscription', 'passport_status', 'passport_number',
-                  'passport_date_of_issue', 'passport_date_of_expiry', 'father_name', 'mobile', 'birth_date')
+        fields = (
+            'user', 'gender', 'people_type', 'student_number', 'conscription', 'passport_status', 'passport_number',
+            'passport_date_of_issue', 'passport_date_of_expiry', 'father_name', 'mobile', 'birth_date')
 
 
 class RegistrationInManageSerializer(serializers.ModelSerializer):
@@ -48,7 +49,7 @@ class RegistrationInManageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments','registrationDate')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate')
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
@@ -57,7 +58,22 @@ class ProgramManageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'is_open', 'state',
-                  'has_coupling', 'questions','type','year')
+                  'has_coupling', 'questions', 'type', 'year')
+
+
+class MessageInManageInboxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('text', 'send_date')
+
+
+class RegistrationMessageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='profile.user.get_full_name')
+    message= MessageInManageInboxSerializer(read_only=True,source='last_from_user_message')
+
+    class Meta:
+        model = Registration
+        fields = ('id', 'name', 'message')
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
