@@ -5,6 +5,8 @@ from datetime import datetime, date
 from accounts.models import Profile
 from django.db.models import Sum, Q
 from django.db.models.functions import Coalesce
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -173,6 +175,7 @@ class Registration(models.Model):
     def last_from_user_message(self):
         return self.messages.filter(to_user=False).order_by('-id').first()
 
+
 class Question(models.Model):
     program = models.ForeignKey(Program, related_name='questions', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
@@ -193,7 +196,6 @@ class Answer(models.Model):
         return self.question.title + '-' + self.registration.profile.user.get_full_name()
 
 
-
 class Message(models.Model):
     registration = models.ForeignKey(Registration, related_name='messages', on_delete=models.CASCADE)
     to_user = models.BooleanField(default=True)
@@ -207,3 +209,10 @@ class Message(models.Model):
 
     def __str__(self):
         return str(self.registration)
+
+#
+# @receiver(post_save, sender=Message)
+# def sens_sms(sender, instance=None, created=False, **kwargs):
+#     if created and not kwargs.get('raw', False):
+#         if instance.to_user and instance.send_sms:
+#             Profile.objects.create(user=instance)
