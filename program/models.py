@@ -137,6 +137,11 @@ class Registration(models.Model):
         return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(
             coupling=True).exclude(status=self.STATUS_REMOVED).first()
 
+    def couple_id(self):
+        reg=self.get_couple_registration()
+        if reg:
+            return reg.id
+        return None
     def __str__(self):
         return self.program.title + ' ' + self.profile.user.get_full_name()
 

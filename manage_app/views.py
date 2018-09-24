@@ -1,4 +1,4 @@
-from rest_framework import generics, views, decorators, response, permissions, viewsets, mixins,status
+from rest_framework import generics, views, decorators, response, permissions, viewsets, mixins, status
 from .models import *
 from .serializers import *
 from .pemissions import *
@@ -14,17 +14,26 @@ class ManagementList(generics.ListAPIView):
 
 class RegistrationManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
-    serializer_class = RegistrationDetailManageSerializer
+    serializer_class = RegistrationInManageSerializer
     queryset = Registration.objects.all()
 
-    @decorators.action(detail=True,methods=['POST',])
+    @decorators.action(detail=True)
+    def messages(self, request, *args, **kwargs):
+        return response.Response(MessageInRegistrationSerializer(self.get_object().messages.all(),many=True).data)
+
+    @decorators.action(detail=True)
+    def payments(self, request, *args, **kwargs):
+        from pay.serializers import PaymentInRegistrationSerializer
+        return response.Response(PaymentInRegistrationSerializer(self.get_object().payments.all(),many=True).data)
+
+    @decorators.action(detail=True, methods=['POST', ])
     def new_message(self, request, *args, **kwargs):
         serializer = NewMessageFromManagerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        message=serializer.save(registration=self.get_object())
+        message = serializer.save(registration=self.get_object())
         if message.send_sms:
             from omid_utils.sms import sendSMS
-            sendSMS([message.registration.profile.mobile],message.text)
+            sendSMS([message.registration.profile.mobile], message.text)
         return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

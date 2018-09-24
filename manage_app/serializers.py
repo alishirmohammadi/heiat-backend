@@ -49,7 +49,7 @@ class RegistrationInManageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate')
+        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate', 'couple_id')
 
 
 class ProgramManageSerializer(serializers.ModelSerializer):
@@ -69,27 +69,20 @@ class MessageInManageInboxSerializer(serializers.ModelSerializer):
 
 class RegistrationMessageSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='profile.user.get_full_name')
-    message= MessageInManageInboxSerializer(read_only=True,source='last_from_user_message')
+    message = MessageInManageInboxSerializer(read_only=True, source='last_from_user_message')
 
     class Meta:
         model = Registration
         fields = ('id', 'name', 'message')
 
 
-class RegistrationDetailManageSerializer(serializers.ModelSerializer):
-    answers = AnswerInRegistrationSerializer(many=True)
-    profile = ProfileInRegistrationListInProgramManageSerializer()
-    messages=MessageInRegistrationSerializer(many=True,read_only=True)
-    couple=RegistrationInManageSerializer(source='get_couple_registration',read_only=True)
-    class Meta:
-        model = Registration
-        fields = ('id', 'profile', 'status', 'coupling', 'answers', 'numberOfPayments', 'registrationDate','messages','couple')
 
 
 class NewMessageFromManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('id', 'text', 'send_date', 'to_user','send_sms')
+        fields = ('id', 'text', 'send_date', 'to_user', 'send_sms')
+
 
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
