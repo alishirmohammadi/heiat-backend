@@ -36,6 +36,7 @@ urlpatterns = [
     path(r'pay/registration/start/', pay_views.start_pay_registration),
     path(r'pay/payment_callback/', pay_views.payment_callback),
     path(r'managements/', manage_views.ManagementList.as_view()),
+    path(r'manage/posts/<pk>/delete/', manage_views.DeletePost.as_view()),
     path(r'manage/posts/<pk>/', manage_views.EditPost.as_view()),
     path(r'manage/posts/', manage_views.CreatePost.as_view()),
     path(r'', include(router.urls)),

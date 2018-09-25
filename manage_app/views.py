@@ -80,7 +80,7 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
 
     @decorators.action(detail=True)
     def posts(self, request, *args, **kwargs):
-        return response.Response(PostSerializer(self.get_object().posts, many=True).data)
+        return response.Response(PostSerializer(self.get_object().posts.order_by('-id'), many=True).data)
 
     @decorators.action(detail=True, methods=['POST', ])
     def draw(self, request, *args, **kwargs):
@@ -158,3 +158,7 @@ class EditPost(generics.UpdateAPIView):
     queryset = Post.objects.all()
     permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
     serializer_class = PostSerializer
+
+class DeletePost(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
