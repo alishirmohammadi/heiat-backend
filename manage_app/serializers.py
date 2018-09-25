@@ -15,7 +15,7 @@ class ManagementListSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'title', 'desc', 'user_sees')
+        fields = ('id', 'title', 'desc', 'user_sees', 'shift')
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -76,8 +76,6 @@ class RegistrationMessageSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'message')
 
 
-
-
 class NewMessageFromManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
@@ -93,5 +91,10 @@ class PostCreateSerializer(serializers.ModelSerializer):
 class CreateQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'title', 'desc', 'user_sees','program')
+        fields = ('id', 'title', 'desc', 'user_sees', 'program', 'shift')
 
+
+class PriceShiftSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PriceShift
+        fields = ('people_type', 'shift')

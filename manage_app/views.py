@@ -82,6 +82,19 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
     def posts(self, request, *args, **kwargs):
         return response.Response(PostSerializer(self.get_object().posts.order_by('-id'), many=True).data)
 
+    @decorators.action(detail=True)
+    def shifts(self, request, *args, **kwargs):
+        return response.Response(PriceShiftSerializer(self.get_object().shifts.all(), many=True).data)
+
+    @decorators.action(detail=True, methods=['POST', ])
+    def shift_price(self, request, *args, **kwargs):
+        people_type = request.data.get('people_type', None)
+        shift = int(request.data.get('shift', 0))
+        if people_type:
+            PriceShift.objects.update_or_create(program=self.get_object(), people_type=people_type,
+                                                defaults={'shift': shift})
+        return response.Response('OK')
+
     @decorators.action(detail=True, methods=['POST', ])
     def draw(self, request, *args, **kwargs):
         left_chances = int(request.data.get('chances', 0))
