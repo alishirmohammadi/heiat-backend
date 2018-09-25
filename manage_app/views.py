@@ -133,6 +133,21 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
         return response.Response(RegistrationInManageSerializer(self.get_object().registrations.all(), many=True).data)
 
 
+    @decorators.action(detail=True, methods=['POST', ])
+    def bulk_message(self, request, *args, **kwargs):
+        text = request.data.get('text', None)
+        send_sms = request.data.get('send_sms', False)
+        registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
+        if text:
+            for registration in registrations:
+                    Message.objects.create(text=text, registration=registration,send_sms=send_sms)
+            if send_sms:
+                from omid_utils.sms import sendSMS
+                numbers=registrations.values_list('profile__mobile',flat=True)
+                sendSMS(numbers,text)
+        return response.Response('OK')
+
+
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
     permission_classes = (permissions.IsAuthenticated, IsManagerOfProgram)
