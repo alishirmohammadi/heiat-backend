@@ -54,7 +54,7 @@ class RegistrationManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
         yes = request.data.get('yes', False)
         registration = self.get_object()
         if question_id:
-            Answer.objects.update_or_create(question_id=question_id,registration=registration,defaults={'yes':yes})
+            Answer.objects.update_or_create(question_id=question_id, registration=registration, defaults={'yes': yes})
             couple = registration.get_couple_registration()
             if couple:
                 Answer.objects.update_or_create(question_id=question_id, registration=couple,
@@ -83,6 +83,28 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
         return response.Response(PostSerializer(self.get_object().posts, many=True).data)
 
     @decorators.action(detail=True, methods=['POST', ])
+    def draw(self, request, *args, **kwargs):
+        left_chances = int(request.data.get('chances', 0))
+        registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
+        undecided = registrations.count()
+        from random import random
+        for registration in registrations:
+            num = left_chances / undecided
+            r=random()
+            win = r < num
+            if win:
+                left_chances -= 1
+            undecided -= 1
+            new_status = Registration.STATUS_CERTAIN if win else Registration.STATUS_RESERVED
+            registration.status = new_status
+            registration.save()
+            couple = registration.get_couple_registration()
+            if couple:
+                couple.status = new_status
+                couple.save()
+        return response.Response(RegistrationInManageSerializer(self.get_object().registrations.all(), many=True).data)
+
+    @decorators.action(detail=True, methods=['POST', ])
     def change_status(self, request, *args, **kwargs):
         new_status = request.data.get('status', Registration.STATUS_DEFAULT)
         registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
@@ -109,6 +131,7 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
                     Answer.objects.update_or_create(question_id=question_id, registration=couple,
                                                     defaults={'yes': yes})
         return response.Response(RegistrationInManageSerializer(self.get_object().registrations.all(), many=True).data)
+
 
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
