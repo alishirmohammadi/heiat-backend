@@ -82,6 +82,33 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
     def posts(self, request, *args, **kwargs):
         return response.Response(PostSerializer(self.get_object().posts, many=True).data)
 
+    @decorators.action(detail=True, methods=['POST', ])
+    def change_status(self, request, *args, **kwargs):
+        new_status = request.data.get('status', Registration.STATUS_DEFAULT)
+        registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
+        for registration in registrations:
+            registration.status = new_status
+            registration.save()
+            couple = registration.get_couple_registration()
+            if couple:
+                couple.status = new_status
+                couple.save()
+        return response.Response(RegistrationInManageSerializer(self.get_object().registrations.all(), many=True).data)
+
+    @decorators.action(detail=True, methods=['POST', ])
+    def change_answer(self, request, *args, **kwargs):
+        question_id = request.data.get('question_id', None)
+        yes = request.data.get('yes', False)
+        registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
+        for registration in registrations:
+            if question_id:
+                Answer.objects.update_or_create(question_id=question_id, registration=registration,
+                                                defaults={'yes': yes})
+                couple = registration.get_couple_registration()
+                if couple:
+                    Answer.objects.update_or_create(question_id=question_id, registration=couple,
+                                                    defaults={'yes': yes})
+        return response.Response(RegistrationInManageSerializer(self.get_object().registrations.all(), many=True).data)
 
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
