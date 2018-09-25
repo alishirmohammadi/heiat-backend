@@ -88,3 +88,10 @@ class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'text', 'post_date', 'program')
+
+
+class CreateQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('id', 'title', 'desc', 'user_sees','program')
+
