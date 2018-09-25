@@ -58,7 +58,7 @@ class ProgramManageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ('id', 'title', 'program_interval', 'register_interval', 'is_open', 'state',
-                  'has_coupling', 'questions', 'type', 'year')
+                  'has_coupling', 'questions', 'type', 'year','base_price','max_first_installment','max_second_installment')
 
 
 class MessageInManageInboxSerializer(serializers.ModelSerializer):
