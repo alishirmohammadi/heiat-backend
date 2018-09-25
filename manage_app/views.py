@@ -48,6 +48,19 @@ class RegistrationManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
             couple.save()
         return response.Response(RegistrationInManageSerializer(registration).data)
 
+    @decorators.action(detail=True, methods=['POST', ])
+    def change_answer(self, request, *args, **kwargs):
+        question_id = request.data.get('question_id', None)
+        yes = request.data.get('yes', False)
+        registration = self.get_object()
+        if question_id:
+            Answer.objects.update_or_create(question_id=question_id,registration=registration,defaults={'yes':yes})
+            couple = registration.get_couple_registration()
+            if couple:
+                Answer.objects.update_or_create(question_id=question_id, registration=couple,
+                                                defaults={'yes': yes})
+        return response.Response(RegistrationInManageSerializer(registration).data)
+
 
 class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
     permission_classes = (permissions.IsAuthenticated, IsManager)
