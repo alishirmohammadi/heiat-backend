@@ -59,10 +59,10 @@ REST_FRAMEWORK = {
         'accounts.throttles.SustainedAnonRateThrottle',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'burst_user': '900/min',
-        'burst_anon': '300/min',
-        'sustained_user': '30000/day',
-        'sustained_anon': '10000/day',
+        'burst_user': '90/min',
+        'burst_anon': '30/min',
+        'sustained_user': '3000/day',
+        'sustained_anon': '1000/day',
     }
 }
 
