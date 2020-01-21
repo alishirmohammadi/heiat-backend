@@ -1,6 +1,14 @@
+import random
+
 from rest_framework import generics, permissions, decorators, response
-from .serializers import ProfileSerializer, CoupleSerializer
+
+from omid_utils.sms import sendSMS
+from omid_utils.specifics import check_melli_code
 from .models import *
+from .serializers import ProfileSerializer, CoupleSerializer
+
+RESET_PASSWORD_SMS_TEXT = "رمز عبور جدید شما: %s"
+RESET_PASSWORD_LIMIT_TIME = 300
 
 
 class EditProfileView(generics.RetrieveUpdateAPIView):
@@ -34,3 +42,29 @@ def set_couple(request):
     profile.couple = me
     profile.save()
     return response.Response(CoupleSerializer(profile).data)
+
+
+@decorators.api_view(['POST'])
+def password_reset(request):
+    username = request.data.get('username')
+    if not username:
+        return response.Response('کد ملی الزامی است', status=400)
+    if not check_melli_code(username):
+        return response.Response('فرمت کد ملی درست نیست', status=400)
+    user = User.objects.filter(username=username)
+    if not user:
+        return response.Response("این نام کاربری در سایت وجود ندارد.", status=404)
+    user = user[0]
+    if not user.profile:
+        return response.Response("شما هنوز پروفایل ندارید. لطفا با مدیر سایت تماس بگیرید.", status=404)
+    if not user.profile.mobile:
+        user.set_password(user.username)
+        user.save()
+        return response.Response("شماره موبایل شما در سیستم موجود نیست. رمز عبور شما به کد ملی تغییر کرد.", status=200)
+    mobile = user.profile.mobile
+    new_password = str(random.randrange(10000, 100000))
+    user.set_password(new_password)
+    user.save()
+    sendSMS([mobile], RESET_PASSWORD_SMS_TEXT % new_password)
+    mobile = mobile[:4] + "xxx" + mobile[7:]
+    return response.Response("رمز عبور جدید به شمارهٔ %s ارسال شد" % mobile, status=200)

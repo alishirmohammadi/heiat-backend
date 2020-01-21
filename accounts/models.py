@@ -1,7 +1,6 @@
 # Encoding: utf-8
-from django.db import models
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -11,7 +10,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 unique=True,
-                                verbose_name=_('user'),
+                                verbose_name="کاربر",
                                 related_name='profile')
     PEOPLE_TYPE_SHARIF_STUDENT = 'sharif student'
     PEOPLE_TYPE_SHARIF_GRADUATED = 'sharif graduated'

@@ -1,15 +1,15 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
-from django.conf import settings
-from django.views.static import serve
 
-from program import views as program_views
 from accounts import views as accounts_views
+from manage_app import views as manage_views
 from omid_utils import views as utils_views
 from pay import views as pay_views
-from manage_app import views as manage_views
+from program import views as program_views
 
 schema_view = get_schema_view(title='هیئت الزهرا دانشگاه شریف')
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path(r'auth/', include('djoser.urls')),
     path(r'accounts/profile/', accounts_views.EditProfileView.as_view()),
     path(r'accounts/couple/', accounts_views.set_couple),
+    path(r'accounts/password/reset/', accounts_views.password_reset),
     path(r'expenses', pay_views.ExpenseList.as_view()),
     path(r'registration/give_up/', program_views.give_up),
     path(r'registration/message/', program_views.NewMessage.as_view()),

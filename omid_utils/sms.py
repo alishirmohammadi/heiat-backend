@@ -1,5 +1,6 @@
 from zeep import Client
 
+
 def sendSMS(list, text):
     client = Client(wsdl='http://api.payamak-panel.com/post/Send.asmx?wsdl')
     if len(list) // 100 == len(list) / 100:
@@ -15,5 +16,4 @@ def sendSMS(list, text):
                 b = b + str(list[j + (i * 100)])
             else:
                 b = b + "," + str(list[j + (i * 100)])
-        client.service.SendSimpleSMS2('9174486355', '3496', b, '50002016008706', text, False)
-
+        client.service.SendSimpleSMS2('9174486355', '3496', b, '500010609236', text, False)
