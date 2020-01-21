@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 from rest_framework import generics, permissions, decorators, response
 
@@ -61,9 +62,12 @@ def password_reset(request):
         user.set_password(user.username)
         user.save()
         return response.Response("شماره موبایل شما در سیستم موجود نیست. رمز عبور شما به کد ملی تغییر کرد.", status=200)
+    if datetime.now().timestamp() - user.last_login.timestamp() < RESET_PASSWORD_LIMIT_TIME:
+        return response.Response("در فاصلهٔ زمانی کمتر از ۵ دقیقه امکان بازیابی رمز عبور وجود ندارد.", status=400)
     mobile = user.profile.mobile
     new_password = str(random.randrange(10000, 100000))
     user.set_password(new_password)
+    user.last_login = datetime.now()
     user.save()
     sendSMS([mobile], RESET_PASSWORD_SMS_TEXT % new_password)
     mobile = mobile[:4] + "xxx" + mobile[7:]
