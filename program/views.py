@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions, viewsets, response, decorators
-from .models import *
-from .serializers import *
+from rest_framework import generics, viewsets, response, decorators
+
 from .pemissions import *
+from .serializers import *
+
 
 class ProgramViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
@@ -74,6 +75,4 @@ def register(request, program_id):
 class NewMessage(generics.CreateAPIView):
     queryset = Message.objects.filter(to_user=False)
     serializer_class = NewMessageSerializer
-    permission_classes = (permissions.IsAuthenticated,IsOwner)
-
-
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
