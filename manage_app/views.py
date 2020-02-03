@@ -1,7 +1,7 @@
-from rest_framework import generics, views, decorators, response, permissions, viewsets, mixins, status
-from .models import *
-from .serializers import *
+from rest_framework import generics, decorators, response, viewsets, mixins, status
+
 from .pemissions import *
+from .serializers import *
 
 
 class ManagementList(generics.ListAPIView):
