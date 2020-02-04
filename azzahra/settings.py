@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'accounts',
     'program',
     'pay',
-    'qr_code',
     'manage_app',
     'dining'
 ]
