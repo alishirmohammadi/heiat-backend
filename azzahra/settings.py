@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'program',
     'pay',
     'qr_code',
-    'manage_app'
+    'manage_app',
+    'dining'
 ]
 
 MIDDLEWARE = [
