@@ -9,7 +9,6 @@ gmon.out
 *_env/
 env/
 venv/
-*/migrations
 
 .idea/
 
