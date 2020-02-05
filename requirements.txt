@@ -13,7 +13,7 @@ django-filter==2.0.0
 django-guardian==1.4.1
 django-templated-mail==1.1.1
 django-userena==2.0.1
-djangorestframework==3.11.0
+djangorestframework==3.9.4
 djoser==2.0.3
 easy-thumbnails==2.3
 fish==1
