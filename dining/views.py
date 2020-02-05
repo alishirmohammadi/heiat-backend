@@ -25,9 +25,9 @@ def receipt(request, program_id):
     program = Program.objects.filter(id=program_id).first()
     if not program:
         return response.Response("برنامه درخواست شده وجود ندارد.", status=404)
-    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_gte=datetime.now())
+    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now())
     if not meal:
-        return response.Response("وعده غذایی‌ای با اطلاعات وارد شده وجود ندارد.")
+        return response.Response("وعده غذایی‌ای در این زمان وجود ندارد.")
     registration = Registration.objects.filter(profile=profile, program=program, status='certain').first()
     if not registration:
         return response.Response("شما در این برنامه شرکت نکرده اید.", status=403)
