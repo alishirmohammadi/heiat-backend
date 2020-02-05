@@ -43,5 +43,5 @@ def receipt(request, program_id):
     elif reception.type == "receipt":
         return response.Response("قبلا غذا دریافت نموده اید.", status=403)
     elif reception.type == "cancel":
-        return response.Response("شما اعلام کرده بودید که غذا نمی‌خواهید.", status=403)
+        return response.Response("رزرو غذای خود را لغو کرده بودید.", status=403)
     return response.Response(username)
