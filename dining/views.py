@@ -25,7 +25,7 @@ def receipt(request, program_id):
     program = Program.objects.filter(id=program_id).first()
     if not program:
         return response.Response("برنامه درخواست شده وجود ندارد.", status=404)
-    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now())
+    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
         return response.Response("وعده غذایی‌ای در این زمان وجود ندارد.")
     registration = Registration.objects.filter(profile=profile, program=program, status='certain').first()
@@ -33,15 +33,15 @@ def receipt(request, program_id):
         return response.Response("شما در این برنامه شرکت نکرده اید.", status=403)
     reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
     if not reception:
-        reception = FoodReception(meal=Meal, profile=profile, type='receipt')
+        reception = FoodReception(meal=meal, profile=profile, status='receipt')
         reception.save()
         return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
-    if reception.type == "reserved":
-        reception.type = "receipt"
+    if reception.status == "reserved":
+        reception.status = "receipt"
         reception.save()
         return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
-    elif reception.type == "receipt":
+    elif reception.status == "receipt":
         return response.Response("قبلا غذا دریافت نموده اید.", status=403)
-    elif reception.type == "cancel":
+    elif reception.status == "cancel":
         return response.Response("رزرو غذای خود را لغو کرده بودید.", status=403)
     return response.Response(username)

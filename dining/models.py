@@ -11,6 +11,13 @@ class Meal(models.Model):
     start_time = models.DateTimeField(verbose_name="زمان شروع توزیع")
     end_time = models.DateTimeField(verbose_name="زمان پایان توزیع")
 
+    class Meta:
+        verbose_name = "وعدهٔ غذایی"
+        verbose_name_plural = "وعده‌های غذایی"
+
+    def __str__(self):
+        return "%s، %s - %s" % (self.title, self.food, self.program)
+
 
 class FoodReception(models.Model):
     STATUS_CHOICES = (
@@ -23,3 +30,10 @@ class FoodReception(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="کاربر")
     status = models.CharField(verbose_name="وضعیت", choices=STATUS_CHOICES, max_length=20)
     reception_time = models.DateTimeField("زمان دریافت", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "دیافت غذا"
+        verbose_name_plural = "دریافت‌های غذا"
+
+    def __str__(self):
+        return "دریافت غذای %s در %s - %s" % (self.profile, self.meal, self.get_status_display())
