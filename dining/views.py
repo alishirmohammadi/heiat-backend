@@ -57,7 +57,7 @@ def status(request, program_id):
         "meal": {
             "title": "",
             "food": "",
-            "total": "",
+            "total": 0,
             "receipt_count": 0
         }
     }
