@@ -18,30 +18,30 @@ def test(request):
 def receipt(request, program_id):
     username = request.data.get("username")
     if not username:
-        return response.Response("نام کاربری فرستاده نشده است.", status=401)
+        return response.Response({"message": "نام کاربری فرستاده نشده است.", "ok": False}, status=401)
     profile = Profile.objects.filter(user__username=username).first()
     if not profile:
-        return response.Response("کاربر وارد شده وجود ندارد.", status=404)
+        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "ok": False}, status=404)
     program = Program.objects.filter(id=program_id).first()
     if not program:
-        return response.Response("برنامه درخواست شده وجود ندارد.", status=404)
+        return response.Response({"message": "برنامه درخواست شده وجود ندارد.", "ok": False}, status=404)
     meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
-        return response.Response("وعده غذایی‌ای در این زمان وجود ندارد.")
+        return response.Response({"message": "وعده غذایی‌ای در این زمان وجود ندارد.", "ok": False}, status=401)
     registration = Registration.objects.filter(profile=profile, program=program, status='certain').first()
     if not registration:
-        return response.Response("شما در این برنامه شرکت نکرده اید.", status=403)
+        return response.Response({"message": "شما در این برنامه شرکت نکرده اید.", "ok": False}, status=403)
     reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
     if not reception:
         reception = FoodReception(meal=meal, profile=profile, status='receipt')
         reception.save()
-        return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
+        return response.Response({"message": "دریافت غذا با موفقیت انجام شد", "ok": True}, status=200)
     if reception.status == "reserved":
         reception.status = "receipt"
         reception.save()
-        return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
+        return response.Response({"message": "دریافت غذا با موفقیت انجام شد", "ok": True}, status=200)
     elif reception.status == "receipt":
-        return response.Response("قبلا غذا دریافت نموده اید.", status=403)
+        return response.Response({"message": "قبلا غذا دریافت نموده اید.", "ok": False}, status=403)
     elif reception.status == "cancel":
-        return response.Response("رزرو غذای خود را لغو کرده بودید.", status=403)
-    return response.Response(username)
+        return response.Response({"message": "رزرو غذای خود را لغو کرده بودید.", "ok": False}, status=403)
+    return response.Response({"message": "خطای ناشناس", "ok": False})
