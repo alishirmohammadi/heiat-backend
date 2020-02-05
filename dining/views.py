@@ -6,8 +6,6 @@ from accounts.models import Profile
 from dining.models import Meal
 from program.models import Program
 
-is_test = True
-
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAuthenticated,))
@@ -27,5 +25,7 @@ def receipt(request, program_id):
     program = Program.objects.filter(id=program_id).first()
     if not program:
         return response.Response("برنامه درخواست شده وجود ندارد.", status=404)
-    meal = Meal.objects.filter(start_time__lte=datetime.now())
+    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_gte=datetime.now())
+    if not meal:
+        return response.Response("وعده غذایی‌ای با اطلاعات وارد شده وجود ندارد. ")
     return response.Response(username)
