@@ -4,5 +4,6 @@ from dining import views
 
 urlpatterns = [
     path('test/', views.test),
-    path('program/<program_id>/receipt/', views.receipt)
+    path('program/<program_id>/receipt/', views.receipt),
+    path('program/<program_id>/', views.status)
 ]
