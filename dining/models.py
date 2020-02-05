@@ -13,7 +13,7 @@ class Meal(models.Model):
 
 
 class FoodReception(models.Model):
-    TYPE_CHOICES = (
+    STATUS_CHOICES = (
         ('receipt', 'دریافت کرده'),
         ('cancel', 'لغو کرده'),
         ('reserved', 'رزرو کرده'),
@@ -21,5 +21,5 @@ class FoodReception(models.Model):
 
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE, verbose_name="وعدهٔ غذایی")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="کاربر")
-    type = models.CharField(verbose_name="وضعیت", choices=TYPE_CHOICES, max_length=20)
+    status = models.CharField(verbose_name="وضعیت", choices=STATUS_CHOICES, max_length=20)
     reception_time = models.DateTimeField("زمان دریافت", auto_now_add=True)
