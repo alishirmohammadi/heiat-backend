@@ -3,8 +3,8 @@ from datetime import datetime
 from rest_framework import decorators, permissions, response
 
 from accounts.models import Profile
-from dining.models import Meal
-from program.models import Program
+from dining.models import Meal, FoodReception
+from program.models import Program, Registration
 
 
 @decorators.api_view(['POST'])
@@ -27,5 +27,21 @@ def receipt(request, program_id):
         return response.Response("برنامه درخواست شده وجود ندارد.", status=404)
     meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_gte=datetime.now())
     if not meal:
-        return response.Response("وعده غذایی‌ای با اطلاعات وارد شده وجود ندارد. ")
+        return response.Response("وعده غذایی‌ای با اطلاعات وارد شده وجود ندارد.")
+    registration = Registration.objects.filter(profile=profile, program=program, status='certain').first()
+    if not registration:
+        return response.Response("شما در این برنامه شرکت نکرده اید.", status=403)
+    reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
+    if not reception:
+        reception = FoodReception(meal=Meal, profile=profile, type='receipt')
+        reception.save()
+        return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
+    if reception.type == "reserved":
+        reception.type = "receipt"
+        reception.save()
+        return response.Response("دریافت غذا با موفقیت انجام شد", status=200)
+    elif reception.type == "receipt":
+        return response.Response("قبلا غذا دریافت نموده اید.", status=403)
+    elif reception.type == "cancel":
+        return response.Response("شما اعلام کرده بودید که غذا نمی‌خواهید.", status=403)
     return response.Response(username)

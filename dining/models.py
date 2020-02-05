@@ -9,7 +9,7 @@ class Meal(models.Model):
     title = models.CharField(verbose_name="عنوان", max_length=100)
     food = models.CharField(verbose_name="غذا", null=True, blank=True, max_length=100)
     start_time = models.DateTimeField(verbose_name="زمان شروع توزیع")
-    end = models.DateTimeField(verbose_name="زمان پایان توزیع")
+    end_time = models.DateTimeField(verbose_name="زمان پایان توزیع")
 
 
 class FoodReception(models.Model):
