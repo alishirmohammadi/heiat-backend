@@ -76,3 +76,28 @@ class NewMessage(generics.CreateAPIView):
     queryset = Message.objects.filter(to_user=False)
     serializer_class = NewMessageSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner)
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def user_detail(request, program_id):
+    username = request.data.get("username")
+    if not username:
+        return response.Response({"message": "نام کاربری فرستاده نشده است.", "ok": False})
+    profile = Profile.objects.filter(user__username=username).first()
+    if not profile:
+        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "ok": False})
+    program = Program.objects.filter(id=program_id).first()
+    if not program:
+        return response.Response({"message": "برنامهٔ وارد شده وجود ندارد.", "ok": False})
+    registration = Registration.objects.filter(program=program, profile=profile).first()
+    if not registration:
+        return response.Response({"message": "کاربر در برنامهٔ مورد نظر ثبت‌نام نکرده است.", "ok": False})
+    serialized_registration = RegistrationInProgramDetailSerializer(registration).data
+    serialized_program = ProgramDetailSerializer(program).data
+    return response.Response({
+        "ok": True,
+        "message": "اطلاعات فرستاده شد",
+        "registration": serialized_registration,
+        "program": serialized_program
+    })
