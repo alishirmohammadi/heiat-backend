@@ -80,7 +80,7 @@ class NewMessage(generics.CreateAPIView):
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
-def user_detail(request, program_id):
+def sub_program_detail(request, program_id, sub_program_id):
     username = request.data.get("username")
     if not username:
         return response.Response({"message": "نام کاربری فرستاده نشده است.", "ok": False})
@@ -93,11 +93,29 @@ def user_detail(request, program_id):
     registration = Registration.objects.filter(program=program, profile=profile).first()
     if not registration:
         return response.Response({"message": "کاربر در برنامهٔ مورد نظر ثبت‌نام نکرده است.", "ok": False})
-    serialized_registration = RegistrationInProgramDetailSerializer(registration).data
-    serialized_program = ProgramDetailSerializer(program).data
+    if registration.numberOfPayments == 0:
+        return response.Response({"ok": False, "message": "شما هزینهٔ شرکت در برنامه را پرداخت نکرده اید."})
+    sub_program = (lambda a: {
+        59: "سرزمین موج‌های آبی",
+        60: "پینت بال",
+        61: "فوتسال",
+        76: "بولینگ",
+        77: "دیدار با خانواده شهدا",
+        78: "بازدید از آسایشگاه معلولین فیاض‌بخش",
+        79: "بازدید از آسایشگاه جانبازان امام خمینی (ره)",
+    }[a])(sub_program_id)
+    question = Question.objects.get(id=sub_program_id)
+    answer = Answer.objects.filter(question=question, profile=profile).first()
+    if not answer:
+        answer = False
+    else:
+        answer = answer.yes
+    if not answer:
+        return response.Response({
+            "ok": False,
+            "message": "خطا. شما در برنامهٔ %s شرکت نکرده اید." % sub_program
+        })
     return response.Response({
         "ok": True,
-        "message": "اطلاعات فرستاده شد",
-        "registration": serialized_registration,
-        "program": serialized_program
+        "message": "شما می‌توانید در برنامهٔ %s شرکت کنید." % sub_program
     })
