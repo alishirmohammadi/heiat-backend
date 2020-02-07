@@ -24,6 +24,7 @@ urlpatterns = [
     path('schema/', schema_view),
     path('choices/', utils_views.choices),
     path('dining/', include('dining.urls')),
+    path('account/details/', accounts_views.user_detail_paboos),
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'auth/', include('djoser.urls.authtoken')),
     path(r'auth/', include('djoser.urls')),

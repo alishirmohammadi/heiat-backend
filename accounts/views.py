@@ -72,3 +72,27 @@ def password_reset(request):
     sendSMS([mobile], RESET_PASSWORD_SMS_TEXT % new_password)
     mobile = mobile[:4] + "xxx" + mobile[7:]
     return response.Response("رمز عبور جدید به شمارهٔ %s ارسال شد" % mobile, status=200)
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def user_detail_paboos(request):
+    username = request.data.get("username")
+    if not username:
+        return response.Response({"message": "نام کاربری فرستاده نشده است.", "ok": False})
+    profile = Profile.objects.filter(user__username=username).first()
+    if not profile:
+        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "ok": False})
+    return response.Response({
+        "ok": True,
+        "message": "اطلاعات ارسال شد.",
+        "user": {
+            "name": profile.__str__(),
+            "mobile": profile.mobile,
+            "gender": profile.get_gender_display(),
+            "train": -1,
+            "wagon": -1,
+            "coupe": -1,
+            "father_name": profile.father_name,
+        }
+    })
