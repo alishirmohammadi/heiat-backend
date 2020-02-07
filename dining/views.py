@@ -18,36 +18,87 @@ def test(request):
 def receipt(request, program_id):
     username = request.data.get("username")
     if not username:
-        return response.Response({"message": "نام کاربری فرستاده نشده است.", "name": "", "ok": False})
+        return response.Response({"message": "نام کاربری فرستاده نشده است.", "user": {}, "ok": False})
     profile = Profile.objects.filter(user__username=username).first()
     if not profile:
-        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "name": "", "ok": False})
+        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "user": {}, "ok": False})
     program = Program.objects.filter(id=program_id).first()
     if not program:
-        return response.Response({"message": "برنامه درخواست شده وجود ندارد.", "name": profile.__str__(), "ok": False})
+        return response.Response({
+            "message": "برنامه درخواست شده وجود ندارد.",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": False
+        })
     meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
-        return response.Response(
-            {"message": "وعده غذایی‌ای در این زمان وجود ندارد.", "name": profile.__str__(), "ok": False})
+        return response.Response({
+            "message": "وعده غذایی‌ای در این زمان وجود ندارد.",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": False
+        })
     registration = Registration.objects.filter(profile=profile, program=program, status='certain').first()
     if not registration:
-        return response.Response(
-            {"message": "شما در این برنامه شرکت نکرده اید.", "name": profile.__str__(), "ok": False})
+        return response.Response({
+            "message": "شما در این برنامه شرکت نکرده اید.",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": False
+        })
     reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
     if not reception:
         reception = FoodReception(meal=meal, profile=profile, status='receipt')
         reception.save()
-        return response.Response({"message": "دریافت غذا با موفقیت انجام شد", "name": profile.__str__(), "ok": True})
+        return response.Response({
+            "message": "دریافت غذا با موفقیت انجام شد",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": True
+        })
     if reception.status == "reserved":
         reception.status = "receipt"
         reception.save()
-        return response.Response({"message": "دریافت غذا با موفقیت انجام شد", "name": profile.__str__(), "ok": True})
+        return response.Response({
+            "message": "دریافت غذا با موفقیت انجام شد",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": True
+        })
     elif reception.status == "receipt":
-        return response.Response({"message": "قبلا غذا دریافت نموده اید.", "name": profile.__str__(), "ok": False})
+        return response.Response({
+            "message": "قبلا غذا دریافت نموده اید.",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": False
+        })
     elif reception.status == "cancel":
-        return response.Response(
-            {"message": "رزرو غذای خود را لغو کرده بودید.", "name": profile.__str__(), "ok": False})
-    return response.Response({"message": "خطای ناشناس", "name": profile.__str__(), "ok": False})
+        return response.Response({
+            "message": "رزرو غذای خود را لغو کرده بودید.",
+            "user": {
+                "name": profile.__str__(),
+                "mobile": profile.mobile,
+            },
+            "ok": False})
+    return response.Response({
+        "message": "خطای ناشناس",
+        "user": {
+            "name": profile.__str__(),
+            "mobile": profile.mobile,
+        },
+        "ok": False})
 
 
 @decorators.api_view(['GET'])
