@@ -96,13 +96,13 @@ def sub_program_detail(request, program_id, sub_program_id):
     if registration.numberOfPayments == 0:
         return response.Response({"ok": False, "message": "شما هزینهٔ شرکت در برنامه را پرداخت نکرده اید."})
     sub_program = (lambda a: {
-        59: "سرزمین موج‌های آبی",
-        60: "پینت بال",
-        61: "فوتسال",
-        76: "بولینگ",
-        77: "دیدار با خانواده شهدا",
-        78: "بازدید از آسایشگاه معلولین فیاض‌بخش",
-        79: "بازدید از آسایشگاه جانبازان امام خمینی (ره)",
+        "59": "سرزمین موج‌های آبی",
+        "60": "پینت بال",
+        "61": "فوتسال",
+        "76": "بولینگ",
+        "77": "دیدار با خانواده شهدا",
+        "78": "بازدید از آسایشگاه معلولین فیاض‌بخش",
+        "79": "بازدید از آسایشگاه جانبازان امام خمینی (ره)",
     }[a])(sub_program_id)
     question = Question.objects.get(id=sub_program_id)
     answer = Answer.objects.filter(question=question, profile=profile).first()
