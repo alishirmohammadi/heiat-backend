@@ -105,7 +105,7 @@ def sub_program_detail(request, program_id, sub_program_id):
         "79": "بازدید از آسایشگاه جانبازان امام خمینی (ره)",
     }[a])(sub_program_id)
     question = Question.objects.get(id=sub_program_id)
-    answer = Answer.objects.filter(question=question, profile=profile).first()
+    answer = Answer.objects.filter(question=question, registration=registration).first()
     if not answer:
         answer = False
     else:
