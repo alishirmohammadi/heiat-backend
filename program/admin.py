@@ -1,5 +1,6 @@
-from .models import Program, Registration,Message,Question,Answer,Post
 from django.contrib import admin
+
+from .models import Program, Registration, Message, Question, Answer, Post
 
 
 class ProgramAdmin(admin.ModelAdmin):
@@ -12,6 +13,8 @@ admin.site.register(Program, ProgramAdmin)
 class RegistrationAdmin(admin.ModelAdmin):
     list_display = ['id', 'profile', 'program', 'registrationDate', 'coupling', 'status']
     readonly_fields = ('profile',)
+    list_filter = ['program', 'coupling', 'status', ]
+    search_fields = ['profile__user__first_name', 'profile__user__last_name']
 
 admin.site.register(Registration, RegistrationAdmin)
 
