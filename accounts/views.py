@@ -95,9 +95,9 @@ def user_detail_paboos(request):
         if reg.comment is not None:
             comment = reg.comment.split(',')
             if len(comment) >= 3:
-                train = comment[0]
-                wagon = comment[1]
-                coupe = comment[2]
+                train = int(comment[0])
+                wagon = int(comment[1])
+                coupe = int(comment[2])
     return response.Response({
         "ok": True,
         "message": "اطلاعات ارسال شد.",
