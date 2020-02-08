@@ -1,12 +1,12 @@
 # Encoding: utf-8
-from django.db import models
+from datetime import datetime
+
 from django.contrib.auth.models import User
-from datetime import datetime, date
-from accounts.models import Profile
+from django.db import models
 from django.db.models import Sum, Q
 from django.db.models.functions import Coalesce
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
+from accounts.models import Profile
 
 
 # Create your models here.
@@ -102,6 +102,7 @@ class Registration(models.Model):
     registrationDate = models.DateTimeField(default=datetime.now)
     coupling = models.BooleanField(default=False)
     numberOfPayments = models.IntegerField(default=0)
+    comment = models.TextField(verbose_name="توضیحات", null=True)
     STATUS_DEFAULT = 'default'
     STATUS_CERTAIN = 'certain'
     STATUS_RESERVED = 'reserved'
