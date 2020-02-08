@@ -5,6 +5,7 @@ from rest_framework import generics, permissions, decorators, response
 
 from omid_utils.sms import sendSMS
 from omid_utils.specifics import check_melli_code
+from program.models import Registration
 from .models import *
 from .serializers import ProfileSerializer, CoupleSerializer
 
@@ -83,6 +84,19 @@ def user_detail_paboos(request):
     profile = Profile.objects.filter(user__username=username).first()
     if not profile:
         return response.Response({"message": "کاربر وارد شده وجود ندارد.", "ok": False})
+    reg = Registration.objects.get(profile=profile, program__id=22)
+    if not reg:
+        reg = Registration.objects.get(profile=profile, program__id=23)
+    train = -1
+    wagon = -1
+    coupe = -1
+    if len(reg) != 0:
+        reg = reg[0]
+        comment = reg.comment.split(',')
+        if len(comment) >= 3:
+            train = comment[0]
+            wagon = comment[1]
+            coupe = comment[2]
     return response.Response({
         "ok": True,
         "message": "اطلاعات ارسال شد.",
@@ -90,9 +104,9 @@ def user_detail_paboos(request):
             "name": profile.__str__(),
             "mobile": profile.mobile,
             "gender": profile.get_gender_display(),
-            "train": -1,
-            "wagon": -1,
-            "coupe": -1,
+            "train": train,
+            "wagon": wagon,
+            "coupe": coupe,
             "father_name": profile.father_name,
         }
     })
