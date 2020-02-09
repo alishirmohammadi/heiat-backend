@@ -5,7 +5,7 @@ from program.models import Program
 
 
 class Meal(models.Model):
-    program = models.ForeignKey(Program, verbose_name="برنامه", on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, verbose_name="برنامه", on_delete=models.CASCADE, null=True)
     title = models.CharField(verbose_name="عنوان", max_length=100)
     food = models.CharField(verbose_name="غذا", null=True, blank=True, max_length=100)
     start_time = models.DateTimeField(verbose_name="زمان شروع توزیع")
