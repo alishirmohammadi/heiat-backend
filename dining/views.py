@@ -8,7 +8,8 @@ from program.models import Program, Registration, Question, Answer
 
 sadat = Question.objects.get(title="اسکان سادات", program__id=22)
 shohada = Question.objects.get(title="اسکان سید الشهدا", program__id=22)
-blanket_meal = Meal.objects.get(title="پتو")
+blanket_meal = Meal.objects.get(title="پتو", program__id=22)
+book_meal = Meal.objects.get(title="بن کتاب", program__id=22)
 
 
 @decorators.api_view(['POST'])
@@ -191,3 +192,9 @@ def receipt_no_eskan(request, meal=None):
 @decorators.permission_classes((permissions.IsAdminUser,))
 def blanket(request):
     return receipt_no_eskan(request, blanket_meal)
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def book(request):
+    return receipt_no_eskan(request, book_meal)
