@@ -31,7 +31,7 @@ def receipt(request, eskan):
     if not profile:
         return response.Response({"message": "کاربر وارد شده وجود ندارد.", "user": {}, "ok": False})
     if eskan == "sadat":
-        reg = Registration.objects.filter(program=22, profile=profile, status='came').first()
+        reg = Registration.objects.filter(program=22, profile=profile, status='came', coupling=False).first()
         if not reg:
             return response.Response(
                 {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False, "user": {"name": profile.__str__()}})
@@ -54,7 +54,7 @@ def receipt(request, eskan):
             return response.Response(
                 {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
     if eskan == "shohada":
-        reg = Registration.objects.filter(program__id=23, profile=profile, status='came').first()
+        reg = Registration.objects.filter(program__id=23, profile=profile, status='came', coupling=False).first()
         if reg:
             food_reception = FoodReception.objects.filter(meal=meal, profile=profile)
             if not food_reception:
@@ -69,7 +69,7 @@ def receipt(request, eskan):
                 return response.Response(
                     {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
         else:
-            reg = Registration.objects.filter(program__id=22, profile=profile, status='came').first()
+            reg = Registration.objects.filter(program__id=22, profile=profile, status='came', coupling=False).first()
             if not reg:
                 return response.Response(
                     {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False, "user": {"name": profile.__str__()}})
@@ -96,7 +96,7 @@ def receipt(request, eskan):
 
 @decorators.api_view(['GET'])
 @decorators.permission_classes((permissions.IsAdminUser,))
-def status(request, program_id):
+def status(request, eskan):
     resp = {
         "ok": False,
         "message": "برنامه درخواست شده وجود ندارد.",
@@ -108,21 +108,53 @@ def status(request, program_id):
             "receipt_count": 0
         }
     }
-    program = Program.objects.filter(id=program_id).first()
-    if not program:
-        return response.Response(resp)
-    resp['program'] = program.title
-    meal = Meal.objects.filter(program=program, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
+    if eskan != "sadat" and eskan != "shohada":
+        return response.Response("", status=400)
+    meal = Meal.objects.filter(program__id=22, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
-        resp['message'] = "وعده غذایی‌ای در این زمان وجود ندارد."
+        resp["message"] = "وعدهٔ غذایی در این زمان یافت نشد."
         return response.Response(resp)
-    resp['ok'] = True
-    resp['message'] = "اطلاعات ارسال شد."
     resp['meal']['title'] = meal.title
     resp['meal']['food'] = meal.food
-    total = len(Registration.objects.filter(program=program, profile__gender=True, status='came'))
-    total -= len(FoodReception.objects.filter(meal=meal, status='cancel'))
+    resp['message'] = "اطلاعات ارسال شد."
+    resp['ok'] = True
+    resp['program'] = Program.objects.filter(id=22).first().title
+    total = 0
+    receipt_count = 0
+    if eskan == "sadat":
+        regs = Registration.objects.filter(status='came', program__id=22, coupling=False)
+        for reg in regs:
+            ans = Answer.objects.filter(registration=reg, question=sadat).first()
+            if not ans:
+                continue
+            if ans.yes:
+                food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
+                if not food_receipt:
+                    total += 1
+                elif food_receipt.status == 'receipt':
+                    total += 1
+                    receipt_count += 1
+    elif eskan == "shohada":
+        regs = Registration.objects.filter(status='came', program__id=23, coupling=False)
+        for reg in regs:
+            food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
+            if not food_receipt:
+                total += 1
+            elif food_receipt.status == 'receipt':
+                total += 1
+                receipt_count += 1
+        regs = Registration.objects.filter(status='came', program__id=22, coupling=False)
+        for reg in regs:
+            ans = Answer.objects.filter(registration=reg, question=shohada).first()
+            if not ans:
+                continue
+            if ans.yes:
+                food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
+                if not food_receipt:
+                    total += 1
+                elif food_receipt.status == 'receipt':
+                    total += 1
+                    receipt_count += 1
     resp['meal']['total'] = total
-    resp['meal']['receipt_count'] = len(FoodReception.objects.filter(meal=meal, status='receipt'))
-
+    resp['meal']['receipt_count'] = receipt_count
     return response.Response(resp)
