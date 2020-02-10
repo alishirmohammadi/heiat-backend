@@ -87,7 +87,9 @@ def cultural_program(request, sub_program):
 @decorators.api_view(['GET'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def cultural_history(request, sub_program):
-    return response.Response({"ok": False, "message": "این بخش در حال پیاده سازی می‌باشد..."})
+    return response.Response(
+        {"ok": False, "meal": {"title": "عنوان", "food": "نام غذا", "total": 1000, "receipt_count": 10},
+         "message": "این بخش در حال پیاده سازی می‌باشد..."})
 
 
 @decorators.api_view(['POST'])
@@ -99,4 +101,6 @@ def entertainment_program(request, sub_program):
 @decorators.api_view(['GET'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def entertainment_history(request, sub_program):
-    return response.Response({"ok": False, "message": "این بخش در حال پیاده سازی می‌باشد..."})
+    return response.Response(
+        {"ok": False, "meal": {"title": "عنوان", "food": "نام غذا", "total": 1000, "receipt_count": 10},
+         "message": "این بخش در حال پیاده سازی می‌باشد..."})
