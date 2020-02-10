@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
 
 from accounts import views as accounts_views
+from dining import views as dining_views
 from manage_app import views as manage_views
 from omid_utils import views as utils_views
 from pay import views as pay_views
@@ -24,6 +25,7 @@ urlpatterns = [
     path('schema/', schema_view),
     path('choices/', utils_views.choices),
     path('dining/', include('dining.urls')),
+    path('blanket/', dining_views.blanket),
     path('account/details/', accounts_views.user_detail_paboos),
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'auth/', include('djoser.urls.authtoken')),

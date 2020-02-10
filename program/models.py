@@ -1,4 +1,3 @@
-# Encoding: utf-8
 from datetime import datetime
 
 from django.contrib.auth.models import User
@@ -8,8 +7,6 @@ from django.db.models.functions import Coalesce
 
 from accounts.models import Profile
 
-
-# Create your models here.
 
 class Program(models.Model):
     title = models.CharField(max_length=100, default='نام برنامه')

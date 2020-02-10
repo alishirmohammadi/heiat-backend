@@ -32,7 +32,7 @@ class FoodReception(models.Model):
     reception_time = models.DateTimeField("زمان دریافت", auto_now_add=True)
 
     class Meta:
-        verbose_name = "دیافت غذا"
+        verbose_name = "دریافت غذا"
         verbose_name_plural = "دریافت‌های غذا"
 
     def __str__(self):

@@ -8,6 +8,7 @@ from program.models import Program, Registration, Question, Answer
 
 sadat = Question.objects.get(title="اسکان سادات", program__id=22)
 shohada = Question.objects.get(title="اسکان سید الشهدا", program__id=22)
+blanket_meal = Meal.objects.get(title="پتو")
 
 
 @decorators.api_view(['POST'])
@@ -18,14 +19,15 @@ def test(request):
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
-def receipt(request, eskan):
+def receipt(request, eskan, meal=None):
     username = request.data.get("username")
     if eskan != "sadat" and eskan != "shohada":
         return response.Response("", status=400)
     if not username:
         return response.Response({"message": "نام کاربری فرستاده نشده است.", "user": {}, "ok": False})
     profile = Profile.objects.filter(user__username=username).first()
-    meal = Meal.objects.filter(program__id=22, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
+    if not meal:
+        meal = Meal.objects.filter(program__id=22, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
         return response.Response({"message": "وعدهٔ غذایی در این زمان وجود ندارد", "ok": False})
     if not profile:
@@ -96,7 +98,7 @@ def receipt(request, eskan):
 
 @decorators.api_view(['GET'])
 @decorators.permission_classes((permissions.IsAdminUser,))
-def status(request, eskan):
+def status(request, eskan, meal=None):
     resp = {
         "ok": False,
         "message": "برنامه درخواست شده وجود ندارد.",
@@ -110,7 +112,8 @@ def status(request, eskan):
     }
     if eskan != "sadat" and eskan != "shohada":
         return response.Response("", status=400)
-    meal = Meal.objects.filter(program__id=22, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
+    if not meal:
+        meal = Meal.objects.filter(program__id=22, start_time__lte=datetime.now(), end_time__gte=datetime.now()).first()
     if not meal:
         resp["message"] = "وعدهٔ غذایی در این زمان یافت نشد."
         return response.Response(resp)
@@ -158,3 +161,33 @@ def status(request, eskan):
     resp['meal']['total'] = total
     resp['meal']['receipt_count'] = receipt_count
     return response.Response(resp)
+
+
+def receipt_no_eskan(request, meal=None):
+    username = request.data.get("username")
+    if not username:
+        return response.Response({"message": "نام کاربری فرستاده نشده است.", "user": {}, "ok": False})
+    profile = Profile.objects.filter(user__username=username).first()
+    if not meal:
+        return response.Response({"message": "امکان تحویل دادن وجود ندارد.", "ok": False})
+    if not profile:
+        return response.Response({"message": "کاربر وارد شده وجود ندارد.", "user": {}, "ok": False})
+    reg = Registration.objects.filter(program__id=22, profile=profile, status='came', coupling=False)
+    if not reg:
+        reg = Registration.objects.filter(program__id=23, profile=profile, status='came', coupling=False)
+    if not reg:
+        return response.Response(
+            {"message": "شما در این برنامه شرکت نکرده اید.", "user": {"name": str(profile)}, "ok": False})
+    reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
+    if not reception:
+        reception = FoodReception(meal=meal, profile=profile, status='receipt')
+        reception.save()
+        return response.Response({"message": "تحویل با موفقیت انجام شد.", "user": {"name": str(profile)}, "ok": True})
+    return response.Response(
+        {"message": "شما قبلا تحویل گرفته اید.", "user": {"name": str(profile)}, "ok": False})
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def blanket(request):
+    return receipt_no_eskan(request, blanket_meal)
