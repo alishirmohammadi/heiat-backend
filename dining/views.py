@@ -188,13 +188,55 @@ def receipt_no_eskan(request, meal=None):
         {"message": "شما قبلا تحویل گرفته اید.", "user": {"name": str(profile)}, "ok": False})
 
 
+def history_with_no_eskan(request, meal=None):
+    resp = {
+        "ok": False,
+        "message": "برنامه درخواست شده وجود ندارد.",
+        "program": "",
+        "meal": {
+            "title": "",
+            "food": "",
+            "total": 0,
+            "receipt_count": 0
+        }
+    }
+    if not meal:
+        resp["message"] = "چیزی برای نمایش آمار در این زمان یافت نشد."
+        return response.Response(resp)
+    resp['meal']['title'] = meal.title
+    resp['meal']['food'] = meal.food
+    resp['message'] = "اطلاعات ارسال شد."
+    resp['ok'] = True
+    resp['program'] = Program.objects.filter(id=22).first().title
+    total = 0
+    receipt_count = len(FoodReception.objects.filter(meal=meal, status='receipt'))
+    total += len(Registration.objects.filter(status='came', program__id=22, coupling=False))
+    total += len(Registration.objects.filter(status='came', program__id=23, coupling=False))
+    total -= len(FoodReception.objects.filter(meal=meal, status='cancel'))
+    resp['meal']['total'] = total
+    resp['meal']['receipt_count'] = receipt_count
+    return response.Response(resp)
+
+
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def blanket(request):
     return receipt_no_eskan(request, blanket_meal)
 
 
+@decorators.api_view(['GET'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def blanket_history(request):
+    return history_with_no_eskan(request, blanket_meal)
+
+
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def book(request):
     return receipt_no_eskan(request, book_meal)
+
+
+@decorators.api_view(['GET'])
+@decorators.permission_classes((permissions.IsAdminUser,))
+def book_history(request):
+    return history_with_no_eskan(request, book_meal)

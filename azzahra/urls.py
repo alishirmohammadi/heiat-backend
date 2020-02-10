@@ -27,6 +27,8 @@ urlpatterns = [
     path('dining/', include('dining.urls')),
     path('blanket/', dining_views.blanket),
     path('book/', dining_views.book),
+    path('blanket/history/', dining_views.blanket_history),
+    path('book/history/', dining_views.book_history),
     path('account/details/', accounts_views.user_detail_paboos),
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'auth/', include('djoser.urls.authtoken')),
