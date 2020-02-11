@@ -248,6 +248,9 @@ def cancel(requset, meal_id):
     meal = Meal.objects.filter(id=meal_id).first()
     if not meal:
         return response.Response({"ok": False, "message": "Meal not found"})
+    food_receipt = FoodReception.objects.filter(meal=meal, profile=requset.user.profile).first()
+    if food_receipt:
+        return response.Response({"ok": False, "message": ""}, status=403)
     food_receipt = FoodReception(meal=meal, profile=requset.user.profile, status="cancel")
     food_receipt.save()
     return response.Response({"ok": True, "message": "Canceled"})
