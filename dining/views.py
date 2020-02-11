@@ -240,3 +240,14 @@ def book(request):
 @decorators.permission_classes((permissions.IsAdminUser,))
 def book_history(request):
     return history_with_no_eskan(request, book_meal)
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((permissions.IsAuthenticated,))
+def cancel(requset, meal_id):
+    meal = Meal.objects.filter(id=meal_id).first()
+    if not meal:
+        return response.Response({"ok": False, "message": "Meal not found"})
+    food_receipt = FoodReception(meal=meal, profile=requset.user.profile, status="cancel")
+    food_receipt.save()
+    return response.Response({"ok": True, "message": "Canceled"})
