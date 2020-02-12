@@ -92,10 +92,51 @@ def cultural_history(request, sub_program):
          "message": "این بخش در حال پیاده سازی می‌باشد..."})
 
 
+sub_program_to_question = {
+    "pool": Question.objects.filter(title__contains="سرزمین موج‌های آبی", program__id=25).first(),
+    "paintball": Question.objects.filter(title__contains="پینت بال", program__id=25).first(),
+    "bowling": Question.objects.filter(title__contains="بولینگ", program__id=25).first(),
+    "footsal": Question.objects.filter(title__contains="فوتسال", program__id=25).first()
+}
+sub_program_to_persian = {
+    "pool": "استخر موج‌های آبی",
+    "paintball": "پینت بال",
+    "bowling": "بولینگ",
+    "footsal": "فوتسال"
+}
+
+
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def entertainment_program(request, sub_program):
-    return response.Response({"ok": False, "message": "این بخش در حال پیاده سازی می‌باشد..."})
+    if sub_program not in ['pool', 'paintball', 'bowling', 'footsal']:
+        return response.Response({"ok": False, "message": "invalid subprogram name."})
+    username = request.data.get('username')
+    if not username:
+        return response.Response({"ok": False, "message": "username not sent"})
+    profile = Profile.objects.get(user__username=username)
+    if not profile:
+        return response.Response({"ok": False, "message": "user with this username not found"})
+    user_json = {"name": profile.__str__()}
+    program = Program.objects.filter(name="برنامه‌های تفریحی پابوس عشق ۹۸").first()
+    if not program:
+        return response.Response({"ok": False, "user": user_json, "message": "program not found"})
+    reg = Registration.objects.filter(profile=profile, program=program).first()
+    if not reg:
+        return response.Response(
+            {"ok": False, "user": user_json, "message": "شما در هیچ یک از برنامه‌های تفریحی ثبت نام نکرده اید."})
+    question = sub_program_to_question[sub_program]
+    answer = Answer.objects.filter(question=question, registration=reg).first()
+    if not answer:
+        return response.Response({"ok": False, "user": user_json,
+                                  "message": "شما در برنامهٔ %s شرکت نکرده اید." % sub_program_to_persian[sub_program]})
+    if not answer.yes:
+        return response.Response({"ok": False, "user": user_json,
+                                  "message": "شما در برنامهٔ %s شرکت نکرده اید." % sub_program_to_persian[sub_program]})
+    if reg.numberOfPayments == 0:
+        return response.Response(
+            {"ok": False, "user": user_json, "message": "شما هزینهٔ شرکت در برنامه را پرداخت نکرده اید."})
+    return response.Response({"ok": True, "user": user_json, "message": "شما در برنامه شرکت کرده اید."})
 
 
 @decorators.api_view(['GET'])
