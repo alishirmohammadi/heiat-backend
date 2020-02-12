@@ -109,7 +109,7 @@ sub_program_to_persian = {
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def entertainment_program(request, sub_program):
-    if sub_program not in ['pool', 'paintball', 'bowling', 'footsal']:
+    if sub_program not in sub_program_to_question.keys():
         return response.Response({"ok": False, "message": "invalid subprogram name."})
     username = request.data.get('username')
     if not username:
@@ -118,7 +118,7 @@ def entertainment_program(request, sub_program):
     if not profile:
         return response.Response({"ok": False, "message": "user with this username not found"})
     user_json = {"name": profile.__str__()}
-    program = Program.objects.filter(name="برنامه‌های تفریحی پابوس عشق ۹۸").first()
+    program = Program.objects.filter(title="برنامه‌های تفریحی پابوس عشق ۹۸").first()
     if not program:
         return response.Response({"ok": False, "user": user_json, "message": "program not found"})
     reg = Registration.objects.filter(profile=profile, program=program).first()
