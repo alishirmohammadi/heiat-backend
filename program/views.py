@@ -78,10 +78,46 @@ class NewMessage(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated, IsOwner)
 
 
+cultural_to_question = {
+    "malool": Question.objects.filter(title__contains="معلولین", program__id=26).first(),
+    "shohada": Question.objects.filter(title__contains="شهدا", program__id=26).first(),
+    "janbaz": Question.objects.filter(title__contains="جانبازان", program__id=26).first(),
+}
+cultural_to_persian = {
+    "malool": "بازدید از آسایشگاه معلولین",
+    "shohada": "دیدار با خانوادهٔ شهدا",
+    "janbaz": "بازدید از آسایشگاه جانبازان",
+}
+
+
 @decorators.api_view(['POST'])
 @decorators.permission_classes((permissions.IsAdminUser,))
 def cultural_program(request, sub_program):
-    return response.Response({"ok": False, "message": "این بخش در حال پیاده سازی می‌باشد..."})
+    if sub_program not in cultural_to_question.keys():
+        return response.Response({"ok": False, "message": "invalid subprogram name."})
+    username = request.data.get('username')
+    if not username:
+        return response.Response({"ok": False, "message": "username not sent"})
+    profile = Profile.objects.get(user__username=username)
+    if not profile:
+        return response.Response({"ok": False, "message": "user with this username not found"})
+    user_json = {"name": profile.__str__()}
+    program = Program.objects.filter(title="برنامه‌های فرهنگی پابوس عشق ۹۸").first()
+    if not program:
+        return response.Response({"ok": False, "user": user_json, "message": "program not found"})
+    reg = Registration.objects.filter(profile=profile, program=program).first()
+    if not reg:
+        return response.Response(
+            {"ok": False, "user": user_json, "message": "شما در هیچ یک از برنامه‌های فرهنگی ثبت نام نکرده اید."})
+    question = cultural_to_question[sub_program]
+    answer = Answer.objects.filter(question=question, registration=reg).first()
+    if not answer:
+        return response.Response({"ok": False, "user": user_json,
+                                  "message": "شما در برنامهٔ %s شرکت نکرده اید." % cultural_to_persian[sub_program]})
+    if not answer.yes:
+        return response.Response({"ok": False, "user": user_json,
+                                  "message": "شما در برنامهٔ %s شرکت نکرده اید." % cultural_to_persian[sub_program]})
+    return response.Response({"ok": True, "user": user_json, "message": "شما در برنامه شرکت کرده اید."})
 
 
 @decorators.api_view(['GET'])
