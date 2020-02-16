@@ -79,14 +79,12 @@ class NewMessage(generics.CreateAPIView):
 
 
 cultural_to_question = {
-    "malool": Question.objects.filter(title__contains="معلولین", program__id=26).first(),
-    "shohada": Question.objects.filter(title__contains="شهدا", program__id=26).first(),
-    "janbaz": Question.objects.filter(title__contains="جانبازان", program__id=26).first(),
+    "museum": Question.objects.filter(title="در برنامهٔ بازدید از اماکن حرم شرکت می‌کنم", program__id=27).first(),
+    "shohada": Question.objects.filter(title="در برنامهٔ دیدار با خانوادهٔ شهدا شرکت می‌کنم", program__id=27).first(),
 }
 cultural_to_persian = {
-    "malool": "بازدید از آسایشگاه معلولین",
+    "museum": "بازدید از اماکن حرم",
     "shohada": "دیدار با خانوادهٔ شهدا",
-    "janbaz": "بازدید از آسایشگاه جانبازان",
 }
 
 
@@ -129,16 +127,14 @@ def cultural_history(request, sub_program):
 
 
 sub_program_to_question = {
-    "pool": Question.objects.filter(title__contains="سرزمین موج‌های آبی", program__id=25).first(),
-    "paintball": Question.objects.filter(title__contains="پینت بال", program__id=25).first(),
-    "bowling": Question.objects.filter(title__contains="بولینگ", program__id=25).first(),
-    "footsal": Question.objects.filter(title__contains="فوتسال", program__id=25).first()
+    "pool": Question.objects.filter(title="در برنامهٔ پارک آبی شرکت می‌کنم", program__id=27).first(),
+    "helium": Question.objects.filter(title="در برنامهٔ پارک هلیومی شرکت می‌کنم", program__id=27).first(),
+    "chalidare": Question.objects.filter(title="در برنامهٔ تفریحی چالیدره شرکت می‌کنم", program__id=27).first(),
 }
 sub_program_to_persian = {
-    "pool": "استخر موج‌های آبی",
-    "paintball": "پینت بال",
-    "bowling": "بولینگ",
-    "footsal": "فوتسال"
+    "pool": "پارک آبی",
+    "helium": "پارک هلیومی",
+    "chalidare": "چالیدره",
 }
 
 
@@ -154,7 +150,7 @@ def entertainment_program(request, sub_program):
     if not profile:
         return response.Response({"ok": False, "message": "user with this username not found"})
     user_json = {"name": profile.__str__()}
-    program = Program.objects.filter(title="برنامه‌های تفریحی پابوس عشق ۹۸").first()
+    program = Program.objects.filter(title="برنامه‌های جانبی پابوس عشق ۹۸ خواهران").first()
     if not program:
         return response.Response({"ok": False, "user": user_json, "message": "program not found"})
     reg = Registration.objects.filter(profile=profile, program=program).first()
