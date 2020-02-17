@@ -128,7 +128,7 @@ def status(request, eskan, meal=None):
     total = 0
     receipt_count = 0
     if eskan == "sadat":
-        regs = Registration.objects.filter(status='came', program__title__contains="پابوس عشق ۹۸", coupling=False)
+        regs = Registration.objects.filter(status='came', program__title__contains="98", coupling=False)
         for reg in regs:
             food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
             if not food_receipt:
