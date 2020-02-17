@@ -56,7 +56,6 @@ def receipt(request, eskan, meal=None):
         if food_reception.status == "cancel":
             return response.Response(
                 {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
-    if eskan == "shohada":
         reg = Registration.objects.filter(program__id=23, profile=profile, status='came', coupling=False).first()
         if reg:
             food_reception = FoodReception.objects.filter(meal=meal, profile=profile)
