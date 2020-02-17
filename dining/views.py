@@ -128,18 +128,14 @@ def status(request, eskan, meal=None):
     total = 0
     receipt_count = 0
     if eskan == "sadat":
-        regs = Registration.objects.filter(status='came', program__id=22, coupling=False)
+        regs = Registration.objects.filter(status='came', program__title__contains="پابوس عشق ۹۸", coupling=False)
         for reg in regs:
-            ans = Answer.objects.filter(registration=reg, question=sadat).first()
-            if not ans:
-                continue
-            if ans.yes:
-                food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
-                if not food_receipt:
-                    total += 1
-                elif food_receipt.status == 'receipt':
-                    total += 1
-                    receipt_count += 1
+            food_receipt = FoodReception.objects.filter(profile=reg.profile, meal=meal).first()
+            if not food_receipt:
+                total += 1
+            elif food_receipt.status == 'receipt':
+                total += 1
+                receipt_count += 1
     elif eskan == "shohada":
         regs = Registration.objects.filter(status='came', program__id=23, coupling=False)
         for reg in regs:
