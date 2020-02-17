@@ -36,70 +36,67 @@ def receipt(request, eskan, meal=None):
     if eskan == "sadat":
         reg = Registration.objects.filter(program=22, profile=profile, status='came', coupling=False).first()
         if not reg:
+            reg = Registration.objects.filter(program=23, profile=profile, status='came', coupling=False).first()
+            if not reg:
+                return response.Response(
+                    {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False, "user": {"name": profile.__str__()}})
+        answer = Answer.objects.filter(question__title__contains="سادات", registration=reg).first()
+        if not answer:
             return response.Response(
-                {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False, "user": {"name": profile.__str__()}})
-            answer = Answer.objects.filter(question=sadat, registration=reg).first()
+                {"message": "شما در اسکان سادات نیستید", "ok": False, "user": {"name": str(profile)}})
+        if not answer.yes:
+            return response.Response(
+                {"message": "شما در اسکان سادات نیستید", "ok": False, "user": {"name": str(profile)}})
+        food_reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
+        if not food_reception:
+            food_reception = FoodReception(meal=meal, profile=profile, status='receipt')
+            food_reception.save()
+            return response.Response({"message": "غذا با موفقیت دریافت شد", "ok": True, "user": {"name": str(profile)}})
+        if food_reception.status == "receipt":
+            return response.Response(
+                {"message": "شما قبلا غذا دریافت کرده اید.", "ok": False, "user": {"name": str(profile)}})
+        if food_reception.status == "cancel":
+            return response.Response(
+                {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
+    if eskan == "shohada":
+        reg = Registration.objects.filter(program__id=23, profile=profile, status='came', coupling=False).first()
+        if reg:
+            food_reception = FoodReception.objects.filter(meal=meal, profile=profile)
+            if not food_reception:
+                food_reception = FoodReception(meal=meal, profile=profile, status='receipt')
+                food_reception.save()
+                return response.Response(
+                    {"message": "غذا با موفقیت دریافت شد", "ok": True, "user": {"name": str(profile)}})
+            elif food_reception.status == "receipt":
+                return response.Response(
+                    {"message": "شما قبلا غذا دریافت کرده اید.", "ok": False, "user": {"name": str(profile)}})
+            elif food_reception.status == "cancel":
+                return response.Response(
+                    {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
+        else:
+            reg = Registration.objects.filter(program__id=22, profile=profile, status='came', coupling=False).first()
+            if not reg:
+                return response.Response(
+                    {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False, "user": {"name": profile.__str__()}})
+            answer = Answer.objects.filter(registration=reg, question=shohada).first()
             if not answer:
                 return response.Response(
-                    {"message": "شما در اسکان سادات نیستید", "ok": False, "user": {"name": str(profile)}})
+                    {"message": "شما در اسکان سیدالشهدا نیستید", "ok": False, "user": {"name": str(profile)}})
             if not answer.yes:
                 return response.Response(
-                    {"message": "شما در اسکان سادات نیستید", "ok": False, "user": {"name": str(profile)}})
+                    {"message": "شما در اسکان سیدالشهدا نیستید", "ok": False, "user": {"name": str(profile)}})
             food_reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
             if not food_reception:
                 food_reception = FoodReception(meal=meal, profile=profile, status='receipt')
                 food_reception.save()
                 return response.Response(
                     {"message": "غذا با موفقیت دریافت شد", "ok": True, "user": {"name": str(profile)}})
-            if food_reception.status == "receipt":
+            elif food_reception.status == "receipt":
                 return response.Response(
                     {"message": "شما قبلا غذا دریافت کرده اید.", "ok": False, "user": {"name": str(profile)}})
-            if food_reception.status == "cancel":
+            elif food_reception.status == "cancel":
                 return response.Response(
                     {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False, "user": {"name": str(profile)}})
-        else:
-            reg = Registration.objects.filter(program__id=23, profile=profile, status='came', coupling=False).first()
-            if reg:
-                food_reception = FoodReception.objects.filter(meal=meal, profile=profile)
-                if not food_reception:
-                    food_reception = FoodReception(meal=meal, profile=profile, status='receipt')
-                    food_reception.save()
-                    return response.Response(
-                        {"message": "غذا با موفقیت دریافت شد", "ok": True, "user": {"name": str(profile)}})
-                elif food_reception.status == "receipt":
-                    return response.Response(
-                        {"message": "شما قبلا غذا دریافت کرده اید.", "ok": False, "user": {"name": str(profile)}})
-                elif food_reception.status == "cancel":
-                    return response.Response(
-                        {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False,
-                         "user": {"name": str(profile)}})
-            else:
-                reg = Registration.objects.filter(program__id=22, profile=profile, status='came',
-                                                  coupling=False).first()
-                if not reg:
-                    return response.Response(
-                        {"message": "شما در این برنامه شرکت نکرده اید.", "ok": False,
-                         "user": {"name": profile.__str__()}})
-                answer = Answer.objects.filter(registration=reg, question=shohada).first()
-                if not answer:
-                    return response.Response(
-                        {"message": "شما در اسکان سیدالشهدا نیستید", "ok": False, "user": {"name": str(profile)}})
-                if not answer.yes:
-                    return response.Response(
-                        {"message": "شما در اسکان سیدالشهدا نیستید", "ok": False, "user": {"name": str(profile)}})
-                food_reception = FoodReception.objects.filter(meal=meal, profile=profile).first()
-                if not food_reception:
-                    food_reception = FoodReception(meal=meal, profile=profile, status='receipt')
-                    food_reception.save()
-                    return response.Response(
-                        {"message": "غذا با موفقیت دریافت شد", "ok": True, "user": {"name": str(profile)}})
-                elif food_reception.status == "receipt":
-                    return response.Response(
-                        {"message": "شما قبلا غذا دریافت کرده اید.", "ok": False, "user": {"name": str(profile)}})
-                elif food_reception.status == "cancel":
-                    return response.Response(
-                        {"message": "شما این وعدهٔ غذایی را لغو کرده اید.", "ok": False,
-                         "user": {"name": str(profile)}})
 
 
 @decorators.api_view(['GET'])
