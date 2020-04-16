@@ -1,17 +1,20 @@
-from django.db import models
-from program.models import Registration
+import traceback
 from datetime import datetime
+
+from django.contrib.sites.models import Site
+from django.db import models
+from django.db.models import Sum
 # from pysimplesoap.client import SoapClient
 from zeep import Client
-from django.contrib.sites.models import Site
-import traceback
-from django.db.models import Sum, Q
+
+from program.models import Registration
 
 
 class Expense(models.Model):
     is_open = models.BooleanField(default=True)
     expense_name = models.CharField(max_length=200)
     callback_url = models.URLField(max_length=300, null=True, blank=True)
+    address = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         verbose_name = 'درگاه'
@@ -26,23 +29,26 @@ class Expense(models.Model):
 
 # Create your models here.
 class Payment(models.Model):
-    registration = models.ForeignKey(Registration, null=True,related_name='payments',on_delete=models.CASCADE)
-    expense = models.ForeignKey(Expense, null=True,related_name='payments',on_delete=models.CASCADE)
+    registration = models.ForeignKey(Registration, null=True, related_name='payments', on_delete=models.CASCADE)
+    expense = models.ForeignKey(Expense, null=True, related_name='payments', on_delete=models.CASCADE)
     numberOfInstallment = models.IntegerField(default=1, null=True)
     amount = models.IntegerField()
     refId = models.CharField(max_length=40, null=True, blank=True)
     saleRefId = models.CharField(max_length=40, null=True, blank=True)
     takingDate = models.DateTimeField(default=datetime.now)
     success = models.BooleanField(default=False)
+    optional_name = models.CharField(max_length=64, null=True, blank=True)
+    optional_mobile = models.CharField(max_length=12, null=True, blank=True)
 
     class Meta:
         verbose_name = 'پرداخت'
         verbose_name_plural = 'پرداخت ها'
 
     @classmethod
-    def create(cls, amount, registration=None, numberOfInstallment=None, expense=None):
+    def create(cls, amount, registration=None, numberOfInstallment=None, expense=None, optional_name=None,
+               optional_mobile=None):
         payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment,
-                      expense=expense)
+                      expense=expense, optional_name=optional_name, optional_mobile=optional_mobile)
         payment.save()
         for i in range(1, 6):
             try:

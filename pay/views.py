@@ -1,9 +1,8 @@
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from program.models import Registration, Program, Profile
 from django.views.decorators.csrf import csrf_exempt
-from .models import Payment, Expense
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from rest_framework import response, decorators, generics, permissions
+
 from .serializers import *
 
 
@@ -58,7 +57,10 @@ def payment_callback(request):
 def start_pay_terminal(request):
     amount = request.data.get('amount', 10000)
     expense_id = request.data.get('expense_id', 10000)
-    payment = Payment.create(amount=amount, expense=Expense.objects.get(id=expense_id))
+    optional_name = request.data.get('optional_name', None)
+    optional_mobile = request.data.get('optional_mobile', None)
+    payment = Payment.create(amount=amount, expense=Expense.objects.get(id=expense_id),
+                             optional_name=optional_name, optional_mobile=optional_mobile)
     return HttpResponse(payment.refId)
 
 

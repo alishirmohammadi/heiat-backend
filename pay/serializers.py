@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import *
 
 
@@ -11,4 +12,4 @@ class PaymentInRegistrationSerializer(serializers.ModelSerializer):
 class ExpenseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        fields = ('expense_name', 'id')
+        fields = ('expense_name', 'address', 'id')
