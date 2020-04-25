@@ -16,6 +16,7 @@ class Expense(models.Model):
     callback_url = models.URLField(max_length=300, null=True, blank=True)
     image_url = models.URLField(max_length=300, null=True, blank=True)
     address = models.CharField(max_length=20, null=True, blank=True)
+    contribution = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'درگاه'
@@ -28,7 +29,6 @@ class Expense(models.Model):
         return self.expense_name
 
 
-# Create your models here.
 class Payment(models.Model):
     registration = models.ForeignKey(Registration, null=True, related_name='payments', on_delete=models.CASCADE)
     expense = models.ForeignKey(Expense, null=True, related_name='payments', on_delete=models.CASCADE)

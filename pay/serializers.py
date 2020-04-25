@@ -12,4 +12,4 @@ class PaymentInRegistrationSerializer(serializers.ModelSerializer):
 class ExpenseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        fields = ('expense_name', 'address', 'id','image_url')
+        fields = ('expense_name', 'address', 'id', 'image_url', 'contribution')
