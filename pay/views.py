@@ -53,6 +53,14 @@ def payment_callback(request):
     return render(request, 'result.html', {'payment': payment})
 
 
+def view_payments(request):
+    # Currently this function only shows pooyesh_karimane payments. To show other expenses, change this code.
+    expense_address = 'pooyesh_karimane'
+    payments = Payment.objects.filter(expense__address=expense_address, success=True).order_by('-takingDate')
+    total_money = payments.aggregate(Sum('amount'))
+    return render(request, 'payments.html', {'payments': payments, 'total_money': total_money['amount__sum']})
+
+
 @decorators.api_view(['POST'])
 def start_pay_terminal(request):
     amount = request.data.get('amount', 10000)
