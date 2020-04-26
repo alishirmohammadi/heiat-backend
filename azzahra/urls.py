@@ -47,6 +47,7 @@ urlpatterns = [
     path(r'pay/terminal/start/', pay_views.start_pay_terminal),
     path(r'pay/registration/start/', pay_views.start_pay_registration),
     path(r'pay/payment_callback/', pay_views.payment_callback),
+    path(r'pay/view_pooyesh_karimane/', pay_views.view_payments),
     path(r'managements/', manage_views.ManagementList.as_view()),
     path(r'manage/posts/<pk>/delete/', manage_views.DeletePost.as_view()),
     path(r'manage/posts/<pk>/', manage_views.EditPost.as_view()),

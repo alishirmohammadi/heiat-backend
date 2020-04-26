@@ -11,6 +11,7 @@ Django==2.0.13
 django-cors-headers==2.4.0
 django-filter==2.0.0
 django-guardian==1.4.1
+django-jalali==3.3.0
 django-templated-mail==1.1.1
 django-userena==2.0.1
 djangorestframework==3.9.4
