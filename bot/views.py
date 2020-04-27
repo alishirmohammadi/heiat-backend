@@ -58,5 +58,5 @@ class BotView(View):
             "parse_mode": "Markdown",
         }
         response = requests.post(
-            f"{TELEGRAM_URL}{TUTORIAL_BOT_TOKEN}/sendMessage", data=data
+            "%s%s/sendMessage" % (TELEGRAM_URL, TUTORIAL_BOT_TOKEN), data=data
         )
