@@ -1,7 +1,5 @@
 import json
 
-import json
-
 import requests
 from django.http import JsonResponse
 from django.views import View
@@ -38,7 +36,7 @@ class BotView(View):
         if text == "+":
             chat["counter"] += 1
             tb_collection.save(chat)
-            msg = f"Number of '+' messages that were parsed: {chat['counter']}"
+            msg = f"Number of '+' messages that were parsed: %d" % chat['counter']
             self.send_message(msg, t_chat["id"])
         elif text == "restart":
             blank_data = {"counter": 0}
