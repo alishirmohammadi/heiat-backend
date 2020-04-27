@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 from django.views.static import serve
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
 
 from accounts import views as accounts_views
+from bot import views as bot_view
 from dining import views as dining_views
 from manage_app import views as manage_views
 from omid_utils import views as utils_views
@@ -45,6 +47,8 @@ urlpatterns = [
     path(r'registration/message/', program_views.NewMessage.as_view()),
     path(r'program/register/<program_id>/', program_views.register),
     path(r'pay/terminal/start/', pay_views.start_pay_terminal),
+    path(r'bot/telegram/', csrf_exempt(bot_view.BotView.as_view())),
+
     path(r'pay/registration/start/', pay_views.start_pay_registration),
     path(r'pay/payment_callback/', pay_views.payment_callback),
     path(r'pay/view_pooyesh_karimane/', pay_views.view_payments),
