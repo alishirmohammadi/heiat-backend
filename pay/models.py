@@ -17,7 +17,7 @@ class Expense(models.Model):
     image_url = models.URLField(max_length=300, null=True, blank=True)
     address = models.CharField(max_length=20, null=True, blank=True)
     contribution = models.IntegerField(null=True, blank=True)
-    boolean_title = models.CharField(max_length=100, null=True, blank=True)
+    flag_title = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name = 'درگاه'
