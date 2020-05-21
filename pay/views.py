@@ -67,8 +67,9 @@ def start_pay_terminal(request):
     expense_id = request.data.get('expense_id', 10000)
     optional_name = request.data.get('optional_name', None)
     optional_mobile = request.data.get('optional_mobile', None)
+    flag = request.data.get('flag', False)
     payment = Payment.create(amount=amount, expense=Expense.objects.get(id=expense_id),
-                             optional_name=optional_name, optional_mobile=optional_mobile)
+                             optional_name=optional_name, optional_mobile=optional_mobile, flag=flag)
     return HttpResponse(payment.refId)
 
 

@@ -49,9 +49,9 @@ class Payment(models.Model):
 
     @classmethod
     def create(cls, amount, registration=None, numberOfInstallment=None, expense=None, optional_name=None,
-               optional_mobile=None):
+               optional_mobile=None, flag=False):
         payment = cls(amount=amount, registration=registration, numberOfInstallment=numberOfInstallment,
-                      expense=expense, optional_name=optional_name, optional_mobile=optional_mobile)
+                      expense=expense, optional_name=optional_name, optional_mobile=optional_mobile, flag=flag)
         payment.save()
         for i in range(1, 6):
             try:
