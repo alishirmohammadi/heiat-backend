@@ -6,10 +6,10 @@ from accounts.models import Profile
 from dining.models import Meal, FoodReception
 from program.models import Program, Registration, Question, Answer
 
-sadat = Question.objects.get(title="اسکان سادات", program__id=22)
-shohada = Question.objects.get(title="اسکان سید الشهدا", program__id=22)
-blanket_meal = Meal.objects.get(title="پتو", program__id=22)
-book_meal = Meal.objects.get(title="بن کتاب", program__id=22)
+sadat = None
+shohada = None
+blanket_meal = None
+book_meal = None
 
 
 @decorators.api_view(['POST'])

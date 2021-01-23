@@ -127,8 +127,8 @@ SERVER_EMAIL = EMAIL_HOST_USER
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'fa-ir'
-import locale
-locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
+# import locale
+# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 from django.utils.translation import ugettext_lazy as _
 
