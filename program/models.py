@@ -183,8 +183,18 @@ class Question(models.Model):
     program = models.ForeignKey(Program, related_name='questions', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     desc = models.TextField(null=True, blank=True)
+    params = models.TextField(null=True, blank=True)
     user_sees = models.BooleanField(default=False)
     shift = models.IntegerField(default=0)
+    VAR_YESNO = 'yesno'
+    VAR_MULTIPLE = 'multiple'
+    VAR_FILE = 'file'
+    VAR_CHOICES = (
+        (VAR_YESNO, 'بله خیر'),
+        (VAR_MULTIPLE, 'چند گزینه ای'),
+        (VAR_FILE, 'فایل'),
+    )
+    var = models.CharField(max_length=20, choices=VAR_CHOICES, default=VAR_YESNO)
 
     def __str__(self):
         return self.title
@@ -194,7 +204,8 @@ class Answer(models.Model):
     registration = models.ForeignKey(Registration, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     yes = models.BooleanField(default=True)
-
+    answer_text = models.TextField(null=True)
+    answer_file = models.FileField(upload_to ='uploads/', null=True, blank=True) 
     def __str__(self):
         return self.question.title + '-' + self.registration.profile.user.get_full_name()
 

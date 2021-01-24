@@ -31,7 +31,7 @@ class MessageInRegistrationSerializer(serializers.ModelSerializer):
 class AnswerInRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ('id', 'yes', 'question')
+        fields = ('id', 'yes', 'question', 'answer_text', 'answer_file')
 
 
 class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
@@ -54,7 +54,7 @@ class PostInProgramSerializer(serializers.ModelSerializer):
 class QuestionInProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'title', 'desc')
+        fields = ('id', 'title', 'desc', 'var', 'params')
 
 
 class ProgramDetailSerializer(serializers.ModelSerializer):

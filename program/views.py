@@ -66,9 +66,12 @@ def register(request, program_id):
         question = Question.objects.filter(id=question_id).first()
         if question and question.user_sees and question.program == program:
             yes = answer.get('yes', False)
-            Answer.objects.update_or_create(question=question, registration=reg, defaults={'yes': yes})
+            text = answer.get('answer_text', None)
+            print(text)
+            print(answer)
+            Answer.objects.update_or_create(question=question, registration=reg, answer_text=text, defaults={'yes': yes})
             if couple_reg:
-                Answer.objects.update_or_create(question=question, registration=couple_reg, defaults={'yes': yes})
+                Answer.objects.update_or_create(question=question, registration=couple_reg, answer_text=text, defaults={'yes': yes})
     return response.Response(RegistrationInProgramDetailSerializer(reg).data)
 
 
