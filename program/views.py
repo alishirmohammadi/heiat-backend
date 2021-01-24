@@ -78,14 +78,8 @@ class NewMessage(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated, IsOwner)
 
 
-cultural_to_question = {
-    "museum": Question.objects.filter(title="در برنامهٔ بازدید از اماکن حرم شرکت می‌کنم", program__id=27).first(),
-    "shohada": Question.objects.filter(title="در برنامهٔ دیدار با خانوادهٔ شهدا شرکت می‌کنم", program__id=27).first(),
-}
-cultural_to_persian = {
-    "museum": "بازدید از اماکن حرم",
-    "shohada": "دیدار با خانوادهٔ شهدا",
-}
+cultural_to_question = {}
+cultural_to_persian = {}
 
 
 @decorators.api_view(['POST'])
@@ -126,16 +120,8 @@ def cultural_history(request, sub_program):
          "message": "این بخش در حال پیاده سازی می‌باشد..."})
 
 
-sub_program_to_question = {
-    "pool": Question.objects.filter(title="در برنامهٔ پارک آبی شرکت می‌کنم", program__id=27).first(),
-    "helium": Question.objects.filter(title="در برنامهٔ پارک هلیومی شرکت می‌کنم", program__id=27).first(),
-    "chalidare": Question.objects.filter(title="در برنامهٔ تفریحی چالیدره شرکت می‌کنم", program__id=27).first(),
-}
-sub_program_to_persian = {
-    "pool": "پارک آبی",
-    "helium": "پارک هلیومی",
-    "chalidare": "چالیدره",
-}
+sub_program_to_question = {}
+sub_program_to_persian = {}
 
 
 @decorators.api_view(['POST'])
