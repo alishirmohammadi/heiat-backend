@@ -3,6 +3,9 @@ from rest_framework import generics, viewsets, response, decorators
 from .pemissions import *
 from .serializers import *
 
+import base64
+from django.core.files.base import ContentFile
+import uuid
 
 class ProgramViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
@@ -69,9 +72,17 @@ def register(request, program_id):
             text = answer.get('answer_text', None)
             print(text)
             print(answer)
-            Answer.objects.update_or_create(question=question, registration=reg, answer_text=text, defaults={'yes': yes})
+            ans, _ = Answer.objects.update_or_create(question=question, registration=reg, answer_text=text, defaults={'yes': yes})
             if couple_reg:
                 Answer.objects.update_or_create(question=question, registration=couple_reg, answer_text=text, defaults={'yes': yes})
+            ans_file = answer.get('answer_file', None)
+            if ans_file:
+                format, imgstr = ans_file.split(';base64,')
+                ext = format.split('/')[-1]
+                data = ContentFile(base64.b64decode(imgstr))
+                file_name = uuid.uuid1().hex + '.' + ext
+                ans.answer_file.save(file_name, data, save=True)
+
     return response.Response(RegistrationInProgramDetailSerializer(reg).data)
 
 
