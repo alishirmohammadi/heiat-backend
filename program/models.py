@@ -163,8 +163,14 @@ class Registration(models.Model):
         shift = self.program.shifts.filter(people_type=self.profile.people_type).first()
         if shift:
             ans = ans + shift.shift
-        ans += self.answers.filter(yes=True).aggregate(sum_shift=Coalesce(Sum('question__shift'), 0)).get('sum_shift',
-                                                                                                          0)
+        for answer in self.answers.all():
+            if answer.question.var == Question.VAR_MULTIPLE:
+                if answer.answer_text and answer.question.shift != '':
+                    s = answer.question.shift.split('-')
+                    ans += int(s[int(answer.answer_text)])
+            if answer.question.var == Question.VAR_YESNO:
+                if answer.yes and answer.question.shift != '':
+                    ans += int(answer.question.shift)
         return ans
 
     def next_installment(self):
@@ -185,7 +191,7 @@ class Question(models.Model):
     desc = models.TextField(null=True, blank=True)
     params = models.TextField(null=True, blank=True)
     user_sees = models.BooleanField(default=False)
-    shift = models.IntegerField(default=0)
+    shift = models.TextField()
     VAR_YESNO = 'yesno'
     VAR_MULTIPLE = 'multiple'
     VAR_FILE = 'file'
@@ -204,7 +210,7 @@ class Answer(models.Model):
     registration = models.ForeignKey(Registration, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     yes = models.BooleanField(default=True)
-    answer_text = models.TextField(null=True)
+    answer_text = models.TextField(null=True, blank=True)
     answer_file = models.FileField(upload_to ='uploads/', null=True, blank=True) 
     def __str__(self):
         return self.question.title + '-' + self.registration.profile.user.get_full_name()
