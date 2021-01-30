@@ -7,6 +7,32 @@ from django.db.models.functions import Coalesce
 
 from accounts.models import Profile
 
+class RegisterState():
+    STATUS_DEFAULT = 'default'
+    STATUS_CERTAIN = 'certain'
+    STATUS_RESERVED = 'reserved'
+    STATUS_GIVEN_UP = 'given up'
+    STATUS_REMOVED = 'removed'
+    STATUS_SUSPENDED = 'suspended'
+    STATUS_NOT_CHOSEN = 'not chosen'
+    STATUS_CAME = 'came'
+    STATUS_NOT_CAME = 'not came'
+    STATUS_TEMPORARY = 'temporary'
+    STATUS_FIRST_STAGE = 'first stage'
+
+    STATUS_CHOICES = (
+        (STATUS_DEFAULT, 'منتظر قرعه کشی'),
+        (STATUS_CERTAIN, 'قطعی'),
+        (STATUS_RESERVED, 'رزرو'),
+        (STATUS_GIVEN_UP, 'انصراف'),
+        (STATUS_REMOVED, 'پاک شده'),
+        (STATUS_SUSPENDED, 'معلق'),
+        (STATUS_NOT_CHOSEN, 'انتخاب نشده'),
+        (STATUS_CAME, 'شرکت کرده'),
+        (STATUS_NOT_CAME, 'شرکت نکرده'),
+        (STATUS_TEMPORARY, 'موقت'),
+        (STATUS_FIRST_STAGE, 'مرحله اول'),
+    )
 
 class Program(models.Model):
     title = models.CharField(max_length=100, default='نام برنامه')
@@ -47,6 +73,8 @@ class Program(models.Model):
         (STATE_ARCHIVE, 'بایگانی'),
     )
     state = models.CharField(max_length=32, choices=STATE_CHOICES, default=STATE_CONFIG)
+    default_status = models.CharField(max_length=200, choices=RegisterState.STATUS_CHOICES, default=RegisterState.STATUS_DEFAULT)
+
 
     class Meta:
         verbose_name = 'برنامه'
@@ -66,12 +94,12 @@ class Program(models.Model):
         return (total['amount__sum'])
 
     def number_of_register(self):
-        total = Registration.objects.filter(program=self).exclude(status__contains=Registration.STATUS_REMOVED).count()
+        total = Registration.objects.filter(program=self).exclude(status__contains=RegisterState.STATUS_REMOVED).count()
         return total
 
     def certain_or_came(self):
         total = Registration.objects.filter(program=self).filter(
-            Q(status=Registration.STATUS_CERTAIN) | Q(status=Registration.STATUS_CAME)).count()
+            Q(status=RegisterState.STATUS_CERTAIN) | Q(status=RegisterState.STATUS_CAME)).count()
         return total
 
     def users_questions(self):
@@ -100,32 +128,7 @@ class Registration(models.Model):
     coupling = models.BooleanField(default=False)
     numberOfPayments = models.IntegerField(default=0)
     comment = models.TextField(verbose_name="توضیحات", null=True)
-    STATUS_DEFAULT = 'default'
-    STATUS_CERTAIN = 'certain'
-    STATUS_RESERVED = 'reserved'
-    STATUS_GIVEN_UP = 'given up'
-    STATUS_REMOVED = 'removed'
-    STATUS_SUSPENDED = 'suspended'
-    STATUS_NOT_CHOSEN = 'not chosen'
-    STATUS_CAME = 'came'
-    STATUS_NOT_CAME = 'not came'
-    STATUS_TEMPORARY = 'temporary'
-    STATUS_FIRST_STAGE = 'first stage'
-
-    STATUS_CHOICES = (
-        (STATUS_DEFAULT, 'منتظر قرعه کشی'),
-        (STATUS_CERTAIN, 'قطعی'),
-        (STATUS_RESERVED, 'رزرو'),
-        (STATUS_GIVEN_UP, 'انصراف'),
-        (STATUS_REMOVED, 'پاک شده'),
-        (STATUS_SUSPENDED, 'معلق'),
-        (STATUS_NOT_CHOSEN, 'انتخاب نشده'),
-        (STATUS_CAME, 'شرکت کرده'),
-        (STATUS_NOT_CAME, 'شرکت نکرده'),
-        (STATUS_TEMPORARY, 'موقت'),
-        (STATUS_FIRST_STAGE, 'مرحله اول'),
-    )
-    status = models.CharField(max_length=200, choices=STATUS_CHOICES, default=STATUS_DEFAULT)
+    status = models.CharField(max_length=200, choices=RegisterState.STATUS_CHOICES, default=RegisterState.STATUS_DEFAULT)
 
     class Meta:
         verbose_name = 'ثبت نام'

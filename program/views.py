@@ -17,7 +17,7 @@ class ProgramViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = Program.objects.filter(state=Program.STATE_ACTIVE)
         if self.request.user.is_authenticated:
             queryset = queryset | Program.objects.filter(state=Program.STATE_ARCHIVE).filter(
-                id__in=self.request.user.profile.registrations.exclude(status=Registration.STATUS_REMOVED).values_list(
+                id__in=self.request.user.profile.registrations.exclude(status=RegisterState.STATUS_REMOVED).values_list(
                     'program_id', flat=True))
         return queryset
 
@@ -31,15 +31,15 @@ def give_up(request):
     registration = Registration.objects.filter(id=registration_id).first()
     if not registration or registration.profile.user.username != request.user.username:
         return response.Response('درخواست نامعتبر', status=400)
-    if not registration.status in [Registration.STATUS_CERTAIN, Registration.STATUS_RESERVED,
-                                   Registration.STATUS_DEFAULT]:
+    if not registration.status in [RegisterState.STATUS_CERTAIN, RegisterState.STATUS_RESERVED,
+                                   RegisterState.STATUS_DEFAULT]:
         return response.Response('درخواست نامعتبر', status=400)
-    registration.status = Registration.STATUS_GIVEN_UP
+    registration.status = RegisterState.STATUS_GIVEN_UP
     registration.save()
     if registration.coupling:
         cr = registration.get_couple_registration()
         if cr:
-            cr.status = Registration.STATUS_GIVEN_UP
+            cr.status = RegisterState.STATUS_GIVEN_UP
             cr.save()
     return response.Response('ok')
 
@@ -51,10 +51,14 @@ def register(request, program_id):
     if not program or program.state != Program.STATE_ACTIVE or not program.is_open:
         return response.Response('درخواست نامعتبر', status=400)
     reg = Registration.objects.filter(program=program).filter(profile__user=request.user).exclude(
-        status=Registration.STATUS_REMOVED).first()
+        status=RegisterState.STATUS_REMOVED).first()
     if reg:
         return response.Response('قبلا ثبت‌نام کرده‌اید', status=400)
-    reg = Registration.objects.create(program=program, profile=request.user.profile)
+    reg = Registration.objects.create(
+        program=program,
+        profile=request.user.profile,
+        status=program.default_status,
+    )
     couple_reg = None
     coupling = request.data.get('coupling', False)
     if program.has_coupling and request.user.profile.couple and coupling:
