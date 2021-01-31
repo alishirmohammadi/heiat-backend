@@ -10,7 +10,7 @@ class ProgramListSerializer(serializers.ModelSerializer):
             user = self.context.get('request').user
             if user and user.is_authenticated:
                 registration = Registration.objects.filter(program=obj).filter(profile__user=user).exclude(
-                    status=Registration.STATUS_REMOVED).first()
+                    status=RegisterState.STATUS_REMOVED).first()
                 if registration:
                     return registration.get_status_display()
             return None
@@ -63,15 +63,19 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     users_questions = QuestionInProgramSerializer(many=True)
 
     def get_registration(self, obj):
+        print("boz")
         try:
             user = self.context.get('request').user
             if user and user.is_authenticated:
                 registration = Registration.objects.filter(program=obj).filter(profile__user=user).exclude(
-                    status=Registration.STATUS_REMOVED).first()
+                    status=RegisterState.STATUS_REMOVED).first()
+                print("salam")
+                print(registration)
                 if registration:
                     return RegistrationInProgramDetailSerializer(registration).data
             return None
-        except:
+        except Exception as E:
+            print(E)
             return None
 
     class Meta:
