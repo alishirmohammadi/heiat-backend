@@ -36,6 +36,8 @@ class RegisterState():
 
 class Program(models.Model):
     title = models.CharField(max_length=100, default='نام برنامه')
+    donate_link = models.CharField(max_length=300, null=True, blank=True)
+    donate_text = models.CharField(max_length=300, null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
     is_open = models.BooleanField(default=False)
     has_coupling = models.BooleanField(default=False)

@@ -42,7 +42,10 @@ class RegistrationInProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id', 'status', 'coupling', 'sum_payed', 'next_installment', 'payments', 'messages', 'answers')
+        fields = (
+            'id', 'status', 'coupling', 'sum_payed', 'next_installment',
+            'payments', 'messages', 'answers',
+        )
 
 
 class PostInProgramSerializer(serializers.ModelSerializer):
@@ -80,8 +83,10 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ('id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts', 'state',
-                  'has_coupling', 'users_questions')
+        fields = (
+            'id', 'title', 'program_interval', 'register_interval', 'registration', 'is_open', 'posts', 'state',
+            'has_coupling', 'users_questions',  'donate_link', 'donate_text',
+        )
 
 
 class NewMessageSerializer(serializers.ModelSerializer):
