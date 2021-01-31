@@ -38,7 +38,7 @@ class RegistrationManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
 
     @decorators.action(detail=True, methods=['POST', ])
     def change_status(self, request, *args, **kwargs):
-        new_status = request.data.get('status', Registration.STATUS_DEFAULT)
+        new_status = request.data.get('status', RegisterState.STATUS_DEFAULT)
         registration = self.get_object()
         registration.status = new_status
         registration.save()
@@ -75,7 +75,7 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
     def last_messages(self, request, *args, **kwargs):
         reg_ids = Message.objects.filter(to_user=False).filter(registration__program=self.get_object()).values_list(
             'registration_id', flat=True)
-        registrations = Registration.objects.filter(id__in=reg_ids).exclude(status=Registration.STATUS_REMOVED)
+        registrations = Registration.objects.filter(id__in=reg_ids).exclude(status=RegisterState.STATUS_REMOVED)
         return response.Response(RegistrationMessageSerializer(registrations, many=True).data)
 
     @decorators.action(detail=True)
@@ -108,7 +108,7 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
             if win:
                 left_chances -= 1
             undecided -= 1
-            new_status = Registration.STATUS_CERTAIN if win else Registration.STATUS_RESERVED
+            new_status = RegisterState.STATUS_CERTAIN if win else RegisterState.STATUS_RESERVED
             registration.status = new_status
             registration.save()
             couple = registration.get_couple_registration()
@@ -119,7 +119,7 @@ class ProgramManagement(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixi
 
     @decorators.action(detail=True, methods=['POST', ])
     def change_status(self, request, *args, **kwargs):
-        new_status = request.data.get('status', Registration.STATUS_DEFAULT)
+        new_status = request.data.get('status', RegisterState.STATUS_DEFAULT)
         registrations = self.get_object().registrations.filter(id__in=request.data.get('ids', []))
         for registration in registrations:
             registration.status = new_status
