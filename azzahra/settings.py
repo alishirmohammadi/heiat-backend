@@ -123,6 +123,7 @@ EMAIL_HOST_USER = 'baharloo.omid'
 EMAIL_HOST_PASSWORD = 'yakarim2'
 DEFAULT_FROM_EMAIL = 'هیئت الزهرا<baharloo.omid@gmail.com>'
 SERVER_EMAIL = EMAIL_HOST_USER
+ACCOUNT_EMAIL_VERIFICATION  = "none"
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
