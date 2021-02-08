@@ -138,7 +138,7 @@ class Registration(models.Model):
 
     def get_couple_registration(self):
         return Registration.objects.filter(profile=self.profile.couple).filter(program=self.program).filter(
-            coupling=True).exclude(status=self.STATUS_REMOVED).first()
+            coupling=True).exclude(status=RegisterState.STATUS_REMOVED).first()
 
     def couple_id(self):
         reg=self.get_couple_registration()
