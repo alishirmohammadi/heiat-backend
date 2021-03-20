@@ -24,7 +24,7 @@ idna==2.7
 isodate==0.5.4
 itypes==1.1.0
 jdatetime==1.8.1
-Jinja2==2.10
+Jinja2==2.11.3
 lxml==4.5.0
 MarkupSafe==1.0
 panda==0.3.1
